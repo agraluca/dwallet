@@ -1,8 +1,8 @@
 import * as S from "./styles";
 
 function Main({
-  title = "React Avançado",
-  description = "TypeScript, ReactJS, NextJS e Styled Components",
+  title = "DWallet",
+  description = "Seu sistema de balanceamento de carteira",
 }) {
   return (
     <S.Wrapper>
