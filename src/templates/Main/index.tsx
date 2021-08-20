@@ -1,10 +1,13 @@
 import * as S from "./styles";
 import Wrapper from "components/Wrapper";
+import { useAuth } from "../../hooks/useAuth";
 
 function Main({
   title = "DWallet",
   description = "Seu sistema de balanceamento de carteira",
 }) {
+  const { logIn } = useAuth();
+
   return (
     <Wrapper>
       <S.Wrapper>
@@ -15,8 +18,7 @@ function Main({
           </S.TitleWrapper>
           <S.Description>{description}</S.Description>
 
-          <S.Button>
-            {" "}
+          <S.Button onClick={logIn}>
             <img src="/icons/google.svg" alt="google logo" /> Log in with Google
           </S.Button>
         </S.Content>
