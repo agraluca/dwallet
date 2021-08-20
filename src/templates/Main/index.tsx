@@ -1,6 +1,7 @@
 import * as S from "./styles";
 import Wrapper from "components/Wrapper";
 import { useAuth } from "../../hooks/useAuth";
+import Heading from "components/Heading";
 
 function Main({
   title = "DWallet",
@@ -14,12 +15,19 @@ function Main({
         <S.Content>
           <S.TitleWrapper>
             <S.Logo src="/img/logo.svg" alt="Logo do projeto" />
-            <S.Title>{title}</S.Title>
+            <Heading level={1} className="login--title">
+              {title}
+            </Heading>
           </S.TitleWrapper>
           <S.Description>{description}</S.Description>
 
           <S.Button onClick={logIn}>
-            <img src="/icons/google.svg" alt="google logo" /> Log in with Google
+            <img
+              src="/icons/google.svg"
+              alt="google logo"
+              className="login--google-logo"
+            />
+            Entrar com o Google
           </S.Button>
         </S.Content>
         <S.IlustrationWrapper>

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.main`
   ${({ theme }) => css`
     background-color: ${theme.colors.black};
     width: 100%;
@@ -15,7 +15,7 @@ export const WaveImg = styled.img`
   width: 100%;
 `;
 
-export const Content = styled.div`
+export const Content = styled.section`
   position: absolute;
   max-width: ${({ theme }) => theme.grid.container};
   margin: 0 auto;
