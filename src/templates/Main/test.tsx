@@ -13,10 +13,17 @@ describe("<Main />", () => {
     ).toBeInTheDocument();
     expect(container.firstChild).toMatchSnapshot();
   });
+
   it("should render the colors correctly", () => {
     const { container } = renderWithTheme(<Main />);
     expect(container.firstChild).toHaveStyle({
       "background-color": theme.colors.black,
     });
+  });
+
+  it("should render the button correctly", () => {
+    renderWithTheme(<Main />);
+    const button = screen.getByText(/Entrar com o Google/i);
+    expect(button).toBeInTheDocument();
   });
 });

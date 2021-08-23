@@ -1,4 +1,5 @@
 import { AppProps } from "next/app";
+import { AuthProvider } from "contexts";
 import Head from "next/head";
 
 import GlobalStyles from "styles/global";
@@ -7,7 +8,7 @@ import theme from "styles/theme";
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <AuthProvider session={pageProps.session}>
       <ThemeProvider theme={theme}>
         <Head>
           <title>DWallet - Seu sistema de balanceamento de carteira</title>
@@ -26,7 +27,7 @@ function App({ Component, pageProps }: AppProps) {
         <GlobalStyles />
         <Component {...pageProps} />
       </ThemeProvider>
-    </>
+    </AuthProvider>
   );
 }
 
