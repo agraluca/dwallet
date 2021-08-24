@@ -22,12 +22,12 @@ export type LogInProviderProps = {
 export function AuthProvider({ children, session }: LogInProviderProps) {
   const logIn = useCallback(() => {
     signIn("google", {
-      callbackUrl: `${process.env.PUBLIC_URL}/home`,
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/home`,
     });
   }, []);
 
   const logOut = useCallback(() => {
-    signOut({ callbackUrl: `${process.env.PUBLIC_URL}` });
+    signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_URL}/` });
   }, []);
 
   return (

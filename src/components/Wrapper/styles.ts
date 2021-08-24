@@ -16,11 +16,14 @@ export const WaveImg = styled.img`
 `;
 
 export const Content = styled.section`
-  position: absolute;
-  max-width: ${({ theme }) => theme.grid.container};
-  margin: 0 auto;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  ${({ theme }) => css`
+    position: absolute;
+    max-width: ${theme.grid.container};
+    min-width: 30rem;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  `}
 `;

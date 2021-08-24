@@ -1,6 +1,6 @@
 import Main from "templates/Main";
 
-export default function Home() {
+export default function SignIn() {
   return (
     <Main
       title="DWallet"
