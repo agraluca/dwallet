@@ -21,6 +21,7 @@ exports[`<Wrapper /> should render the heading 1`] = `
 .c1 {
   position: absolute;
   max-width: 126rem;
+  min-width: 30rem;
   margin: 0 auto;
   top: 0;
   left: 0;
