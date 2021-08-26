@@ -1,4 +1,5 @@
 import Main from "templates/Main";
+import { withSSRActiveSession } from "utils";
 
 export default function SignIn() {
   return (
@@ -8,3 +9,9 @@ export default function SignIn() {
     />
   );
 }
+
+export const getServerSideProps = withSSRActiveSession(async () => {
+  return {
+    props: {},
+  };
+});
