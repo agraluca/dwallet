@@ -4,16 +4,11 @@ import * as S from "./styles";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: "default" | "icon";
+  variant?: string;
   icon?: string;
 }
 
-export function Button({
-  children,
-  variant = "default",
-  icon,
-  ...rest
-}: ButtonProps) {
+export function Button({ children, variant = "", icon, ...rest }: ButtonProps) {
   switch (variant) {
     case "default":
       return <S.Button {...rest}>{children}</S.Button>;
@@ -24,6 +19,6 @@ export function Button({
         </S.IconButton>
       );
     default:
-      return <Button {...rest}>{children}</Button>;
+      return <S.Button {...rest}>{children}</S.Button>;
   }
 }
