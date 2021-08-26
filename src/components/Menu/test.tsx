@@ -8,5 +8,6 @@ describe("<Menu />", () => {
     renderWithTheme(<Menu />);
 
     expect(screen.getByText(/Sua carteira/i)).toBeInTheDocument();
+    expect(screen.getByText(/Pesquisar/i)).toBeInTheDocument();
   });
 });
