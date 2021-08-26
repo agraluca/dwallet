@@ -23,12 +23,14 @@ function Menu() {
 
       <S.LogoWrapper>
         <Link href="/home" passHref>
-          <Image
-            width={75}
-            height={66}
-            src="/img/logo.svg"
-            alt="Logo amarela com formato de um W"
-          />
+          <a>
+            <Image
+              width={75}
+              height={66}
+              src="/img/logo.svg"
+              alt="Logo amarela com formato de um W"
+            />
+          </a>
         </Link>
       </S.LogoWrapper>
 
