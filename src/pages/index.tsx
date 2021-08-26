@@ -1,6 +1,7 @@
 import Main from "templates/Main";
+import { withSSRActiveSession } from "utils";
 
-export default function Home() {
+export default function SignIn() {
   return (
     <Main
       title="DWallet"
@@ -8,3 +9,9 @@ export default function Home() {
     />
   );
 }
+
+export const getServerSideProps = withSSRActiveSession(async () => {
+  return {
+    props: {},
+  };
+});
