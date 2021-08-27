@@ -1,9 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
-import { ReactNode } from "react";
 import * as S from "./styles";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
   variant?: string;
   icon?: string;
 }
