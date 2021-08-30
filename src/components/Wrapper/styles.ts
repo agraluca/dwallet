@@ -4,6 +4,8 @@ export const Wrapper = styled.section`
   ${({ theme }) => css`
     background-color: ${theme.colors.black};
     position: relative;
+    width: 100%;
+    height: 100%;
   `}
 `;
 
