@@ -5,7 +5,7 @@ import '../.jest/next-image.mock'
 
 export const parameters = {
   backgrounds: {
-    default: 'dwallet-light',
+    default: 'dwallet-dark',
     values: [
       {
         name: 'dwallet-light',
