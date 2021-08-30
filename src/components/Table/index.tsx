@@ -22,14 +22,16 @@ function Table({ tableData }: TableProps) {
       {tableData?.length && (
         <>
           <S.TableHeader>
-            <S.TableHeaderData>Thicker</S.TableHeaderData>
-            <S.TableHeaderData>Tipo</S.TableHeaderData>
-            <S.TableHeaderData>Preço</S.TableHeaderData>
-            <S.TableHeaderData>% Ideal</S.TableHeaderData>
-            <S.TableHeaderData>% Atual</S.TableHeaderData>
-            <S.TableHeaderData>Qtd</S.TableHeaderData>
-            <S.TableHeaderData>Qtd p/ comprar</S.TableHeaderData>
-            <S.TableHeaderData>Status</S.TableHeaderData>
+            <S.TableHeaderRow>
+              <S.TableHeaderData>Thicker</S.TableHeaderData>
+              <S.TableHeaderData>Tipo</S.TableHeaderData>
+              <S.TableHeaderData>Preço</S.TableHeaderData>
+              <S.TableHeaderData>% Ideal</S.TableHeaderData>
+              <S.TableHeaderData>% Atual</S.TableHeaderData>
+              <S.TableHeaderData>Qtd</S.TableHeaderData>
+              <S.TableHeaderData>Qtd p/ comprar</S.TableHeaderData>
+              <S.TableHeaderData>Status</S.TableHeaderData>
+            </S.TableHeaderRow>
           </S.TableHeader>
           <S.TableBody>
             {tableData?.map((data, index) => {

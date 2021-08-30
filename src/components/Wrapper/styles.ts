@@ -14,6 +14,7 @@ export const WaveImg = styled.img`
   bottom: 0;
   width: 100%;
   pointer-events: none;
+  z-index: -1;
 `;
 
 export const Content = styled.section`

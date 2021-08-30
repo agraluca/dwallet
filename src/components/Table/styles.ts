@@ -12,6 +12,10 @@ export const TableHeader = styled.thead`
   ${() => css``}
 `;
 
+export const TableHeaderRow = styled.tr`
+  ${() => css``}
+`;
+
 export const TableHeaderData = styled.th`
   ${({ theme }) => css`
     color: ${theme.colors.white};
