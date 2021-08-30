@@ -1,39 +1,6 @@
 import { formatNumberToBrlCurrency } from "utils";
 import * as S from "./styles";
 
-const tableData = [
-  {
-    stock: "ABEV3",
-    type: "Ação",
-    price: 30,
-    idealPorcentage: 8,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 10,
-    status: "Comprar",
-  },
-  {
-    stock: "HGLG11",
-    type: "FII",
-    price: 110,
-    idealPorcentage: 8,
-    currentPorcentage: 5,
-    stockAmount: 10,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-];
-
 export type TableDataProps = {
   stock: string;
   type: string;
@@ -49,7 +16,7 @@ export type TableProps = {
   tableData: TableDataProps[];
 };
 
-function Table(/* { tableData }: TableProps */) {
+function Table({ tableData }: TableProps) {
   return (
     <S.TableWrapper>
       {tableData?.length && (

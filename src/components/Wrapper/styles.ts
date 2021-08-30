@@ -1,10 +1,8 @@
 import styled, { css } from "styled-components";
 
-export const Wrapper = styled.main`
+export const Wrapper = styled.section`
   ${({ theme }) => css`
     background-color: ${theme.colors.black};
-    width: 100%;
-    height: 100%;
     position: relative;
   `}
 `;
@@ -13,6 +11,7 @@ export const WaveImg = styled.img`
   position: absolute;
   bottom: 0;
   width: 100%;
+  pointer-events: none;
 `;
 
 export const Content = styled.section`

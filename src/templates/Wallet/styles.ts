@@ -1,108 +1,27 @@
 import styled, { css } from "styled-components";
-import media from "styled-media-query";
 
-export const Wrapper = styled.main`
+export const Container = styled.main`
   ${({ theme }) => css`
-    background-color: ${theme.colors.black};
+    margin: 0 auto;
+    padding: 0 calc(${theme.spacings.medium} * 2)
+      calc(${theme.spacings.medium} * 2);
+  `}
+`;
+
+export const CardWrapper = styled.section`
+  ${({ theme }) => css`
     width: 100%;
-    height: 100%;
-    padding: ${theme.spacings.medium};
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    color: ${theme.colors.white};
+    gap: calc(${theme.grid.gutter} * 2);
   `}
 `;
 
-export const Logo = styled.img`
-  width: 10rem;
-`;
-
-export const TitleWrapper = styled.div`
+export const ButtonsWrapper = styled.section`
   ${({ theme }) => css`
     display: flex;
-    align-items: center;
-
-    .login--title {
-      font-size: calc(${theme.font.sizes.large} * 2);
-    }
-  `}
-`;
-
-export const Description = styled.p`
-  ${({ theme }) => css`
-    font-size: ${theme.font.sizes.large};
-    font-weight: ${theme.font.weight.thin};
-    line-height: calc(${theme.font.sizes.large} * 1.2);
-    max-width: 40rem;
-  `}
-`;
-
-export const Content = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 50%;
-
-  ${media.lessThan("large")`
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  `}
-`;
-
-export const IlustrationWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  ${media.lessThan("large")`
-    display: none;
-  `}
-`;
-
-export const Illustration = styled.img`
-  width: min(30rem, 100%);
-  align-self: flex-start;
-`;
-
-export const WaveIllustration = styled.img`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-`;
-
-export const Button = styled.button`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    width: 40rem;
-    border-radius: ${theme.border.radius};
-    padding: ${theme.spacings.xsmall};
-    font-size: ${theme.font.sizes.small};
-    font-weight: ${theme.font.weight.normal};
-    cursor: pointer;
-    transition: filter 0.2s;
-    margin-top: ${theme.spacings.small};
-    border: 0.2rem solid ${theme.colors.white};
-    color: ${theme.colors.white};
-    background-color: ${theme.colors.black};
-
-    .login--google-logo {
-      width: 2.8rem;
-      height: 2.8rem;
-    }
-
-    &:hover {
-      filter: brightness(0.8);
-    }
-
-    ${media.lessThan("small")`
-      width: 100%;
-   `}
+    gap: ${theme.grid.gutter};
+    padding: calc(${theme.spacings.medium} * 2) 0;
   `}
 `;
