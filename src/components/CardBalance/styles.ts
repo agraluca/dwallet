@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
     flex-direction: column;
     padding: ${theme.spacings.small} ${theme.spacings.medium};
     gap: calc(${theme.grid.gutter} / 2) 0;
-    max-width: 33.4rem;
+    width: 33.4rem;
     background: linear-gradient(
       180deg,
       ${theme.colors.black} 0%,
@@ -32,7 +32,7 @@ export const Title = styled.p`
     font-size: ${theme.font.sizes.medium};
     font-weight: ${theme.font.weight.normal};
 
-    .card__value_size {
+    &.card__value_size {
       font-size: ${theme.font.sizes.xlarge};
       font-weight: ${theme.font.weight.bold};
     }

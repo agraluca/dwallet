@@ -10,16 +10,16 @@ export type CardProps = {
 
 function CardBalance({ type = "total", value = 1000 }: CardProps) {
   const card = {
-    total: { name: "Total", src: "icons/dolar.svg", width: 16, height: 16 },
+    total: { name: "Total", src: "/icons/dolar.svg", width: 16, height: 16 },
     rf: {
       name: "Renda Fixa",
-      src: "icons/renda-fixa.svg",
+      src: "/icons/renda-fixa.svg",
       width: 32,
       height: 16,
     },
     rv: {
       name: "Renda Variável",
-      src: "icons/renda-variavel.svg",
+      src: "/icons/renda-variavel.svg",
       width: 48,
       height: 16,
     },
