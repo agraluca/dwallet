@@ -11,14 +11,14 @@ describe("Button Component", () => {
   });
   it("should render with icon variant", () => {
     renderWithTheme(
-      <Button variant="icon" icon="/icons/svg-plus.svg">
+      <Button variant="icon" icon="/icons/plus.svg">
         Adicionar
       </Button>
     );
 
     const iconImg = screen.getByRole("img");
     expect(screen.getByAltText("icone")).toBeInTheDocument();
-    expect(iconImg).toHaveAttribute("src", "/icons/svg-plus.svg");
+    expect(iconImg).toHaveAttribute("src", "/icons/plus.svg");
   });
   it("should render with default variant", () => {
     renderWithTheme(<Button variant="default">Adicionar</Button>);

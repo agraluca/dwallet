@@ -1,15 +1,14 @@
 import { ButtonHTMLAttributes } from "react";
+
 import * as S from "./styles";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonProps = {
   variant?: string;
   icon?: string;
-}
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({ children, variant = "", icon, ...rest }: ButtonProps) {
   switch (variant) {
-    case "default":
-      return <S.Button {...rest}>{children}</S.Button>;
     case "icon":
       return (
         <S.IconButton {...rest}>
