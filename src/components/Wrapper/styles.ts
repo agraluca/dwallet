@@ -10,7 +10,7 @@ export const Wrapper = styled.section`
 `;
 
 export const WaveImg = styled.img`
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   pointer-events: none;
