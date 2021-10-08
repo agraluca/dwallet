@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Wrapper from "components/Wrapper";
 import Menu from "components/Menu";
 import CardBalance from "components/CardBalance";
@@ -100,6 +102,12 @@ const tableData = [
 ];
 
 function Wallet() {
+  const [isAdding, setIsAdding] = useState(false);
+
+  const addItemToTable = () => {
+    setIsAdding(true);
+  };
+
   return (
     <Wrapper>
       <Menu />
@@ -110,8 +118,8 @@ function Wallet() {
           <CardBalance type="rv" value={70} />
         </S.CardWrapper>
 
-        <S.ButtonsWrapper>
-          <Button variant="icon" icon="icons/plus.svg">
+        <S.ButtonsWrapper isAdding={isAdding}>
+          <Button variant="icon" icon="icons/plus.svg" onClick={addItemToTable}>
             Adicionar
           </Button>
           <Button variant="icon" icon="icons/edit.svg">
@@ -122,7 +130,11 @@ function Wallet() {
           </Button>
         </S.ButtonsWrapper>
 
-        <Table tableData={tableData} />
+        <Table
+          tableData={tableData}
+          isAdding={isAdding}
+          setIsAdding={setIsAdding}
+        />
       </S.Container>
     </Wrapper>
   );

@@ -17,11 +17,16 @@ export const CardWrapper = styled.section`
     gap: calc(${theme.grid.gutter} * 2);
   `}
 `;
-
-export const ButtonsWrapper = styled.section`
-  ${({ theme }) => css`
+type ButtonsWrapperProps = {
+  isAdding?: boolean;
+};
+export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
+  ${({ theme, isAdding }) => css`
     display: flex;
     gap: ${theme.grid.gutter};
-    padding: calc(${theme.spacings.medium} * 2) 0;
+    padding-top: calc(${theme.spacings.medium} * 2);
+    padding-bottom: ${isAdding
+      ? theme.spacings.medium
+      : `calc(${theme.spacings.medium} * 2)`};
   `}
 `;
