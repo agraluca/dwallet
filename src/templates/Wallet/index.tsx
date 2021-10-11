@@ -39,73 +39,18 @@ const tableData = [
     shouldBuyAmount: 0,
     status: "Segurar",
   },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
 ];
 
 function Wallet() {
   const [isAdding, setIsAdding] = useState(false);
+  const [cardBalanceValues] = useState({
+    total: 2000,
+    rf: 600,
+    rv: 1400,
+  });
 
   const addItemToTable = () => {
-    setIsAdding(true);
+    isAdding ? setIsAdding(false) : setIsAdding(true);
   };
 
   return (
@@ -113,14 +58,24 @@ function Wallet() {
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={1000} />
-          <CardBalance type="rf" value={30} />
-          <CardBalance type="rv" value={70} />
+          <CardBalance type="total" value={cardBalanceValues.total} />
+          <CardBalance
+            type="rf"
+            value={(cardBalanceValues.rf / cardBalanceValues.total) * 100}
+          />
+          <CardBalance
+            type="rv"
+            value={(cardBalanceValues.rv / cardBalanceValues.total) * 100}
+          />
         </S.CardWrapper>
 
         <S.ButtonsWrapper isAdding={isAdding}>
-          <Button variant="icon" icon="icons/plus.svg" onClick={addItemToTable}>
-            Adicionar
+          <Button
+            variant={isAdding ? "" : "icon"}
+            onClick={addItemToTable}
+            {...(isAdding ? {} : { icon: "icons/plus.svg" })}
+          >
+            {isAdding ? "Cancelar" : "Adicionar"}
           </Button>
           <Button variant="icon" icon="icons/edit.svg">
             Editar
@@ -134,6 +89,7 @@ function Wallet() {
           tableData={tableData}
           isAdding={isAdding}
           setIsAdding={setIsAdding}
+          cardBalanceValues={cardBalanceValues}
         />
       </S.Container>
     </Wrapper>

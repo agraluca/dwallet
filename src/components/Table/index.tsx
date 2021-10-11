@@ -1,6 +1,8 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
-import { formatNumberToBrlCurrency } from "utils";
+import { useState } from "react";
+import { formatNumberToBrlCurrency, typeCheck } from "utils";
+// import api from "services/axios";
 import * as S from "./styles";
 
 export type TableDataProps = {
@@ -18,9 +20,81 @@ export type TableProps = {
   tableData: TableDataProps[];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
+  cardBalanceValues: {
+    total: number;
+    rf: number;
+    rv: number;
+  };
 };
 
-function Table({ tableData, isAdding, setIsAdding }: TableProps) {
+function Table({
+  tableData,
+  isAdding,
+  setIsAdding,
+  cardBalanceValues,
+}: TableProps) {
+  const [tableFormValues, setTableFormValues] = useState({
+    ticker: "",
+    type: "",
+    price: "",
+    idealPorcentage: "",
+    quantity: "",
+    total: "",
+  });
+
+  const handleInputChange = (field: string, value: string) => {
+    setTableFormValues((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleTickerBlur = async () => {
+    // const response = await api.get(
+    //   `mainsearchquery?q=${tableFormValues.ticker}&country=`
+    // );
+
+    // console.log(response.data);
+    setTableFormValues((prev) => ({
+      ...prev,
+      type: typeCheck(tableFormValues.ticker),
+      price: "10",
+    }));
+  };
+
+  const handleQuantityBlur = () => {
+    setTableFormValues((prev) => ({
+      ...prev,
+      total: `${
+        Number(tableFormValues.price) * Number(tableFormValues.quantity)
+      }`,
+    }));
+  };
+
+  const addItemToTable = () => {
+    console.log(
+      tableData.reduce((acc, curr) => {
+        acc = acc + Number(curr.stockAmount) * Number(curr.price);
+        return acc / tableData.length;
+      }, 0)
+    );
+    const currentPorcentage =
+      ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
+        cardBalanceValues.total) *
+      100;
+    tableData.push({
+      stock: tableFormValues.ticker,
+      type: tableFormValues.type,
+      price: Number(tableFormValues.price),
+      idealPorcentage: Number(tableFormValues.idealPorcentage),
+      currentPorcentage,
+      stockAmount: Number(tableFormValues.quantity),
+      shouldBuyAmount: 10,
+      status:
+        currentPorcentage < Number(tableFormValues.idealPorcentage)
+          ? "Comprar"
+          : "Segurar",
+    });
+    setIsAdding(false);
+  };
+
   return (
     <>
       {isAdding && (
@@ -28,36 +102,62 @@ function Table({ tableData, isAdding, setIsAdding }: TableProps) {
           <S.TableBody>
             <S.TableAddingRow>
               <S.TableBodyData>
-                <InputWithLabel label="Ticker:" />
-              </S.TableBodyData>
-              <S.TableBodyData>
-                <InputWithLabel label="Tipo:" placeholder="-" disabled />
+                <InputWithLabel
+                  label="Ticker:"
+                  onInputChange={(value) => handleInputChange("ticker", value)}
+                  onBlur={handleTickerBlur}
+                />
               </S.TableBodyData>
               <S.TableBodyData>
                 <InputWithLabel
-                  label="Preço:"
-                  placeholder="R$ 00.00"
+                  label="Tipo:"
+                  onInputChange={(value) => handleInputChange("type", value)}
+                  placeholder="-"
+                  value={tableFormValues.type}
                   disabled
                 />
               </S.TableBodyData>
               <S.TableBodyData>
-                <InputWithLabel label="% Ideal:" />
+                <InputWithLabel
+                  label="Preço:"
+                  onInputChange={(value) => handleInputChange("price", value)}
+                  placeholder={formatNumberToBrlCurrency(0)}
+                  value={formatNumberToBrlCurrency(tableFormValues.price)}
+                  disabled
+                />
+              </S.TableBodyData>
+              <S.TableBodyData>
+                <InputWithLabel
+                  label="% Ideal:"
+                  onInputChange={(value) =>
+                    handleInputChange("idealPorcentage", value)
+                  }
+                />
               </S.TableBodyData>
               <S.TableBodyData>-</S.TableBodyData>
               <S.TableBodyData>
-                <InputWithLabel label="Qtd:" />
+                <InputWithLabel
+                  label="Qtd:"
+                  onInputChange={(value) =>
+                    handleInputChange("quantity", value)
+                  }
+                  onBlur={handleQuantityBlur}
+                />
               </S.TableBodyData>
               <S.TableBodyData>
                 <InputWithLabel
                   label="Total:"
-                  placeholder="R$ 00.00"
+                  onInputChange={(value) => handleInputChange("total", value)}
+                  placeholder={formatNumberToBrlCurrency(0)}
+                  value={formatNumberToBrlCurrency(tableFormValues.total)}
                   disabled
                 />
               </S.TableBodyData>
               <S.TableBodyData className="table__body-button-container">
                 <Button
-                  onClick={() => setIsAdding(false)}
+                  onClick={addItemToTable}
                   className="table__body-button"
+                  disabled={Number(tableFormValues.total) === 0}
                 >
                   Adicionar
                 </Button>
