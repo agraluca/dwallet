@@ -33,14 +33,17 @@ function Table({
   setIsAdding,
   cardBalanceValues,
 }: TableProps) {
-  const [tableFormValues, setTableFormValues] = useState({
+  const tableFormValuesInitialValues = {
     ticker: "",
     type: "",
     price: "",
     idealPorcentage: "",
     quantity: "",
     total: "",
-  });
+  };
+  const [tableFormValues, setTableFormValues] = useState(
+    tableFormValuesInitialValues
+  );
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -69,16 +72,11 @@ function Table({
   };
 
   const addItemToTable = () => {
-    console.log(
-      tableData.reduce((acc, curr) => {
-        acc = acc + Number(curr.stockAmount) * Number(curr.price);
-        return acc / tableData.length;
-      }, 0)
-    );
     const currentPorcentage =
       ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
         cardBalanceValues.total) *
       100;
+    const status = currentPorcentage < Number(tableFormValues.idealPorcentage);
     tableData.push({
       stock: tableFormValues.ticker,
       type: tableFormValues.type,
@@ -86,12 +84,17 @@ function Table({
       idealPorcentage: Number(tableFormValues.idealPorcentage),
       currentPorcentage,
       stockAmount: Number(tableFormValues.quantity),
-      shouldBuyAmount: 10,
-      status:
-        currentPorcentage < Number(tableFormValues.idealPorcentage)
-          ? "Comprar"
-          : "Segurar",
+      shouldBuyAmount: status
+        ? Math.floor(
+            (Number(tableFormValues.idealPorcentage) *
+              Number(tableFormValues.quantity)) /
+              currentPorcentage -
+              Number(tableFormValues.quantity)
+          )
+        : 0,
+      status: status ? "Comprar" : "Segurar",
     });
+    setTableFormValues(tableFormValuesInitialValues);
     setIsAdding(false);
   };
 
