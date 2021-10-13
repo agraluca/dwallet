@@ -7,47 +7,11 @@ import Table from "components/Table";
 import { Button } from "components/Button";
 
 import * as S from "./styles";
-
-const tableData = [
-  {
-    stock: "ABEV3",
-    type: "Ação",
-    price: 30,
-    idealPorcentage: 8,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 10,
-    status: "Comprar",
-  },
-  {
-    stock: "HGLG11",
-    type: "FII",
-    price: 110,
-    idealPorcentage: 8,
-    currentPorcentage: 5,
-    stockAmount: 10,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-  {
-    stock: "BIDI3",
-    type: "Ação",
-    price: 40,
-    idealPorcentage: 4,
-    currentPorcentage: 5,
-    stockAmount: 50,
-    shouldBuyAmount: 0,
-    status: "Segurar",
-  },
-];
+import { useCashFlow } from "hooks";
 
 function Wallet() {
   const [isAdding, setIsAdding] = useState(false);
-  const [cardBalanceValues] = useState({
-    total: 2000,
-    rf: 600,
-    rv: 1400,
-  });
+  const { total, rf, rv, tableData } = useCashFlow();
 
   const addItemToTable = () => {
     isAdding ? setIsAdding(false) : setIsAdding(true);
@@ -58,15 +22,9 @@ function Wallet() {
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={cardBalanceValues.total} />
-          <CardBalance
-            type="rf"
-            value={(cardBalanceValues.rf / cardBalanceValues.total) * 100}
-          />
-          <CardBalance
-            type="rv"
-            value={(cardBalanceValues.rv / cardBalanceValues.total) * 100}
-          />
+          <CardBalance type="total" value={total} />
+          <CardBalance type="rf" value={(rf / total) * 100} />
+          <CardBalance type="rv" value={(rv / total) * 100} />
         </S.CardWrapper>
 
         <S.ButtonsWrapper isAdding={isAdding}>
@@ -89,7 +47,6 @@ function Wallet() {
           tableData={tableData}
           isAdding={isAdding}
           setIsAdding={setIsAdding}
-          cardBalanceValues={cardBalanceValues}
         />
       </S.Container>
     </Wrapper>

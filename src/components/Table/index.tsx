@@ -1,5 +1,6 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
+import { useCashFlow } from "hooks";
 import { useState } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
@@ -20,19 +21,9 @@ export type TableProps = {
   tableData: TableDataProps[];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
-  cardBalanceValues: {
-    total: number;
-    rf: number;
-    rv: number;
-  };
 };
 
-function Table({
-  tableData,
-  isAdding,
-  setIsAdding,
-  cardBalanceValues,
-}: TableProps) {
+function Table({ tableData, isAdding, setIsAdding }: TableProps) {
   const tableFormValuesInitialValues = {
     ticker: "",
     type: "",
@@ -44,6 +35,8 @@ function Table({
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );
+
+  const { total, setTableData } = useCashFlow();
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -72,28 +65,34 @@ function Table({
   };
 
   const addItemToTable = () => {
-    const currentPorcentage =
+    const currentPorcentage = (
       ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
-        cardBalanceValues.total) *
-      100;
-    const status = currentPorcentage < Number(tableFormValues.idealPorcentage);
-    tableData.push({
-      stock: tableFormValues.ticker,
-      type: tableFormValues.type,
-      price: Number(tableFormValues.price),
-      idealPorcentage: Number(tableFormValues.idealPorcentage),
-      currentPorcentage,
-      stockAmount: Number(tableFormValues.quantity),
-      shouldBuyAmount: status
-        ? Math.floor(
-            (Number(tableFormValues.idealPorcentage) *
-              Number(tableFormValues.quantity)) /
-              currentPorcentage -
-              Number(tableFormValues.quantity)
-          )
-        : 0,
-      status: status ? "Comprar" : "Segurar",
-    });
+        (total + Number(tableFormValues.total))) *
+      100
+    ).toFixed(2);
+    const status =
+      Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
+
+    setTableData([
+      ...tableData,
+      {
+        stock: tableFormValues.ticker,
+        type: tableFormValues.type,
+        price: Number(tableFormValues.price),
+        idealPorcentage: Number(tableFormValues.idealPorcentage),
+        currentPorcentage: Number(currentPorcentage),
+        stockAmount: Number(tableFormValues.quantity),
+        shouldBuyAmount: status
+          ? Math.ceil(
+              (Number(tableFormValues.idealPorcentage) *
+                Number(tableFormValues.quantity)) /
+                Number(currentPorcentage) -
+                Number(tableFormValues.quantity)
+            )
+          : 0,
+        status: status ? "Comprar" : "Segurar",
+      },
+    ]);
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding(false);
   };
@@ -175,7 +174,7 @@ function Table({
           <>
             <S.TableHeader>
               <S.TableHeaderRow>
-                <S.TableHeaderData>Thicker</S.TableHeaderData>
+                <S.TableHeaderData>Ticker</S.TableHeaderData>
                 <S.TableHeaderData>Tipo</S.TableHeaderData>
                 <S.TableHeaderData>Preço</S.TableHeaderData>
                 <S.TableHeaderData>% Ideal</S.TableHeaderData>
