@@ -42,12 +42,13 @@ function Wallet() {
             Ver gráfico
           </Button>
         </S.ButtonsWrapper>
-
-        <Table
-          tableData={tableData}
-          isAdding={isAdding}
-          setIsAdding={setIsAdding}
-        />
+        <S.TableWrapper>
+          <Table
+            tableData={tableData}
+            isAdding={isAdding}
+            setIsAdding={setIsAdding}
+          />
+        </S.TableWrapper>
       </S.Container>
     </Wrapper>
   );
