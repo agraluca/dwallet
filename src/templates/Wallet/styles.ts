@@ -67,6 +67,10 @@ export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
     ${media.lessThan("medium")`
       justify-content: center;
       flex-direction: column;
+      padding-top: ${theme.spacings.medium};
+      padding-bottom:  ${theme.spacings.medium};
+      };
+
     `}
   `}
 `;
