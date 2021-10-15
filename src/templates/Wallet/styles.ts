@@ -5,8 +5,11 @@ import media from "styled-media-query";
 export const Container = styled.main`
   ${({ theme }) => css`
     margin: 0 auto;
-    padding: 0 calc(${theme.spacings.medium} * 2)
-      calc(${theme.spacings.medium} * 2);
+    padding: 0 calc(${theme.spacings.medium} * 2);
+
+    ${media.lessThan("medium")`
+      padding: 0 ${theme.spacings.xxsmall};
+    `}
   `}
 `;
 
@@ -17,6 +20,10 @@ export const CardWrapper = styled.section`
     justify-content: space-between;
     align-items: center;
     gap: calc(${theme.grid.gutter} * 2);
+
+    ${media.lessThan("medium")`
+      gap: ${theme.spacings.small};
+    `}
 
     ${media.lessThan("large")`
       overflow-x: auto;
