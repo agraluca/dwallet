@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { formatNumberToBrlCurrency } from "utils";
+import { formatNumberToBrlCurrency, formatNumberToPercent } from "utils";
 
 import * as S from "./styles";
 
 export type CardProps = {
   type: "total" | "rf" | "rv";
-  value: number;
+  value: number | string;
 };
 
 function CardBalance({ type = "total", value = 1000 }: CardProps) {
@@ -35,7 +35,9 @@ function CardBalance({ type = "total", value = 1000 }: CardProps) {
         />
       </S.TitleWrapper>
       <S.Title className="card__value_size">
-        {type === "total" ? formatNumberToBrlCurrency(value) : `${value}%`}
+        {type === "total"
+          ? formatNumberToBrlCurrency(value)
+          : formatNumberToPercent(value)}
       </S.Title>
     </S.Wrapper>
   );

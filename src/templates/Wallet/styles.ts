@@ -52,10 +52,20 @@ export const CardWrapper = styled.section`
     `}
   `}
 `;
+
+export const ButtonsWrapper = styled.section`
+  ${() => css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `}
+`;
+
 type ButtonsWrapperProps = {
   isAdding?: boolean;
 };
-export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
+
+export const ActionButtonsWrapper = styled.div<ButtonsWrapperProps>`
   ${({ theme, isAdding }) => css`
     display: flex;
     gap: ${theme.grid.gutter};
@@ -72,6 +82,46 @@ export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
       };
 
     `}
+  `}
+`;
+
+export const ToggleContainer = styled.div<ButtonsWrapperProps>`
+  ${({ theme }) => css`
+    display: flex;
+
+    input {
+      position: absolute;
+      height: 0;
+      width: 0;
+      border: 0;
+
+      &:checked + label {
+        background-color: ${theme.colors.yellow};
+        color: ${theme.colors.black};
+        box-shadow: none;
+      }
+    }
+
+    label {
+      cursor: pointer;
+      background-color: ${theme.colors.black};
+      color: ${theme.colors.lightBlue};
+      font-size: ${theme.font.sizes.small};
+      text-align: center;
+      padding: ${theme.spacings.xsmall} ${theme.spacings.large};
+      border: 0.2rem solid ${theme.colors.blue};
+      /* box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3),
+        0 1px rgba(255, 255, 255, 0.1); */
+      transition: all 0.1s ease-in-out;
+
+      &:first-of-type {
+        border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
+      }
+
+      &:last-of-type {
+        border-radius: 0 ${theme.border.radius} ${theme.border.radius} 0;
+      }
+    }
   `}
 `;
 

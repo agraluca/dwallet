@@ -12,14 +12,14 @@ describe("<Card />", () => {
   });
 
   it("should render fixed income card", () => {
-    renderWithTheme(<Card type="rf" value={30} />);
+    renderWithTheme(<Card type="rf" value={0.3} />);
 
     expect(screen.getByText("Renda Fixa")).toBeInTheDocument();
     expect(screen.getByText("30%")).toBeInTheDocument();
   });
 
   it("should render variable income card", () => {
-    renderWithTheme(<Card type="rv" value={70} />);
+    renderWithTheme(<Card type="rv" value={0.7} />);
 
     expect(screen.getByText("Renda Variável")).toBeInTheDocument();
     expect(screen.getByText("70%")).toBeInTheDocument();

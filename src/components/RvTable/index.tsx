@@ -6,7 +6,7 @@ import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
 import * as S from "./styles";
 
-export type TableDataProps = {
+export type TableDataRvProps = {
   stock: string;
   type: string;
   price: number;
@@ -18,12 +18,12 @@ export type TableDataProps = {
 };
 
 export type TableProps = {
-  tableData: TableDataProps[];
+  tableDataRv: TableDataRvProps[];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
 };
 
-function Table({ tableData, isAdding, setIsAdding }: TableProps) {
+function RvTable({ tableDataRv, isAdding, setIsAdding }: TableProps) {
   const tableFormValuesInitialValues = {
     ticker: "",
     type: "",
@@ -36,7 +36,7 @@ function Table({ tableData, isAdding, setIsAdding }: TableProps) {
     tableFormValuesInitialValues
   );
 
-  const { total, setTableData } = useCashFlow();
+  const { total, setTableDataRv } = useCashFlow();
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -73,8 +73,8 @@ function Table({ tableData, isAdding, setIsAdding }: TableProps) {
     const status =
       Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
 
-    setTableData([
-      ...tableData,
+    setTableDataRv([
+      ...tableDataRv,
       {
         stock: tableFormValues.ticker,
         type: tableFormValues.type,
@@ -170,7 +170,7 @@ function Table({ tableData, isAdding, setIsAdding }: TableProps) {
       )}
 
       <S.TableWrapper>
-        {tableData?.length && (
+        {tableDataRv?.length && (
           <>
             <S.TableHeader>
               <S.TableHeaderRow>
@@ -185,7 +185,7 @@ function Table({ tableData, isAdding, setIsAdding }: TableProps) {
               </S.TableHeaderRow>
             </S.TableHeader>
             <S.TableBody>
-              {tableData?.map((data, index) => {
+              {tableDataRv?.map((data, index) => {
                 return (
                   <S.TableRow key={index}>
                     <S.TableBodyData>
@@ -219,4 +219,4 @@ function Table({ tableData, isAdding, setIsAdding }: TableProps) {
   );
 }
 
-export default Table;
+export default RvTable;
