@@ -95,9 +95,11 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
   }, [rf, rv, tableDataRf, tableDataRv, total]);
 
   useEffect(() => {
+    console.log(rv);
     const updatedTableDataRv = tableDataRv.map((data) => {
       const currentPorcentage = (
-        ((Number(data.price) * Number(data.stockAmount)) / total) *
+        ((Number(data.price) * Number(data.stockAmount)) /
+          ((total * rv) / total)) *
         100
       ).toFixed(2);
       const status = Number(currentPorcentage) < Number(data.idealPorcentage);
@@ -122,7 +124,7 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
 
     const updatedTableDataRf = tableDataRf.map((data) => {
       const currentPorcentage = (
-        (Number(data.totalPrice) / total) *
+        (Number(data.totalPrice) / ((total * rf) / total)) *
         100
       ).toFixed(2);
       const status = Number(currentPorcentage) < Number(data.idealPorcentage);
@@ -132,11 +134,9 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
         currentPorcentage: Number(currentPorcentage),
         totalPrice: Number(data.totalPrice),
         shouldBuyPrice: status
-          ? Math.ceil(
-              (Number(data.idealPorcentage) * Number(data.totalPrice)) /
-                Number(currentPorcentage) -
-                Number(data.totalPrice)
-            )
+          ? (Number(data.idealPorcentage) * Number(data.totalPrice)) /
+              Number(currentPorcentage) -
+            Number(data.totalPrice)
           : 0,
         status: status ? "Comprar" : "Segurar",
       };

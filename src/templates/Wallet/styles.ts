@@ -54,10 +54,15 @@ export const CardWrapper = styled.section`
 `;
 
 export const ButtonsWrapper = styled.section`
-  ${() => css`
+  ${({ theme }) => css`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    ${media.lessThan("medium")`
+      flex-direction: column;
+      padding-bottom:  ${theme.spacings.medium};
+    `}
   `}
 `;
 
@@ -79,48 +84,49 @@ export const ActionButtonsWrapper = styled.div<ButtonsWrapperProps>`
       flex-direction: column;
       padding-top: ${theme.spacings.medium};
       padding-bottom:  ${theme.spacings.medium};
-      };
-
     `}
   `}
 `;
 
 export const ToggleContainer = styled.div<ButtonsWrapperProps>`
-  ${({ theme }) => css`
+  ${() => css`
     display: flex;
+    overflow: hidden;
+  `}
+`;
+export const SwitchInput = styled.input`
+  ${({ theme }) => css`
+    position: absolute;
+    height: 0;
+    width: 0;
+    border: 0;
 
-    input {
-      position: absolute;
-      height: 0;
-      width: 0;
-      border: 0;
+    &:checked + label {
+      background-color: ${theme.colors.yellow};
+      color: ${theme.colors.black};
+      box-shadow: none;
+    }
+  `}
+`;
 
-      &:checked + label {
-        background-color: ${theme.colors.yellow};
-        color: ${theme.colors.black};
-        box-shadow: none;
-      }
+export const SwitchLabel = styled.label`
+  ${({ theme }) => css`
+    cursor: pointer;
+    background-color: ${theme.colors.black};
+    color: ${theme.colors.lightBlue};
+    font-size: ${theme.font.sizes.small};
+    text-align: center;
+    padding: ${theme.spacings.xsmall} ${theme.spacings.large};
+    border: 0.2rem solid ${theme.colors.blue};
+
+    transition: all 0.1s ease-in-out;
+
+    &:first-of-type {
+      border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
     }
 
-    label {
-      cursor: pointer;
-      background-color: ${theme.colors.black};
-      color: ${theme.colors.lightBlue};
-      font-size: ${theme.font.sizes.small};
-      text-align: center;
-      padding: ${theme.spacings.xsmall} ${theme.spacings.large};
-      border: 0.2rem solid ${theme.colors.blue};
-      /* box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3),
-        0 1px rgba(255, 255, 255, 0.1); */
-      transition: all 0.1s ease-in-out;
-
-      &:first-of-type {
-        border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
-      }
-
-      &:last-of-type {
-        border-radius: 0 ${theme.border.radius} ${theme.border.radius} 0;
-      }
+    &:last-of-type {
+      border-radius: 0 ${theme.border.radius} ${theme.border.radius} 0;
     }
   `}
 `;

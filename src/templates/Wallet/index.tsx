@@ -50,7 +50,7 @@ function Wallet() {
             </Button>
           </S.ActionButtonsWrapper>
           <S.ToggleContainer>
-            <input
+            <S.SwitchInput
               type="radio"
               id="radio-one"
               name="switch-one"
@@ -58,8 +58,8 @@ function Wallet() {
               onChange={handleToggleStatus}
               checked={toggleStatus === "rf"}
             />
-            <label htmlFor="radio-one">Renda Fixa</label>
-            <input
+            <S.SwitchLabel htmlFor="radio-one">Renda Fixa</S.SwitchLabel>
+            <S.SwitchInput
               type="radio"
               id="radio-two"
               name="switch-one"
@@ -67,7 +67,7 @@ function Wallet() {
               onChange={handleToggleStatus}
               checked={toggleStatus === "rv"}
             />
-            <label htmlFor="radio-two">Renda Variável</label>
+            <S.SwitchLabel htmlFor="radio-two">Renda Variável</S.SwitchLabel>
           </S.ToggleContainer>
         </S.ButtonsWrapper>
 
