@@ -52,6 +52,7 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
   const [total, setTotal] = useState(0);
   const [rf, setRf] = useState(0);
   const [rv, setRv] = useState(0);
+
   const [tableDataRv, setTableDataRv] = useState<TableDataRvProps[]>([
     {
       stock: "ABEV3",
@@ -63,9 +64,27 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
       shouldBuyAmount: 0,
       status: "Segurar",
     },
+    {
+      stock: "ITUB3",
+      type: "Ação",
+      price: 15.5,
+      idealPorcentage: 8,
+      currentPorcentage: 8,
+      stockAmount: 10,
+      shouldBuyAmount: 0,
+      status: "Segurar",
+    },
   ]);
 
   const [tableDataRf, setTableDataRf] = useState<TableDataRfProps[]>([
+    {
+      name: "CDB",
+      idealPorcentage: 10,
+      currentPorcentage: 10,
+      totalPrice: 100,
+      shouldBuyPrice: 0,
+      status: "Segurar",
+    },
     {
       name: "CDB",
       idealPorcentage: 10,

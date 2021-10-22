@@ -23,14 +23,24 @@ function Wallet() {
     setToggleStatus(event.target.value);
   };
 
+  const rvTotal = tableDataRv.reduce((acc, item) => {
+    acc += item.price * item.stockAmount;
+    return acc;
+  }, 0);
+
+  const rfTotal = tableDataRf.reduce((acc, item) => {
+    acc += item.totalPrice;
+    return acc;
+  }, 0);
+
   return (
     <Wrapper>
       <Menu />
       <S.Container>
         <S.CardWrapper>
           <CardBalance type="total" value={total} />
-          <CardBalance type="rf" value={rf / total} />
-          <CardBalance type="rv" value={rv / total} />
+          <CardBalance type="rf" value={rf / total} total={rfTotal} />
+          <CardBalance type="rv" value={rv / total} total={rvTotal} />
         </S.CardWrapper>
 
         <S.ButtonsWrapper>
