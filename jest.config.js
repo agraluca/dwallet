@@ -8,7 +8,7 @@ module.exports = {
     "!src/utils/**",
     "!src/styles/**",
   ],
-  coverageDirectory: "<rootDir>/src/coverage",
+  coverageDirectory: "<rootDir>/coverage",
   setupFilesAfterEnv: ["<rootDir>/.jest/setup.ts"],
   modulePaths: ["<rootDir>/src/", "<rootDir>/.jest"],
 };
