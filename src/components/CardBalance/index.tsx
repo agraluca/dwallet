@@ -10,7 +10,7 @@ export type CardProps = {
   total?: number | string;
 };
 
-function CardBalance({ type = "total", value = 1000, total = 0 }: CardProps) {
+function CardBalance({ type, value, total = 0 }: CardProps) {
   const [isPercentageValue, setIsPercentageValue] = useState(true);
 
   function handleTogglePercentageValue() {

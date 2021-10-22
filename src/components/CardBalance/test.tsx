@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { renderWithTheme } from "utils/tests/helpers";
 
 import Card from ".";
@@ -23,5 +23,20 @@ describe("<Card />", () => {
 
     expect(screen.getByText("Renda Variável")).toBeInTheDocument();
     expect(screen.getByText("70%")).toBeInTheDocument();
+  });
+  it("should render the total value when toggle button is clicked in variableincome card", () => {
+    renderWithTheme(<Card type="rv" value={1000} total={35} />);
+
+    fireEvent.click(screen.getByTitle("Percentual"));
+
+    expect(screen.getByText("R$ 35,00"));
+  });
+
+  it("should render the total value when toggle button is clicked in fixed income card", () => {
+    renderWithTheme(<Card type="rf" value={1000} total={35} />);
+
+    fireEvent.click(screen.getByTitle("Percentual"));
+
+    expect(screen.getByText("R$ 35,00"));
   });
 });
