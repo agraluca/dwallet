@@ -8,9 +8,10 @@ export type CardProps = {
   type: "total" | "rf" | "rv";
   value: number | string;
   total?: number | string;
+  hide?: boolean;
 };
 
-function CardBalance({ type, value, total = 0 }: CardProps) {
+function CardBalance({ type, value, total = 0, hide = false }: CardProps) {
   const [isPercentageValue, setIsPercentageValue] = useState(true);
 
   function handleTogglePercentageValue() {
@@ -31,11 +32,13 @@ function CardBalance({ type, value, total = 0 }: CardProps) {
       <S.TitleWrapper>
         <S.Title>{card[type]}</S.Title>
         {type === "total" ? (
-          <Image
-            src="/icons/dollar-sign.svg"
-            width={iconsWidth}
-            height={iconsHeight}
-          />
+          <S.DesactivatedButton>
+            <Image
+              src="/icons/dollar-sign.svg"
+              width={iconsWidth}
+              height={iconsHeight}
+            />
+          </S.DesactivatedButton>
         ) : (
           <S.ToggleButton
             onClick={handleTogglePercentageValue}
@@ -53,7 +56,7 @@ function CardBalance({ type, value, total = 0 }: CardProps) {
           </S.ToggleButton>
         )}
       </S.TitleWrapper>
-      <S.Title className="card__value_size">
+      <S.Title className={`card__value_size ${hide && "is_hidding"}`}>
         {type === "total"
           ? formatNumberToBrlCurrency(value)
           : isPercentageValue

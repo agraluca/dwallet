@@ -13,10 +13,15 @@ import RfTable from "components/RfTable";
 function Wallet() {
   const [isAdding, setIsAdding] = useState(false);
   const [toggleStatus, setToggleStatus] = useState("rv");
+  const [isHidding, setIsHidding] = useState(false);
   const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
   const addItemToTable = () => {
     isAdding ? setIsAdding(false) : setIsAdding(true);
+  };
+
+  const handleToggleIsHidding = () => {
+    setIsHidding((state) => !state);
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,17 +43,28 @@ function Wallet() {
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={total} />
-          <CardBalance type="rf" value={rf / total} total={rfTotal} />
-          <CardBalance type="rv" value={rv / total} total={rvTotal} />
+          <CardBalance type="total" value={total} hide={isHidding} />
+          <CardBalance
+            type="rf"
+            value={rf / total}
+            total={rfTotal}
+            hide={isHidding}
+          />
+          <CardBalance
+            type="rv"
+            value={rv / total}
+            total={rvTotal}
+            hide={isHidding}
+          />
         </S.CardWrapper>
 
         <S.ButtonsWrapper>
           <S.ActionButtonsWrapper isAdding={isAdding}>
             <Button
               variant="icon"
-              icon="icons/eye.svg"
+              icon={isHidding ? "icons/eye-off.svg" : "icons/eye.svg"}
               iconSize="medium"
+              onClick={handleToggleIsHidding}
             ></Button>
             <Button
               variant={isAdding ? "" : "icon"}

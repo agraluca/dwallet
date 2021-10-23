@@ -39,4 +39,10 @@ describe("<Card />", () => {
 
     expect(screen.getByText("R$ 35,00"));
   });
+
+  it("should render the component when value is hidding", () => {
+    renderWithTheme(<Card type="rf" value={1000} total={35} hide />);
+
+    expect(screen.getByText("100.000%")).toHaveClass("is_hidding");
+  });
 });
