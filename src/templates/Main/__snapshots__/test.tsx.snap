@@ -129,15 +129,17 @@ exports[`<Main /> should render the heading 1`] = `
 
 .c0 {
   background-color: #242423;
+  position: relative;
   width: 100%;
   height: 100%;
-  position: relative;
 }
 
 .c11 {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .c1 {
@@ -181,7 +183,7 @@ exports[`<Main /> should render the heading 1`] = `
   }
 }
 
-<main
+<section
   class="c0"
 >
   <section
@@ -240,5 +242,5 @@ exports[`<Main /> should render the heading 1`] = `
     class="c11 wave"
     src="/img/wave.svg"
   />
-</main>
+</section>
 `;

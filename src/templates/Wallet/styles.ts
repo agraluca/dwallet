@@ -1,108 +1,159 @@
+import { Wrapper as CardBalance } from "components/CardBalance/styles";
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
-export const Wrapper = styled.main`
+export const Container = styled.main`
   ${({ theme }) => css`
-    background-color: ${theme.colors.black};
-    width: 100%;
-    height: 100%;
-    padding: ${theme.spacings.medium};
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    color: ${theme.colors.white};
+    margin: 0 auto;
+    padding: 0 calc(${theme.spacings.medium} * 2);
+
+    ${media.lessThan("medium")`
+      padding: 0 ${theme.spacings.xxsmall};
+    `}
   `}
 `;
 
-export const Logo = styled.img`
-  width: 10rem;
+export const CardWrapper = styled.section`
+  ${({ theme }) => css`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: calc(${theme.grid.gutter} * 2);
+
+    ${media.lessThan("medium")`
+      gap: ${theme.spacings.small};
+    `}
+
+    ${media.lessThan("large")`
+      overflow-x: auto;
+      padding-bottom: ${theme.spacings.xsmall};
+
+      &::-webkit-scrollbar {
+        height: 1rem;
+
+      }
+
+      &::-webkit-scrollbar-track {
+        background: ${theme.colors.lightBlue};
+        border-radius: ${theme.border.radius};
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: ${theme.colors.yellow};
+        border-radius: ${theme.border.radius};
+      }
+
+      ${CardBalance} {
+        max-height: 15rem;
+        min-width: 30rem;
+      }
+
+    `}
+  `}
 `;
 
-export const TitleWrapper = styled.div`
-  ${({ theme }) => css`
+export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
+  ${({ theme, isAdding }) => css`
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    //gap: ${theme.grid.gutter};
+    padding-top: calc(${theme.spacings.medium} * 2);
+    padding-bottom: ${isAdding
+      ? theme.spacings.medium
+      : `calc(${theme.spacings.medium} * 2)`};
 
-    .login--title {
-      font-size: calc(${theme.font.sizes.large} * 2);
+    ${media.lessThan("medium")`
+      justify-content: center;
+      flex-direction: column;
+      padding-top: ${theme.spacings.medium};
+      padding-bottom:  ${theme.spacings.medium};
+    `}
+  `}
+`;
+
+type ButtonsWrapperProps = {
+  isAdding?: boolean;
+};
+
+export const ActionButtonsWrapper = styled.div<ButtonsWrapperProps>`
+  ${({ theme }) => css`
+    display: flex;
+    gap: ${theme.font.sizes.small};
+    ${media.lessThan("medium")`
+      flex-direction: column;
+      justify-content: stretch;
+      width: 29rem;
+      padding-top: ${theme.spacings.medium};
+      padding-bottom:  ${theme.spacings.medium};
+    `}
+  `}
+`;
+
+export const ToggleContainer = styled.div<ButtonsWrapperProps>`
+  ${() => css`
+    display: flex;
+    overflow: hidden;
+  `}
+`;
+export const SwitchInput = styled.input`
+  ${({ theme }) => css`
+    position: absolute;
+    height: 0;
+    width: 0;
+    border: 0;
+
+    &:checked + label {
+      background-color: ${theme.colors.yellow};
+      color: ${theme.colors.black};
+      box-shadow: none;
     }
   `}
 `;
 
-export const Description = styled.p`
+export const SwitchLabel = styled.label`
   ${({ theme }) => css`
-    font-size: ${theme.font.sizes.large};
-    font-weight: ${theme.font.weight.thin};
-    line-height: calc(${theme.font.sizes.large} * 1.2);
-    max-width: 40rem;
-  `}
-`;
-
-export const Content = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 50%;
-
-  ${media.lessThan("large")`
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  `}
-`;
-
-export const IlustrationWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  ${media.lessThan("large")`
-    display: none;
-  `}
-`;
-
-export const Illustration = styled.img`
-  width: min(30rem, 100%);
-  align-self: flex-start;
-`;
-
-export const WaveIllustration = styled.img`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-`;
-
-export const Button = styled.button`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    width: 40rem;
-    border-radius: ${theme.border.radius};
-    padding: ${theme.spacings.xsmall};
-    font-size: ${theme.font.sizes.small};
-    font-weight: ${theme.font.weight.normal};
     cursor: pointer;
-    transition: filter 0.2s;
-    margin-top: ${theme.spacings.small};
-    border: 0.2rem solid ${theme.colors.white};
-    color: ${theme.colors.white};
     background-color: ${theme.colors.black};
+    color: ${theme.colors.lightBlue};
+    font-size: ${theme.font.sizes.small};
+    text-align: center;
+    padding: ${theme.spacings.xsmall} ${theme.spacings.large};
+    border: 0.2rem solid ${theme.colors.blue};
 
-    .login--google-logo {
-      width: 2.8rem;
-      height: 2.8rem;
+    transition: all 0.1s ease-in-out;
+
+    &:first-of-type {
+      border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
     }
 
-    &:hover {
-      filter: brightness(0.8);
+    &:last-of-type {
+      border-radius: 0 ${theme.border.radius} ${theme.border.radius} 0;
     }
+  `}
+`;
 
-    ${media.lessThan("small")`
-      width: 100%;
-   `}
+export const TableWrapper = styled.section`
+  ${({ theme }) => css`
+    width: 100%;
+
+    ${media.lessThan("large")`
+      overflow: auto;
+      &::-webkit-scrollbar {
+        height: 1rem;
+
+      }
+
+      &::-webkit-scrollbar-track {
+        background: ${theme.colors.lightBlue};
+        border-radius: ${theme.border.radius};
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: ${theme.colors.yellow};
+        border-radius: ${theme.border.radius};
+      }
+    `}
   `}
 `;
