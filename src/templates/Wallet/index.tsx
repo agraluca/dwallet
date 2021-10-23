@@ -17,11 +17,16 @@ function Wallet() {
   const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
   const addItemToTable = () => {
-    isAdding ? setIsAdding(false) : setIsAdding(true);
+    if (isAdding) {
+      setIsAdding(false);
+    } else {
+      setIsAdding(true);
+      setIsHidding(false);
+    }
   };
 
   const handleToggleIsHidding = () => {
-    setIsHidding((state) => !state);
+    !isAdding && setIsHidding((state) => !state);
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,12 +113,14 @@ function Wallet() {
               tableDataRv={tableDataRv}
               isAdding={isAdding}
               setIsAdding={setIsAdding}
+              hide={isHidding}
             />
           ) : (
             <RfTable
               tableDataRf={tableDataRf}
               isAdding={isAdding}
               setIsAdding={setIsAdding}
+              hide={isHidding}
             />
           )}
         </S.TableWrapper>

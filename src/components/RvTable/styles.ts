@@ -82,6 +82,8 @@ export const TableBodyData = styled.td`
     font-weight: ${theme.font.weight.bold};
     padding: 0 ${theme.spacings.medium};
 
+    min-width: 13.2rem;
+
     &:first-child {
       border-top-left-radius: ${theme.border.radius};
       border-bottom-left-radius: ${theme.border.radius};

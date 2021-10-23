@@ -11,9 +11,15 @@ export type TableProps = {
   tableDataRf: TableDataRfProps[];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
+  hide?: boolean;
 };
 
-function RfTable({ tableDataRf, isAdding, setIsAdding }: TableProps) {
+function RfTable({
+  tableDataRf,
+  isAdding,
+  setIsAdding,
+  hide = false,
+}: TableProps) {
   const tableFormValuesInitialValues = {
     name: "",
     idealPorcentage: 0,
@@ -126,13 +132,21 @@ function RfTable({ tableDataRf, isAdding, setIsAdding }: TableProps) {
                 return (
                   <S.TableRow key={index}>
                     <S.TableBodyData>{data.name.toUpperCase()}</S.TableBodyData>
-                    <S.TableBodyData>{data.idealPorcentage}%</S.TableBodyData>
-                    <S.TableBodyData>{data.currentPorcentage}%</S.TableBodyData>
                     <S.TableBodyData>
-                      {formatNumberToBrlCurrency(data.totalPrice)}
+                      {hide ? " - " : `${data.idealPorcentage}%`}
                     </S.TableBodyData>
                     <S.TableBodyData>
-                      {formatNumberToBrlCurrency(data.shouldBuyPrice)}
+                      {hide ? " - " : `${data.currentPorcentage}%`}
+                    </S.TableBodyData>
+                    <S.TableBodyData>
+                      {hide
+                        ? " - "
+                        : formatNumberToBrlCurrency(data.totalPrice)}
+                    </S.TableBodyData>
+                    <S.TableBodyData>
+                      {hide
+                        ? " - "
+                        : formatNumberToBrlCurrency(data.shouldBuyPrice)}
                     </S.TableBodyData>
                     <S.TableBodyData
                       className={
@@ -141,7 +155,7 @@ function RfTable({ tableDataRf, isAdding, setIsAdding }: TableProps) {
                           : "table__body-data_red"
                       }
                     >
-                      {data.status}
+                      {hide ? " - " : data.status}
                     </S.TableBodyData>
                   </S.TableRow>
                 );
