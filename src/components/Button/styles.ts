@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface IconProps {
-  iconSize: "small" | "medium" | "large";
+  iconSize?: "small" | "medium" | "large";
 }
 
 export const Button = styled.button`

@@ -12,7 +12,7 @@ export function Button({
   children,
   variant = "",
   icon,
-  iconSize = "small",
+  iconSize,
   ...rest
 }: ButtonProps) {
   switch (variant) {
