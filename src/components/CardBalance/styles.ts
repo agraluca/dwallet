@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
     );
     border: 0.3rem solid ${theme.colors.yellow};
     border-radius: ${theme.border.radius};
-    min-height: 14.2rem;
+    min-height: 15rem;
   `}
 `;
 
