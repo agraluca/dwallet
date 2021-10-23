@@ -90,5 +90,14 @@ export const ToggleButton = styled.button`
 `;
 
 export const DesactivatedButton = styled(ToggleButton)`
-  cursor: none;
+  cursor: default;
+
+  &:hover {
+    border: 0;
+    border-radius: 0;
+
+    & img {
+      filter: none;
+    }
+  }
 `;
