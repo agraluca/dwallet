@@ -46,6 +46,11 @@ function Wallet() {
         <S.ButtonsWrapper>
           <S.ActionButtonsWrapper isAdding={isAdding}>
             <Button
+              variant="icon"
+              icon="icons/eye.svg"
+              iconSize="medium"
+            ></Button>
+            <Button
               variant={isAdding ? "" : "icon"}
               onClick={addItemToTable}
               {...(isAdding ? {} : { icon: "icons/plus.svg" })}

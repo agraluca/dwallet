@@ -1,11 +1,15 @@
 import styled, { css } from "styled-components";
 
+interface IconProps {
+  iconSize: "small" | "medium" | "large";
+}
+
 export const Button = styled.button`
   ${({ theme }) => css`
     background-color: ${theme.colors.black};
     color: ${theme.colors.blue};
     border: 0.2rem solid ${theme.colors.blue};
-    padding: ${theme.spacings.xsmall} ${theme.spacings.large};
+    padding: ${theme.spacings.xsmall} ${theme.spacings.small};
     border-radius: ${theme.border.radius};
     font-size: ${theme.font.sizes.small};
     font-weight: ${theme.font.weight.bold};
@@ -30,7 +34,30 @@ export const IconButton = styled(Button)`
   `}
 `;
 
-export const Icon = styled.img`
-  width: 1.8rem;
-  height: 1.8rem;
+export const Icon = styled.img<IconProps>`
+  ${({ iconSize, theme }) => {
+    switch (iconSize) {
+      case "small":
+        return css`
+          width: ${theme.font.sizes.small};
+          height: ${theme.font.sizes.small};
+        `;
+      case "medium":
+        return css`
+          width: ${theme.font.sizes.medium};
+          height: ${theme.font.sizes.medium};
+        `;
+      case "large":
+        return css`
+          width: ${theme.font.sizes.large};
+          height: ${theme.font.sizes.large};
+        `;
+
+      default:
+        return css`
+          width: ${theme.font.sizes.small};
+          height: ${theme.font.sizes.small};
+        `;
+    }
+  }}
 `;
