@@ -63,7 +63,7 @@ function Wallet() {
           />
         </S.CardWrapper>
 
-        <S.ButtonsWrapper>
+        <S.ButtonsWrapper isAdding={isAdding}>
           <S.ActionButtonsWrapper isAdding={isAdding}>
             <Button
               variant="icon"
