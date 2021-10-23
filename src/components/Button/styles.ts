@@ -22,6 +22,11 @@ export const Button = styled.button`
         ${theme.colors.lightBlack} 100%
       );
     }
+
+    &:disabled {
+      cursor: not-allowed;
+      filter: brightness(0.8);
+    }
   `}
 `;
 

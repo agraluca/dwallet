@@ -67,9 +67,10 @@ function Wallet() {
           <S.ActionButtonsWrapper isAdding={isAdding}>
             <Button
               variant="icon"
-              icon={isHidding ? "icons/eye-off.svg" : "icons/eye.svg"}
+              icon={isHidding ? "/icons/eye-off.svg" : "/icons/eye.svg"}
               iconSize="medium"
               onClick={handleToggleIsHidding}
+              disabled={isAdding}
             ></Button>
             <Button
               variant={isAdding ? "" : "icon"}
