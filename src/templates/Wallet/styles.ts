@@ -53,14 +53,21 @@ export const CardWrapper = styled.section`
   `}
 `;
 
-export const ButtonsWrapper = styled.section`
-  ${({ theme }) => css`
+export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
+  ${({ theme, isAdding }) => css`
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    //gap: ${theme.grid.gutter};
+    padding-top: calc(${theme.spacings.medium} * 2);
+    padding-bottom: ${isAdding
+      ? theme.spacings.medium
+      : `calc(${theme.spacings.medium} * 2)`};
 
     ${media.lessThan("medium")`
+      justify-content: center;
       flex-direction: column;
+      padding-top: ${theme.spacings.medium};
       padding-bottom:  ${theme.spacings.medium};
     `}
   `}
@@ -71,17 +78,13 @@ type ButtonsWrapperProps = {
 };
 
 export const ActionButtonsWrapper = styled.div<ButtonsWrapperProps>`
-  ${({ theme, isAdding }) => css`
+  ${({ theme }) => css`
     display: flex;
-    gap: ${theme.grid.gutter};
-    padding-top: calc(${theme.spacings.medium} * 2);
-    padding-bottom: ${isAdding
-      ? theme.spacings.medium
-      : `calc(${theme.spacings.medium} * 2)`};
-
+    gap: ${theme.font.sizes.small};
     ${media.lessThan("medium")`
-      justify-content: center;
       flex-direction: column;
+      justify-content: stretch;
+      width: 29rem;
       padding-top: ${theme.spacings.medium};
       padding-bottom:  ${theme.spacings.medium};
     `}

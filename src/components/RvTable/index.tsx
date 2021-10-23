@@ -21,9 +21,15 @@ export type TableProps = {
   tableDataRv: TableDataRvProps[];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
+  hide?: boolean;
 };
 
-function RvTable({ tableDataRv, isAdding, setIsAdding }: TableProps) {
+function RvTable({
+  tableDataRv,
+  isAdding,
+  setIsAdding,
+  hide = false,
+}: TableProps) {
   const tableFormValuesInitialValues = {
     ticker: "",
     type: "",
@@ -193,12 +199,20 @@ function RvTable({ tableDataRv, isAdding, setIsAdding }: TableProps) {
                     </S.TableBodyData>
                     <S.TableBodyData>{data.type}</S.TableBodyData>
                     <S.TableBodyData>
-                      {formatNumberToBrlCurrency(data.price)}
+                      {hide ? " - " : formatNumberToBrlCurrency(data.price)}
                     </S.TableBodyData>
-                    <S.TableBodyData>{data.idealPorcentage}%</S.TableBodyData>
-                    <S.TableBodyData>{data.currentPorcentage}%</S.TableBodyData>
-                    <S.TableBodyData>{data.stockAmount}</S.TableBodyData>
-                    <S.TableBodyData>{data.shouldBuyAmount}</S.TableBodyData>
+                    <S.TableBodyData>
+                      {hide ? " - " : `${data.idealPorcentage}%`}
+                    </S.TableBodyData>
+                    <S.TableBodyData>
+                      {hide ? " - " : `${data.currentPorcentage}%`}
+                    </S.TableBodyData>
+                    <S.TableBodyData>
+                      {hide ? " - " : `${data.stockAmount}`}
+                    </S.TableBodyData>
+                    <S.TableBodyData>
+                      {hide ? " - " : `${data.shouldBuyAmount}`}
+                    </S.TableBodyData>
                     <S.TableBodyData
                       className={
                         data.status === "Comprar"
@@ -206,7 +220,7 @@ function RvTable({ tableDataRv, isAdding, setIsAdding }: TableProps) {
                           : "table__body-data_red"
                       }
                     >
-                      {data.status}
+                      {hide ? " - " : `${data.status}`}
                     </S.TableBodyData>
                   </S.TableRow>
                 );

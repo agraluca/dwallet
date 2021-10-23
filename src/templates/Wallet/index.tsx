@@ -13,10 +13,20 @@ import RfTable from "components/RfTable";
 function Wallet() {
   const [isAdding, setIsAdding] = useState(false);
   const [toggleStatus, setToggleStatus] = useState("rv");
+  const [isHidding, setIsHidding] = useState(false);
   const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
   const addItemToTable = () => {
-    isAdding ? setIsAdding(false) : setIsAdding(true);
+    if (isAdding) {
+      setIsAdding(false);
+    } else {
+      setIsAdding(true);
+      setIsHidding(false);
+    }
+  };
+
+  const handleToggleIsHidding = () => {
+    !isAdding && setIsHidding((state) => !state);
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,13 +48,30 @@ function Wallet() {
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={total} />
-          <CardBalance type="rf" value={rf / total} total={rfTotal} />
-          <CardBalance type="rv" value={rv / total} total={rvTotal} />
+          <CardBalance type="total" value={total} hide={isHidding} />
+          <CardBalance
+            type="rf"
+            value={rf / total}
+            total={rfTotal}
+            hide={isHidding}
+          />
+          <CardBalance
+            type="rv"
+            value={rv / total}
+            total={rvTotal}
+            hide={isHidding}
+          />
         </S.CardWrapper>
 
-        <S.ButtonsWrapper>
+        <S.ButtonsWrapper isAdding={isAdding}>
           <S.ActionButtonsWrapper isAdding={isAdding}>
+            <Button
+              variant="icon"
+              icon={isHidding ? "/icons/eye-off.svg" : "/icons/eye.svg"}
+              iconSize="medium"
+              onClick={handleToggleIsHidding}
+              disabled={isAdding}
+            ></Button>
             <Button
               variant={isAdding ? "" : "icon"}
               onClick={addItemToTable}
@@ -87,12 +114,14 @@ function Wallet() {
               tableDataRv={tableDataRv}
               isAdding={isAdding}
               setIsAdding={setIsAdding}
+              hide={isHidding}
             />
           ) : (
             <RfTable
               tableDataRf={tableDataRf}
               isAdding={isAdding}
               setIsAdding={setIsAdding}
+              hide={isHidding}
             />
           )}
         </S.TableWrapper>
