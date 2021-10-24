@@ -11,22 +11,30 @@ import { useCashFlow } from "hooks";
 import RfTable from "components/RfTable";
 
 function Wallet() {
-  const [isAdding, setIsAdding] = useState(false);
+  const [tableStatus, setTableStatus] = useState("default");
   const [toggleStatus, setToggleStatus] = useState("rv");
-  const [isHidding, setIsHidding] = useState(false);
   const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
-  const addItemToTable = () => {
-    if (isAdding) {
-      setIsAdding(false);
+  const isAddingCondition = tableStatus === "isAdding";
+  const isHiddingCondition = tableStatus === "isHidding";
+
+  const handleToggleIsAdding = () => {
+    if (tableStatus === "isAdding") {
+      setTableStatus("initial");
     } else {
-      setIsAdding(true);
-      setIsHidding(false);
+      setTableStatus("isAdding");
     }
   };
 
   const handleToggleIsHidding = () => {
-    !isAdding && setIsHidding((state) => !state);
+    tableStatus !== "isAdding" &&
+      setTableStatus((state) =>
+        state === "default" ? "isHidding" : "default"
+      );
+  };
+
+  const handleChangeTableStatusToInitial = () => {
+    setTableStatus("initial");
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,36 +56,38 @@ function Wallet() {
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={total} hide={isHidding} />
+          <CardBalance type="total" value={total} hide={isHiddingCondition} />
           <CardBalance
             type="rf"
             value={rf / total}
             total={rfTotal}
-            hide={isHidding}
+            hide={isHiddingCondition}
           />
           <CardBalance
             type="rv"
             value={rv / total}
             total={rvTotal}
-            hide={isHidding}
+            hide={isHiddingCondition}
           />
         </S.CardWrapper>
 
-        <S.ButtonsWrapper isAdding={isAdding}>
-          <S.ActionButtonsWrapper isAdding={isAdding}>
+        <S.ButtonsWrapper isAdding={isAddingCondition}>
+          <S.ActionButtonsWrapper isAdding={isAddingCondition}>
             <Button
               variant="icon"
-              icon={isHidding ? "/icons/eye-off.svg" : "/icons/eye.svg"}
+              icon={
+                isHiddingCondition ? "/icons/eye-off.svg" : "/icons/eye.svg"
+              }
               iconSize="medium"
               onClick={handleToggleIsHidding}
-              disabled={isAdding}
+              disabled={isAddingCondition}
             ></Button>
             <Button
-              variant={isAdding ? "" : "icon"}
-              onClick={addItemToTable}
-              {...(isAdding ? {} : { icon: "icons/plus.svg" })}
+              variant={isAddingCondition ? "" : "icon"}
+              onClick={handleToggleIsAdding}
+              {...(isAddingCondition ? {} : { icon: "/icons/plus.svg" })}
             >
-              {isAdding ? "Cancelar" : "Adicionar"}
+              {isAddingCondition ? "Cancelar" : "Adicionar"}
             </Button>
             <Button variant="icon" icon="icons/edit.svg">
               Editar
@@ -112,16 +122,16 @@ function Wallet() {
           {toggleStatus === "rv" ? (
             <RvTable
               tableDataRv={tableDataRv}
-              isAdding={isAdding}
-              setIsAdding={setIsAdding}
-              hide={isHidding}
+              isAdding={isAddingCondition}
+              setIsAdding={handleChangeTableStatusToInitial}
+              hide={tableStatus === "isHidding"}
             />
           ) : (
             <RfTable
               tableDataRf={tableDataRf}
-              isAdding={isAdding}
-              setIsAdding={setIsAdding}
-              hide={isHidding}
+              isAdding={isAddingCondition}
+              setIsAdding={handleChangeTableStatusToInitial}
+              hide={isHiddingCondition}
             />
           )}
         </S.TableWrapper>

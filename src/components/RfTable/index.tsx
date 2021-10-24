@@ -10,7 +10,7 @@ import * as S from "./styles";
 export type TableProps = {
   tableDataRf: TableDataRfProps[];
   isAdding: boolean;
-  setIsAdding: (value: boolean) => void;
+  setIsAdding: () => void;
   hide?: boolean;
 };
 
@@ -66,7 +66,7 @@ function RfTable({
       },
     ]);
     setTableFormValues(tableFormValuesInitialValues);
-    setIsAdding(false);
+    setIsAdding();
   };
 
   return (

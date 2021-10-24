@@ -20,7 +20,7 @@ export type TableDataRvProps = {
 export type TableProps = {
   tableDataRv: TableDataRvProps[];
   isAdding: boolean;
-  setIsAdding: (value: boolean) => void;
+  setIsAdding: () => void;
   hide?: boolean;
 };
 
@@ -100,7 +100,7 @@ function RvTable({
       },
     ]);
     setTableFormValues(tableFormValuesInitialValues);
-    setIsAdding(false);
+    setIsAdding();
   };
 
   return (
