@@ -27,5 +27,12 @@ export const Input = styled.input`
     &::placeholder {
       color: ${theme.colors.lightBlack};
     }
+
+    & ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      -moz-appearance: textfield;
+    }
   `}
 `;

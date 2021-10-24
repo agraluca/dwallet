@@ -152,6 +152,7 @@ function RvTable({
               <S.TableBodyData>
                 <InputWithLabel
                   label="% Ideal:"
+                  type="number"
                   onInputChange={(value) =>
                     handleInputChange("idealPorcentage", value)
                   }
@@ -161,6 +162,7 @@ function RvTable({
               <S.TableBodyData>
                 <InputWithLabel
                   label="Qtd:"
+                  type="number"
                   onInputChange={(value) =>
                     handleInputChange("quantity", value)
                   }

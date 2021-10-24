@@ -86,6 +86,7 @@ function RfTable({
               <S.TableBodyData>
                 <InputWithLabel
                   label="% Ideal:"
+                  type="number"
                   onInputChange={(value) =>
                     handleInputChange("idealPorcentage", value)
                   }
@@ -95,6 +96,8 @@ function RfTable({
               <S.TableBodyData>
                 <InputWithLabel
                   label="Preço:"
+                  type="number"
+                  data-mask="__.__"
                   onInputChange={(value) =>
                     handleInputChange("totalPrice", value)
                   }
