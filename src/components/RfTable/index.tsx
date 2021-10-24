@@ -14,20 +14,21 @@ export type TableProps = {
   hide?: boolean;
 };
 
+const tableFormValuesInitialValues = {
+  name: "",
+  idealPorcentage: 0,
+  currentPorcentage: 0,
+  totalPrice: 0,
+  shouldBuyPrice: 0,
+  status: "",
+};
+
 function RfTable({
   tableDataRf,
   isAdding,
   setIsAdding,
   hide = false,
 }: TableProps) {
-  const tableFormValuesInitialValues = {
-    name: "",
-    idealPorcentage: 0,
-    currentPorcentage: 0,
-    totalPrice: 0,
-    shouldBuyPrice: 0,
-    status: "",
-  };
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );

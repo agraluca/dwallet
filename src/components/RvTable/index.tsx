@@ -1,6 +1,7 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import { useCashFlow } from "hooks";
+import { useDebounceTextField } from "hooks/useDebounce";
 import { useState } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
@@ -24,41 +25,50 @@ export type TableProps = {
   hide?: boolean;
 };
 
+const tableFormValuesInitialValues = {
+  ticker: "",
+  type: "",
+  price: "",
+  idealPorcentage: "",
+  quantity: "",
+  total: "",
+};
+
 function RvTable({
   tableDataRv,
   isAdding,
   setIsAdding,
   hide = false,
 }: TableProps) {
-  const tableFormValuesInitialValues = {
-    ticker: "",
-    type: "",
-    price: "",
-    idealPorcentage: "",
-    quantity: "",
-    total: "",
-  };
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );
 
   const { total, setTableDataRv } = useCashFlow();
+  const { debounce } = useDebounceTextField();
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleTickerBlur = async () => {
+  const handleTickerBlur = async (valueValidation: boolean) => {
     // const response = await api.get(
     //   `mainsearchquery?q=${tableFormValues.ticker}&country=`
     // );
 
     // console.log(response.data);
-    setTableFormValues((prev) => ({
-      ...prev,
-      type: typeCheck(tableFormValues.ticker),
-      price: "10",
-    }));
+
+    valueValidation
+      ? setTableFormValues((prev) => ({
+          ...prev,
+          type: typeCheck(tableFormValues.ticker),
+          price: "10",
+        }))
+      : setTableFormValues((prev) => ({
+          ...prev,
+          type: "",
+          price: "",
+        }));
   };
 
   const handleQuantityBlur = () => {
@@ -112,8 +122,13 @@ function RvTable({
               <S.TableBodyData>
                 <InputWithLabel
                   label="Ticker:"
-                  onInputChange={(value) => handleInputChange("ticker", value)}
-                  onBlur={handleTickerBlur}
+                  onInputChange={(value) =>
+                    debounce(() => {
+                      handleInputChange("ticker", value);
+
+                      handleTickerBlur(value.length >= 4);
+                    }, 2000)
+                  }
                 />
               </S.TableBodyData>
               <S.TableBodyData>
