@@ -1,8 +1,9 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
+import Input from "components/Input";
 import { useCashFlow } from "hooks";
 import { useDebounceTextField } from "hooks/useDebounce";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
 import * as S from "./styles";
@@ -22,7 +23,9 @@ export type TableProps = {
   tableDataRv: TableDataRvProps[];
   isAdding: boolean;
   setIsAdding: () => void;
-  hide?: boolean;
+  isHidding?: boolean;
+  isEditing?: boolean;
+  handleCloseIsEditing?: () => void;
 };
 
 const tableFormValuesInitialValues = {
@@ -38,11 +41,15 @@ function RvTable({
   tableDataRv,
   isAdding,
   setIsAdding,
-  hide = false,
+  isHidding = false,
+  isEditing = false,
+  handleCloseIsEditing,
 }: TableProps) {
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );
+
+  const [copyTableDataRv, setCopyTableDataRv] = useState(tableDataRv);
 
   const { total, setTableDataRv } = useCashFlow();
   const { debounce } = useDebounceTextField();
@@ -111,6 +118,27 @@ function RvTable({
     ]);
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
+  };
+
+  const handleChangeCopyTableDataRv = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number,
+    field: boolean
+  ) => {
+    const slicedData = [...copyTableDataRv];
+
+    if (field && Number(event.target.value) >= 0) {
+      slicedData[index].idealPorcentage = Number(event.target.value);
+    } else if (Number(event.target.value) >= 0) {
+      slicedData[index].stockAmount = Number(event.target.value);
+    }
+
+    setCopyTableDataRv(slicedData);
+  };
+
+  const handleSaveRvTable = () => {
+    setTableDataRv(copyTableDataRv);
+    handleCloseIsEditing();
   };
 
   return (
@@ -192,6 +220,15 @@ function RvTable({
         </S.TableWrapper>
       )}
 
+      {isEditing && (
+        <S.SaveButtonWrapper>
+          <Button className="save-btn__editing" onClick={handleSaveRvTable}>
+            {" "}
+            Salvar{" "}
+          </Button>
+        </S.SaveButtonWrapper>
+      )}
+
       <S.TableWrapper>
         {tableDataRv?.length && (
           <>
@@ -216,19 +253,51 @@ function RvTable({
                     </S.TableBodyData>
                     <S.TableBodyData>{data.type}</S.TableBodyData>
                     <S.TableBodyData>
-                      {hide ? " - " : formatNumberToBrlCurrency(data.price)}
+                      {isHidding
+                        ? " - "
+                        : formatNumberToBrlCurrency(data.price)}
                     </S.TableBodyData>
                     <S.TableBodyData>
-                      {hide ? " - " : `${data.idealPorcentage}%`}
+                      {isEditing ? (
+                        <S.InputSymbol>
+                          <Input
+                            name="ideal-percentage"
+                            id="ideal-percentage"
+                            type="number"
+                            className="input--centered"
+                            value={copyTableDataRv[index].idealPorcentage}
+                            onChange={(event) => {
+                              handleChangeCopyTableDataRv(event, index, true);
+                            }}
+                          />
+                          %
+                        </S.InputSymbol>
+                      ) : (
+                        <>{isHidding ? " - " : `${data.idealPorcentage} %`}</>
+                      )}
+                    </S.TableBodyData>
+
+                    <S.TableBodyData>
+                      {isHidding ? " - " : `${data.currentPorcentage}%`}
                     </S.TableBodyData>
                     <S.TableBodyData>
-                      {hide ? " - " : `${data.currentPorcentage}%`}
+                      {isEditing ? (
+                        <Input
+                          name="stock-amount"
+                          id="stock-amount"
+                          type="number"
+                          className="input--centered"
+                          value={copyTableDataRv[index].stockAmount}
+                          onChange={(event) => {
+                            handleChangeCopyTableDataRv(event, index, false);
+                          }}
+                        />
+                      ) : (
+                        <>{isHidding ? " - " : `${data.stockAmount}`}</>
+                      )}
                     </S.TableBodyData>
                     <S.TableBodyData>
-                      {hide ? " - " : `${data.stockAmount}`}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.shouldBuyAmount}`}
+                      {isHidding ? " - " : `${data.shouldBuyAmount}`}
                     </S.TableBodyData>
                     <S.TableBodyData
                       className={
@@ -237,7 +306,7 @@ function RvTable({
                           : "table__body-data_red"
                       }
                     >
-                      {hide ? " - " : `${data.status}`}
+                      {isHidding ? " - " : `${data.status}`}
                     </S.TableBodyData>
                   </S.TableRow>
                 );

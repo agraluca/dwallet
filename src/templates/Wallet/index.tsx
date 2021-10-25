@@ -17,24 +17,33 @@ function Wallet() {
 
   const isAddingCondition = tableStatus === "isAdding";
   const isHiddingCondition = tableStatus === "isHidding";
+  const isEditingCondition = tableStatus === "isEditing";
 
   const handleToggleIsAdding = () => {
     if (tableStatus === "isAdding") {
-      setTableStatus("initial");
+      setTableStatus("default");
     } else {
       setTableStatus("isAdding");
     }
   };
 
   const handleToggleIsHidding = () => {
-    tableStatus !== "isAdding" &&
+    if (tableStatus === "default" || tableStatus === "isHidding") {
       setTableStatus((state) =>
         state === "default" ? "isHidding" : "default"
+      );
+    }
+  };
+
+  const handleToggleIsEditing = () => {
+    if (tableStatus !== "isAdding")
+      setTableStatus((state) =>
+        state === "default" ? "isEditing" : "default"
       );
   };
 
   const handleChangeTableStatusToInitial = () => {
-    setTableStatus("initial");
+    setTableStatus("default");
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,18 +89,25 @@ function Wallet() {
               }
               iconSize="medium"
               onClick={handleToggleIsHidding}
-              disabled={isAddingCondition}
+              disabled={isAddingCondition || isEditingCondition}
             ></Button>
             <Button
               variant={isAddingCondition ? "" : "icon"}
               onClick={handleToggleIsAdding}
               {...(isAddingCondition ? {} : { icon: "/icons/plus.svg" })}
+              disabled={isEditingCondition}
             >
               {isAddingCondition ? "Cancelar" : "Adicionar"}
             </Button>
-            <Button variant="icon" icon="icons/edit.svg">
-              Editar
+            <Button
+              variant={isEditingCondition ? "" : "icon"}
+              icon="icons/edit.svg"
+              onClick={handleToggleIsEditing}
+              disabled={isAddingCondition}
+            >
+              {isEditingCondition ? "Cancelar" : "Editar"}
             </Button>
+
             <Button variant="icon" icon="icons/chart-bar.svg">
               Ver gráfico
             </Button>
@@ -124,7 +140,9 @@ function Wallet() {
               tableDataRv={tableDataRv}
               isAdding={isAddingCondition}
               setIsAdding={handleChangeTableStatusToInitial}
-              hide={tableStatus === "isHidding"}
+              isHidding={tableStatus === "isHidding"}
+              isEditing={tableStatus == "isEditing"}
+              handleCloseIsEditing={handleChangeTableStatusToInitial}
             />
           ) : (
             <RfTable

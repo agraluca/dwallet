@@ -1,5 +1,27 @@
 import styled, { css } from "styled-components";
 
+export const SaveButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: ${({ theme }) => theme.spacings.medium};
+  & .save-btn__editing {
+    background: ${({ theme }) => theme.colors.yellow};
+    color: ${({ theme }) => theme.colors.black};
+    transition: filter 0.2s;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: ${({ theme }) => theme.font.sizes.small};
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+`;
+
 export const TableWrapper = styled.table`
   ${({ theme }) => css`
     border-collapse: separate;
@@ -101,5 +123,18 @@ export const TableBodyData = styled.td`
     &.table__body-data_red {
       color: ${theme.colors.red};
     }
+
+    & .input--centered {
+      width: 8rem;
+
+      text-align: center;
+      font-size: ${theme.font.sizes.medium};
+      padding: ${theme.font.sizes.xsmall} 0;
+      font-weight: ${theme.font.weight.bold};
+    }
   `}
 `;
+
+export const InputSymbol = styled.span``;
+
+export const SaveButton = styled.button``;
