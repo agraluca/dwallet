@@ -25,7 +25,7 @@ export type TableProps = {
   setIsAdding: () => void;
   isHidding?: boolean;
   isEditing?: boolean;
-  handleCloseIsEditing?: () => void;
+  handleCloseIsEditing: () => void;
 };
 
 const tableFormValuesInitialValues = {
