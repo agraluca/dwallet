@@ -9,7 +9,7 @@ function Wrapper({ children }: WrapperProps) {
   return (
     <S.Wrapper>
       <S.Content>{children}</S.Content>
-      <S.WaveImg src="/img/wave.svg" alt="wave" className="wave" />
+      <S.WaveImg src="/img/wave.svg" alt="wave" />
     </S.Wrapper>
   );
 }

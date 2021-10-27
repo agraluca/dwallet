@@ -7,6 +7,7 @@ import { useState, ChangeEvent } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
 import * as S from "./styles";
+import { useEffect } from "react";
 
 export type TableDataRvProps = {
   stock: string;
@@ -20,7 +21,6 @@ export type TableDataRvProps = {
 };
 
 export type TableProps = {
-  tableDataRv: TableDataRvProps[];
   isAdding: boolean;
   setIsAdding: () => void;
   isHidding?: boolean;
@@ -38,7 +38,6 @@ const tableFormValuesInitialValues = {
 };
 
 function RvTable({
-  tableDataRv,
   isAdding,
   setIsAdding,
   isHidding = false,
@@ -49,10 +48,14 @@ function RvTable({
     tableFormValuesInitialValues
   );
 
-  const [copyTableDataRv, setCopyTableDataRv] = useState(tableDataRv);
-
-  const { total, setTableDataRv } = useCashFlow();
+  const { total, setTableDataRv, setForceUpdate, forceUpdate, tableDataRv } =
+    useCashFlow();
+  const [copyTableDataRv, setCopyTableDataRv] = useState([...tableDataRv]);
   const { debounce } = useDebounceTextField();
+
+  useEffect(() => {
+    setCopyTableDataRv([...tableDataRv]);
+  }, [tableDataRv]);
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -119,7 +122,7 @@ function RvTable({
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
   };
-
+  console.log("copy", copyTableDataRv);
   const handleChangeCopyTableDataRv = (
     event: ChangeEvent<HTMLInputElement>,
     index: number,
@@ -134,6 +137,7 @@ function RvTable({
     }
 
     setCopyTableDataRv(slicedData);
+    setForceUpdate(!forceUpdate);
   };
 
   const handleSaveRvTable = () => {
@@ -155,7 +159,7 @@ function RvTable({
                       handleInputChange("ticker", value);
 
                       handleTickerBlur(value.length >= 4);
-                    }, 2000)
+                    }, 1000)
                   }
                 />
               </S.TableBodyData>
@@ -223,8 +227,7 @@ function RvTable({
       {isEditing && (
         <S.SaveButtonWrapper>
           <Button className="save-btn__editing" onClick={handleSaveRvTable}>
-            {" "}
-            Salvar{" "}
+            Salvar
           </Button>
         </S.SaveButtonWrapper>
       )}
@@ -246,6 +249,7 @@ function RvTable({
             </S.TableHeader>
             <S.TableBody>
               {tableDataRv?.map((data, index) => {
+                console.log(data.idealPorcentage);
                 return (
                   <S.TableRow key={index}>
                     <S.TableBodyData>
@@ -265,7 +269,7 @@ function RvTable({
                             id="ideal-percentage"
                             type="number"
                             className="input--centered"
-                            value={copyTableDataRv[index].idealPorcentage}
+                            value={copyTableDataRv[index]?.idealPorcentage}
                             onChange={(event) => {
                               handleChangeCopyTableDataRv(event, index, true);
                             }}
@@ -287,7 +291,7 @@ function RvTable({
                           id="stock-amount"
                           type="number"
                           className="input--centered"
-                          value={copyTableDataRv[index].stockAmount}
+                          value={copyTableDataRv[index]?.stockAmount}
                           onChange={(event) => {
                             handleChangeCopyTableDataRv(event, index, false);
                           }}

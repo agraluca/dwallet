@@ -28,6 +28,8 @@ export type CashFlowProps = {
   setTableDataRv: (value: TableDataRvProps[]) => void;
   tableDataRf: TableDataRfProps[];
   setTableDataRf: (value: TableDataRfProps[]) => void;
+  forceUpdate: boolean;
+  setForceUpdate: (value: boolean) => void;
 };
 
 const cashFlowInitialValues = {
@@ -38,6 +40,8 @@ const cashFlowInitialValues = {
   setTableDataRv: () => null,
   tableDataRf: [],
   setTableDataRf: () => null,
+  forceUpdate: false,
+  setForceUpdate: () => null,
 };
 
 export const CashFlowContext = createContext<CashFlowProps>(
@@ -52,6 +56,7 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
   const [total, setTotal] = useState(0);
   const [rf, setRf] = useState(0);
   const [rv, setRv] = useState(0);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   const [tableDataRv, setTableDataRv] = useState<TableDataRvProps[]>([
     {
@@ -114,7 +119,6 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
   }, [rf, rv, tableDataRf, tableDataRv, total]);
 
   useEffect(() => {
-    console.log(rv);
     const updatedTableDataRv = tableDataRv.map((data) => {
       const currentPorcentage = (
         ((Number(data.price) * Number(data.stockAmount)) /
@@ -139,6 +143,7 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
         status: status ? "Comprar" : "Segurar",
       };
     });
+    console.log("dentro do useEffect", updatedTableDataRv);
     setTableDataRv(updatedTableDataRv);
 
     const updatedTableDataRf = tableDataRf.map((data) => {
@@ -162,7 +167,7 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
     });
     setTableDataRf(updatedTableDataRf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [total, tableDataRv.length, tableDataRf.length]);
+  }, [total, tableDataRv.length, tableDataRf.length, forceUpdate]);
 
   return (
     <CashFlowContext.Provider
@@ -174,6 +179,8 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
         setTableDataRv,
         tableDataRf,
         setTableDataRf,
+        setForceUpdate,
+        forceUpdate,
       }}
     >
       {children}

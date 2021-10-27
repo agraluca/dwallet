@@ -1,25 +1,24 @@
 import styled, { css } from "styled-components";
 
 export const SaveButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: ${({ theme }) => theme.spacings.medium};
-  & .save-btn__editing {
-    background: ${({ theme }) => theme.colors.yellow};
-    color: ${({ theme }) => theme.colors.black};
-    transition: filter 0.2s;
-    height: 5rem;
+  ${({ theme }) => css`
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    font-size: ${({ theme }) => theme.font.sizes.small};
+    justify-content: flex-end;
+    margin-bottom: ${theme.spacings.medium};
 
-    &:hover {
-      filter: brightness(0.8);
+    & .save-btn__editing {
+      background: ${theme.colors.black};
+      color: ${theme.colors.blue};
+      transition: filter 0.2s;
+      font-size: ${theme.font.sizes.small};
+
+      &:hover {
+        filter: brightness(0.8);
+      }
     }
-  }
+  `}
 `;
 
 export const TableWrapper = styled.table`
@@ -125,16 +124,28 @@ export const TableBodyData = styled.td`
     }
 
     & .input--centered {
-      width: 8rem;
-
+      width: 7rem;
+      font-family: ${theme.font.family};
       text-align: center;
       font-size: ${theme.font.sizes.medium};
       padding: ${theme.font.sizes.xsmall} 0;
       font-weight: ${theme.font.weight.bold};
+      outline: none;
+      margin-right: ${theme.spacings.xxsmall};
+      &:focus-within {
+        box-shadow: 0 0 0.5rem ${theme.colors.yellow};
+      }
     }
   `}
 `;
 
-export const InputSymbol = styled.span``;
+export const InputSymbol = styled.span`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 ${theme.spacings.xsmall};
+  `}
+`;
 
 export const SaveButton = styled.button``;

@@ -13,7 +13,6 @@
     "storybook": "start-storybook -s ./public -p 6006 --no-dll",
     "build-storybook": "build-storybook -s ./public --no-dll",
     "cover": "yarn test --coverage --watchAll=false"
-
   },
   "husky": {
     "hooks": {
@@ -26,7 +25,6 @@
       "yarn test --findRelatedTests --bail"
     ]
   },
-
   "dependencies": {
     "axios": "^0.22.0",
     "next": "11.1.0",

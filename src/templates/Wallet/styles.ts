@@ -6,6 +6,7 @@ export const Container = styled.main`
   ${({ theme }) => css`
     margin: 0 auto;
     padding: 0 calc(${theme.spacings.medium} * 2);
+    padding-bottom: ${theme.spacings.large};
 
     ${media.lessThan("medium")`
       padding: 0 ${theme.spacings.xxsmall};
@@ -150,6 +151,7 @@ export const TableWrapper = styled.section`
 
     ${media.lessThan("large")`
       overflow: auto;
+
       &::-webkit-scrollbar {
         height: 1rem;
 
@@ -158,10 +160,12 @@ export const TableWrapper = styled.section`
       &::-webkit-scrollbar-track {
         background: ${theme.colors.lightBlue};
         border-radius: ${theme.border.radius};
+
       }
 
       &::-webkit-scrollbar-thumb {
         background: ${theme.colors.yellow};
+
         border-radius: ${theme.border.radius};
       }
     `}

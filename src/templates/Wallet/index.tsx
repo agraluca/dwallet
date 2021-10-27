@@ -137,7 +137,6 @@ function Wallet() {
         <S.TableWrapper>
           {toggleStatus === "rv" ? (
             <RvTable
-              tableDataRv={tableDataRv}
               isAdding={isAddingCondition}
               setIsAdding={handleChangeTableStatusToInitial}
               isHidding={tableStatus === "isHidding"}
