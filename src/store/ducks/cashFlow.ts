@@ -1,5 +1,4 @@
-import { createSlice /*PayloadAction */ } from "@reduxjs/toolkit";
-//import type { RootState } from "../store";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface VariableIncomeListProps {
   stock: string;
@@ -11,7 +10,6 @@ interface VariableIncomeListProps {
   shouldBuyAmount: number;
   status: string;
 }
-
 interface FixedIncomeListProps {
   name: string;
   idealPorcentage: number;
@@ -77,9 +75,12 @@ const cashFlowSlice = createSlice({
           stockAmount: Number(data.stockAmount),
           shouldBuyAmount: status
             ? Math.ceil(
-                (Number(data.idealPorcentage) * Number(data.stockAmount)) /
-                  Number(currentPorcentage) -
-                  Number(data.stockAmount)
+                ((Number(data.stockAmount) *
+                  Number(data.price) *
+                  Number(data.idealPorcentage) -
+                  Number(data.price) * Number(data.stockAmount)) /
+                  Number(data.currentPorcentage)) *
+                  Number(data.price)
               )
             : 0,
           status: status ? "Comprar" : "Segurar",
@@ -107,6 +108,19 @@ const cashFlowSlice = createSlice({
           status: status ? "Comprar" : "Segurar",
         };
       });
+    },
+    reset: () => initialState,
+    addNewValueToVariableIncomeList: (
+      state,
+      action: PayloadAction<VariableIncomeListProps>
+    ) => {
+      state.variableIncomeList = [...state.variableIncomeList, action.payload];
+    },
+    addNewValueToFixedIncomeList: (
+      state,
+      action: PayloadAction<FixedIncomeListProps>
+    ) => {
+      state.fixedIncomeList = [...state.fixedIncomeList, action.payload];
     },
   },
 });

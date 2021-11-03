@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Wrapper from "components/Wrapper";
 import Menu from "components/Menu";
@@ -7,20 +7,42 @@ import RvTable from "components/RvTable";
 import { Button } from "components/Button";
 
 import * as S from "./styles";
-import { useCashFlow } from "hooks";
+//import { useCashFlow } from "hooks";
 import RfTable from "components/RfTable";
-import { /*useAppDispatch,*/ useAppSelector } from "hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
+import { cashFlowActions } from "store/ducks/cashFlow";
 
 function Wallet() {
   const [isAdding, setIsAdding] = useState(false);
   const [toggleStatus, setToggleStatus] = useState("rv");
   const [isHidding, setIsHidding] = useState(false);
-  const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
+  // const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
-  //const dispatch = useAppDispatch();
-  const cashFlowState = useAppSelector((state) => state.cashFlow);
+  const dispatch = useAppDispatch();
+  const {
+    variableIncomeList,
+    fixedIncomeList,
+    fixedIncome,
+    variableIncome,
+    totalIncome,
+  } = useAppSelector((state) => state.cashFlow);
 
-  console.log("data", cashFlowState);
+  //console.log("data", cashFlowState);
+
+  useEffect(() => {
+    const {
+      updateFixedIncome,
+      updateVariableIncome,
+      updateTotalIncome,
+      updateVariableIncomeList,
+      updateFixedIncomeList,
+    } = cashFlowActions;
+    dispatch(updateFixedIncome());
+    dispatch(updateVariableIncome());
+    dispatch(updateTotalIncome());
+    dispatch(updateVariableIncomeList());
+    dispatch(updateFixedIncomeList());
+  }, [dispatch, variableIncomeList.length, fixedIncomeList.length]);
 
   const addItemToTable = () => {
     if (isAdding) {
@@ -39,12 +61,12 @@ function Wallet() {
     setToggleStatus(event.target.value);
   };
 
-  const rvTotal = tableDataRv.reduce((acc, item) => {
+  const variableIncomeTotal = variableIncomeList.reduce((acc, item) => {
     acc += item.price * item.stockAmount;
     return acc;
   }, 0);
 
-  const rfTotal = tableDataRf.reduce((acc, item) => {
+  const fixedIncomeTotal = fixedIncomeList.reduce((acc, item) => {
     acc += item.totalPrice;
     return acc;
   }, 0);
@@ -54,17 +76,17 @@ function Wallet() {
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={total} hide={isHidding} />
+          <CardBalance type="total" value={totalIncome} hide={isHidding} />
           <CardBalance
             type="rf"
-            value={rf / total}
-            total={rfTotal}
+            value={fixedIncome / totalIncome}
+            total={fixedIncomeTotal}
             hide={isHidding}
           />
           <CardBalance
             type="rv"
-            value={rv / total}
-            total={rvTotal}
+            value={variableIncome / totalIncome}
+            total={variableIncomeTotal}
             hide={isHidding}
           />
         </S.CardWrapper>
@@ -117,14 +139,14 @@ function Wallet() {
         <S.TableWrapper>
           {toggleStatus === "rv" ? (
             <RvTable
-              tableDataRv={tableDataRv}
+              tableDataRv={variableIncomeList}
               isAdding={isAdding}
               setIsAdding={setIsAdding}
               hide={isHidding}
             />
           ) : (
             <RfTable
-              tableDataRf={tableDataRf}
+              tableDataRf={fixedIncomeList}
               isAdding={isAdding}
               setIsAdding={setIsAdding}
               hide={isHidding}

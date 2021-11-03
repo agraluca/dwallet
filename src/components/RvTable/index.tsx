@@ -5,6 +5,8 @@ import { useState } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
 import * as S from "./styles";
+import { useAppDispatch } from "hooks/useReduxHooks";
+import { cashFlowActions } from "store/ducks/cashFlow";
 
 export type TableDataRvProps = {
   stock: string;
@@ -42,7 +44,9 @@ function RvTable({
     tableFormValuesInitialValues
   );
 
-  const { total, setTableDataRv } = useCashFlow();
+  const { total } = useCashFlow();
+
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -79,26 +83,27 @@ function RvTable({
     const status =
       Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
 
-    setTableDataRv([
-      ...tableDataRv,
-      {
-        stock: tableFormValues.ticker,
-        type: tableFormValues.type,
-        price: Number(tableFormValues.price),
-        idealPorcentage: Number(tableFormValues.idealPorcentage),
-        currentPorcentage: Number(currentPorcentage),
-        stockAmount: Number(tableFormValues.quantity),
-        shouldBuyAmount: status
-          ? Math.ceil(
-              (Number(tableFormValues.idealPorcentage) *
-                Number(tableFormValues.quantity)) /
-                Number(currentPorcentage) -
-                Number(tableFormValues.quantity)
-            )
-          : 0,
-        status: status ? "Comprar" : "Segurar",
-      },
-    ]);
+    const newValue = {
+      stock: tableFormValues.ticker,
+      type: tableFormValues.type,
+      price: Number(tableFormValues.price),
+      idealPorcentage: Number(tableFormValues.idealPorcentage),
+      currentPorcentage: Number(currentPorcentage),
+      stockAmount: Number(tableFormValues.quantity),
+      shouldBuyAmount: status
+        ? Math.ceil(
+            (Number(tableFormValues.idealPorcentage) *
+              Number(tableFormValues.quantity)) /
+              Number(currentPorcentage) -
+              Number(tableFormValues.quantity)
+          )
+        : 0,
+      status: status ? "Comprar" : "Segurar",
+    };
+
+    const { addNewValueToVariableIncomeList } = cashFlowActions;
+    dispatch(addNewValueToVariableIncomeList(newValue));
+
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding(false);
   };

@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { rootReducer } from "./rootReducer";
+import { cashFlowReducer } from "./ducks/cashFlow";
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: { cashFlow: cashFlowReducer },
+  devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
