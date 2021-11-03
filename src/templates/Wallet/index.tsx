@@ -9,12 +9,18 @@ import { Button } from "components/Button";
 import * as S from "./styles";
 import { useCashFlow } from "hooks";
 import RfTable from "components/RfTable";
+import { /*useAppDispatch,*/ useAppSelector } from "hooks/useReduxHooks";
 
 function Wallet() {
   const [isAdding, setIsAdding] = useState(false);
   const [toggleStatus, setToggleStatus] = useState("rv");
   const [isHidding, setIsHidding] = useState(false);
   const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
+
+  //const dispatch = useAppDispatch();
+  const cashFlowState = useAppSelector((state) => state.cashFlow);
+
+  console.log("data", cashFlowState);
 
   const addItemToTable = () => {
     if (isAdding) {
