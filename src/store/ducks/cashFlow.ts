@@ -33,18 +33,7 @@ const initialState: CashFlowProps = {
   totalIncome: 10,
   variableIncome: 0,
   fixedIncome: 0,
-  variableIncomeList: [
-    {
-      stock: "ABEV3",
-      type: "Ação",
-      price: 25,
-      idealPorcentage: 50,
-      currentPorcentage: 8,
-      stockAmount: 10,
-      shouldBuyAmount: 0,
-      status: "Segurar",
-    },
-  ],
+  variableIncomeList: [],
   fixedIncomeList: [],
 };
 
