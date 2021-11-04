@@ -136,6 +136,7 @@ function Wallet() {
           </S.ToggleContainer>
         </S.ButtonsWrapper>
 
+        {}
         <S.TableWrapper>
           {toggleStatus === "rv" ? (
             <RvTable
