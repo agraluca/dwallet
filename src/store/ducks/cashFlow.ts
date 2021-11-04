@@ -33,7 +33,18 @@ const initialState: CashFlowProps = {
   totalIncome: 10,
   variableIncome: 0,
   fixedIncome: 0,
-  variableIncomeList: [],
+  variableIncomeList: [
+    {
+      stock: "ABEV3",
+      type: "Ação",
+      price: 25,
+      idealPorcentage: 50,
+      currentPorcentage: 8,
+      stockAmount: 10,
+      shouldBuyAmount: 0,
+      status: "Segurar",
+    },
+  ],
   fixedIncomeList: [],
 };
 
@@ -66,6 +77,12 @@ const cashFlowSlice = createSlice({
 
         const status = Number(currentPorcentage) < Number(data.idealPorcentage);
 
+        const result1 =
+          Number(data.idealPorcentage / 100) * state.variableIncome;
+        const result2 = Number(data.price) * Number(data.stockAmount);
+        const result3 =
+          (1 - Number(data.idealPorcentage / 100)) * Number(data.price);
+
         return {
           stock: data.stock,
           type: data.type,
@@ -74,14 +91,7 @@ const cashFlowSlice = createSlice({
           currentPorcentage: Number(currentPorcentage),
           stockAmount: Number(data.stockAmount),
           shouldBuyAmount: status
-            ? Math.ceil(
-                ((Number(data.stockAmount) *
-                  Number(data.price) *
-                  Number(data.idealPorcentage) -
-                  Number(data.price) * Number(data.stockAmount)) /
-                  Number(data.currentPorcentage)) *
-                  Number(data.price)
-              )
+            ? Math.ceil((result1 - result2) / result3)
             : 0,
           status: status ? "Comprar" : "Segurar",
         };
