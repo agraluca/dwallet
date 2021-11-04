@@ -13,7 +13,7 @@ import { alreadyExistsInList } from "utils/functions";
 export type TableProps = {
   tableDataRf: TableDataRfProps[];
   isAdding: boolean;
-  setIsAdding: (value: boolean) => void;
+  setIsAdding: () => void;
   hide?: boolean;
   total: number;
 };
@@ -86,7 +86,7 @@ function RfTable({
     dispatch(addNewValueToFixedIncomeList(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
-    setIsAdding(false);
+    setIsAdding();
   };
 
   return (

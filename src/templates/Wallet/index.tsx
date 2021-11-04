@@ -11,11 +11,17 @@ import * as S from "./styles";
 import RfTable from "components/RfTable";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
+import { usePageStatus } from "hooks/usePageStatus";
 
 function Wallet() {
-  const [isAdding, setIsAdding] = useState(false);
   const [toggleStatus, setToggleStatus] = useState("rv");
-  const [isHidding, setIsHidding] = useState(false);
+  const {
+    isHidding,
+    handleChangeStatusToIsHidding,
+    handleChangeStatusToInitial,
+    isAdding,
+    handleChangeStatusToIsAdding,
+  } = usePageStatus();
   // const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
   const dispatch = useAppDispatch();
@@ -45,16 +51,15 @@ function Wallet() {
   }, [dispatch, variableIncomeList.length, fixedIncomeList.length]);
 
   const addItemToTable = () => {
-    if (isAdding) {
-      setIsAdding(false);
-    } else {
-      setIsAdding(true);
-      setIsHidding(false);
-    }
+    isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();
   };
 
   const handleToggleIsHidding = () => {
-    !isAdding && setIsHidding((state) => !state);
+    if (!isAdding) {
+      isHidding
+        ? handleChangeStatusToInitial()
+        : handleChangeStatusToIsHidding();
+    }
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +147,7 @@ function Wallet() {
             <RvTable
               tableDataRv={variableIncomeList}
               isAdding={isAdding}
-              setIsAdding={setIsAdding}
+              setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
               total={totalIncome}
             />
@@ -150,7 +155,7 @@ function Wallet() {
             <RfTable
               tableDataRf={fixedIncomeList}
               isAdding={isAdding}
-              setIsAdding={setIsAdding}
+              setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
               total={totalIncome}
             />
