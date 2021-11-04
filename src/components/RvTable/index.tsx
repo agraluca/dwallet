@@ -1,6 +1,5 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
-import { useCashFlow } from "hooks";
 import { useState } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
@@ -8,6 +7,7 @@ import * as S from "./styles";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
+import { alreadyExistsInList } from "utils/functions";
 
 export type TableDataRvProps = {
   stock: string;
@@ -25,6 +25,7 @@ export type TableProps = {
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
   hide?: boolean;
+  total: number;
 };
 
 const columnsVariableIncomeTable = [
@@ -43,6 +44,7 @@ function RvTable({
   isAdding,
   setIsAdding,
   hide = false,
+  total,
 }: TableProps) {
   const tableFormValuesInitialValues = {
     ticker: "",
@@ -56,9 +58,13 @@ function RvTable({
     tableFormValuesInitialValues
   );
 
-  const { total } = useCashFlow();
-
   const dispatch = useAppDispatch();
+
+  const exists = alreadyExistsInList<TableDataRvProps>(
+    tableFormValues.ticker,
+    "stock",
+    tableDataRv
+  );
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -70,6 +76,12 @@ function RvTable({
     // );
 
     // console.log(response.data);
+
+    if (exists) {
+      alert("Já existe esse ativo em sua carteira.");
+
+      return;
+    }
     setTableFormValues((prev) => ({
       ...prev,
       type: typeCheck(tableFormValues.ticker),
@@ -84,14 +96,6 @@ function RvTable({
         Number(tableFormValues.price) * Number(tableFormValues.quantity)
       }`,
     }));
-  };
-
-  const alreadyExistsInVariableIncomeList = (stock: string) => {
-    const exists = tableDataRv.filter(
-      (item) => stock.toUpperCase() === item.stock.toUpperCase()
-    );
-
-    return exists.length > 0;
   };
 
   const addItemToTable = () => {
@@ -122,13 +126,7 @@ function RvTable({
     };
 
     const { addNewValueToVariableIncomeList } = cashFlowActions;
-    const alreadyExists = alreadyExistsInVariableIncomeList(newValue.stock);
 
-    if (alreadyExists) {
-      alert("Já existe esse ativo em sua carteira.");
-
-      return;
-    }
     dispatch(addNewValueToVariableIncomeList(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
@@ -197,7 +195,7 @@ function RvTable({
                 <Button
                   onClick={addItemToTable}
                   className="table__body-button"
-                  disabled={Number(tableFormValues.total) === 0}
+                  disabled={Number(tableFormValues.total) === 0 || exists}
                 >
                   Adicionar
                 </Button>

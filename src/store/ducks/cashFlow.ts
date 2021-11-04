@@ -77,12 +77,6 @@ const cashFlowSlice = createSlice({
         ).toFixed(2);
 
         const status = Number(currentPorcentage) < Number(data.idealPorcentage);
-        console.log(
-          "teste",
-          Number(data.idealPorcentage / 100) * state.variableIncome -
-            Number(data.price * data.stockAmount) /
-              ((1 - Number(data.idealPorcentage / 100)) * Number(data.price))
-        );
 
         const result1 =
           Number(data.idealPorcentage / 100) * state.variableIncome;
@@ -113,16 +107,18 @@ const cashFlowSlice = createSlice({
           100
         ).toFixed(2);
         const status = Number(currentPorcentage) < Number(data.idealPorcentage);
+
+        const result1 =
+          Number(data.idealPorcentage / 100) * state.fixedIncome -
+          Number(data.totalPrice);
+        const result2 = 1 - Number(data.idealPorcentage / 100);
+
         return {
           name: data.name,
           idealPorcentage: Number(data.idealPorcentage),
           currentPorcentage: Number(currentPorcentage),
           totalPrice: Number(data.totalPrice),
-          shouldBuyPrice: status
-            ? (Number(data.idealPorcentage) * Number(data.totalPrice)) /
-                Number(currentPorcentage) -
-              Number(data.totalPrice)
-            : 0,
+          shouldBuyPrice: status ? Math.ceil(result1 / result2) : 0,
           status: status ? "Comprar" : "Segurar",
         };
       });

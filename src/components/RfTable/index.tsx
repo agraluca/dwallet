@@ -2,17 +2,20 @@ import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import TableHeader from "components/TableHeader";
 import { TableDataRfProps } from "contexts/cashFlowContext";
-import { useCashFlow } from "hooks";
 import { useState } from "react";
 import { formatNumberToBrlCurrency } from "utils";
+import { useAppDispatch } from "hooks/useReduxHooks";
+import { cashFlowActions } from "store/ducks/cashFlow";
 
 import * as S from "./styles";
+import { alreadyExistsInList } from "utils/functions";
 
 export type TableProps = {
   tableDataRf: TableDataRfProps[];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
   hide?: boolean;
+  total: number;
 };
 
 const columnsFixedIncomeTable = [
@@ -29,6 +32,7 @@ function RfTable({
   isAdding,
   setIsAdding,
   hide = false,
+  total,
 }: TableProps) {
   const tableFormValuesInitialValues = {
     name: "",
@@ -42,7 +46,7 @@ function RfTable({
     tableFormValuesInitialValues
   );
 
-  const { total, setTableDataRf } = useCashFlow();
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -57,24 +61,30 @@ function RfTable({
     const status =
       Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
 
-    setTableDataRf([
-      ...tableDataRf,
-      {
-        name: tableFormValues.name,
-        idealPorcentage: Number(tableFormValues.idealPorcentage),
-        currentPorcentage: Number(currentPorcentage),
-        totalPrice: Number(tableFormValues.totalPrice),
-        shouldBuyPrice: status
-          ? Math.ceil(
-              (Number(tableFormValues.idealPorcentage) *
-                Number(tableFormValues.totalPrice)) /
-                Number(currentPorcentage) -
-                Number(tableFormValues.totalPrice)
-            )
-          : 0,
-        status: status ? "Comprar" : "Segurar",
-      },
-    ]);
+    const newValue = {
+      name: tableFormValues.name,
+      idealPorcentage: Number(tableFormValues.idealPorcentage),
+      currentPorcentage: Number(currentPorcentage),
+      totalPrice: Number(tableFormValues.totalPrice),
+      shouldBuyPrice: status
+        ? Math.ceil(
+            (Number(tableFormValues.idealPorcentage) *
+              Number(tableFormValues.totalPrice)) /
+              Number(currentPorcentage) -
+              Number(tableFormValues.totalPrice)
+          )
+        : 0,
+      status: status ? "Comprar" : "Segurar",
+    };
+    const exists = alreadyExistsInList(newValue.name, "name", tableDataRf);
+
+    if (exists) {
+      alert("Já existe esse ativo em sua carteira.");
+      return;
+    }
+    const { addNewValueToFixedIncomeList } = cashFlowActions;
+    dispatch(addNewValueToFixedIncomeList(newValue));
+
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding(false);
   };
@@ -123,48 +133,43 @@ function RfTable({
           </S.TableBody>
         </S.TableWrapper>
       )}
-
-      <S.TableWrapper>
-        {tableDataRf?.length && (
-          <>
-            <TableHeader columns={columnsFixedIncomeTable} />
-            <S.TableBody>
-              {tableDataRf?.map((data, index) => {
-                return (
-                  <S.TableRow key={index}>
-                    <S.TableBodyData>{data.name.toUpperCase()}</S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.idealPorcentage}%`}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.currentPorcentage}%`}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide
-                        ? " - "
-                        : formatNumberToBrlCurrency(data.totalPrice)}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide
-                        ? " - "
-                        : formatNumberToBrlCurrency(data.shouldBuyPrice)}
-                    </S.TableBodyData>
-                    <S.TableBodyData
-                      className={
-                        data.status === "Comprar"
-                          ? "table__body-data_green"
-                          : "table__body-data_red"
-                      }
-                    >
-                      {hide ? " - " : data.status}
-                    </S.TableBodyData>
-                  </S.TableRow>
-                );
-              })}
-            </S.TableBody>
-          </>
-        )}
-      </S.TableWrapper>
+      {tableDataRf.length > 0 && (
+        <S.TableWrapper>
+          <TableHeader columns={columnsFixedIncomeTable} />
+          <S.TableBody>
+            {tableDataRf?.map((data, index) => {
+              return (
+                <S.TableRow key={index}>
+                  <S.TableBodyData>{data.name.toUpperCase()}</S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : `${data.idealPorcentage}%`}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : `${data.currentPorcentage}%`}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : formatNumberToBrlCurrency(data.totalPrice)}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide
+                      ? " - "
+                      : formatNumberToBrlCurrency(data.shouldBuyPrice)}
+                  </S.TableBodyData>
+                  <S.TableBodyData
+                    className={
+                      data.status === "Comprar"
+                        ? "table__body-data_green"
+                        : "table__body-data_red"
+                    }
+                  >
+                    {hide ? " - " : data.status}
+                  </S.TableBodyData>
+                </S.TableRow>
+              );
+            })}
+          </S.TableBody>
+        </S.TableWrapper>
+      )}
     </>
   );
 }

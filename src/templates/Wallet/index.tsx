@@ -144,6 +144,7 @@ function Wallet() {
               isAdding={isAdding}
               setIsAdding={setIsAdding}
               hide={isHidding}
+              total={totalIncome}
             />
           ) : (
             <RfTable
@@ -151,6 +152,7 @@ function Wallet() {
               isAdding={isAdding}
               setIsAdding={setIsAdding}
               hide={isHidding}
+              total={totalIncome}
             />
           )}
         </S.TableWrapper>
