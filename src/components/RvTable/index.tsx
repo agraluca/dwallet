@@ -86,6 +86,14 @@ function RvTable({
     }));
   };
 
+  const alreadyExistsInVariableIncomeList = (stock: string) => {
+    const exists = tableDataRv.filter(
+      (item) => stock.toUpperCase() === item.stock.toUpperCase()
+    );
+
+    return exists.length > 0;
+  };
+
   const addItemToTable = () => {
     const currentPorcentage = (
       ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
@@ -114,6 +122,13 @@ function RvTable({
     };
 
     const { addNewValueToVariableIncomeList } = cashFlowActions;
+    const alreadyExists = alreadyExistsInVariableIncomeList(newValue.stock);
+
+    if (alreadyExists) {
+      alert("Já existe esse ativo em sua carteira.");
+
+      return;
+    }
     dispatch(addNewValueToVariableIncomeList(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
@@ -191,50 +206,46 @@ function RvTable({
           </S.TableBody>
         </S.TableWrapper>
       )}
+      {tableDataRv.length > 0 && (
+        <S.TableWrapper>
+          <TableHeader columns={columnsVariableIncomeTable} />
 
-      <S.TableWrapper>
-        {tableDataRv?.length && (
-          <>
-            <TableHeader columns={columnsVariableIncomeTable} />
-            <S.TableBody>
-              {tableDataRv?.map((data, index) => {
-                return (
-                  <S.TableRow key={index}>
-                    <S.TableBodyData>
-                      {data.stock.toUpperCase()}
-                    </S.TableBodyData>
-                    <S.TableBodyData>{data.type}</S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : formatNumberToBrlCurrency(data.price)}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.idealPorcentage}%`}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.currentPorcentage}%`}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.stockAmount}`}
-                    </S.TableBodyData>
-                    <S.TableBodyData>
-                      {hide ? " - " : `${data.shouldBuyAmount}`}
-                    </S.TableBodyData>
-                    <S.TableBodyData
-                      className={
-                        data.status === "Comprar"
-                          ? "table__body-data_green"
-                          : "table__body-data_red"
-                      }
-                    >
-                      {hide ? " - " : `${data.status}`}
-                    </S.TableBodyData>
-                  </S.TableRow>
-                );
-              })}
-            </S.TableBody>
-          </>
-        )}
-      </S.TableWrapper>
+          <S.TableBody>
+            {tableDataRv.map((data, index) => {
+              return (
+                <S.TableRow key={index}>
+                  <S.TableBodyData>{data.stock.toUpperCase()}</S.TableBodyData>
+                  <S.TableBodyData>{data.type}</S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : formatNumberToBrlCurrency(data.price)}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : `${data.idealPorcentage}%`}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : `${data.currentPorcentage}%`}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : `${data.stockAmount}`}
+                  </S.TableBodyData>
+                  <S.TableBodyData>
+                    {hide ? " - " : `${data.shouldBuyAmount}`}
+                  </S.TableBodyData>
+                  <S.TableBodyData
+                    className={
+                      data.status === "Comprar"
+                        ? "table__body-data_green"
+                        : "table__body-data_red"
+                    }
+                  >
+                    {hide ? " - " : `${data.status}`}
+                  </S.TableBodyData>
+                </S.TableRow>
+              );
+            })}
+          </S.TableBody>
+        </S.TableWrapper>
+      )}
     </>
   );
 }
