@@ -7,6 +7,7 @@ import { formatNumberToBrlCurrency, typeCheck } from "utils";
 import * as S from "./styles";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
+import TableHeader from "components/TableHeader";
 
 export type TableDataRvProps = {
   stock: string;
@@ -25,6 +26,17 @@ export type TableProps = {
   setIsAdding: (value: boolean) => void;
   hide?: boolean;
 };
+
+const columnsVariableIncomeTable = [
+  { name: "Ticker" },
+  { name: "Tipo" },
+  { name: "Preço" },
+  { name: "% Ideal" },
+  { name: "% Atual" },
+  { name: "Qtd" },
+  { name: "Qtd p/ comprar" },
+  { name: "Status" },
+];
 
 function RvTable({
   tableDataRv,
@@ -183,18 +195,7 @@ function RvTable({
       <S.TableWrapper>
         {tableDataRv?.length && (
           <>
-            <S.TableHeader>
-              <S.TableHeaderRow>
-                <S.TableHeaderData>Ticker</S.TableHeaderData>
-                <S.TableHeaderData>Tipo</S.TableHeaderData>
-                <S.TableHeaderData>Preço</S.TableHeaderData>
-                <S.TableHeaderData>% Ideal</S.TableHeaderData>
-                <S.TableHeaderData>% Atual</S.TableHeaderData>
-                <S.TableHeaderData>Qtd</S.TableHeaderData>
-                <S.TableHeaderData>Qtd p/ comprar</S.TableHeaderData>
-                <S.TableHeaderData>Status</S.TableHeaderData>
-              </S.TableHeaderRow>
-            </S.TableHeader>
+            <TableHeader columns={columnsVariableIncomeTable} />
             <S.TableBody>
               {tableDataRv?.map((data, index) => {
                 return (
