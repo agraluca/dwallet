@@ -30,10 +30,21 @@ interface CashFlowProps {
 }
 
 const initialState: CashFlowProps = {
-  totalIncome: 10,
+  totalIncome: 0,
   variableIncome: 0,
   fixedIncome: 0,
-  variableIncomeList: [],
+  variableIncomeList: [
+    {
+      stock: "WEGE3",
+      type: "Ação",
+      price: 10,
+      idealPorcentage: 10,
+      currentPorcentage: 0,
+      stockAmount: 1,
+      shouldBuyAmount: 0,
+      status: "Segurar",
+    },
+  ],
   fixedIncomeList: [],
 };
 
@@ -54,7 +65,8 @@ const cashFlowSlice = createSlice({
       }, 0);
     },
     updateTotalIncome: (state) => {
-      state.totalIncome = state.fixedIncome + state.variableIncome;
+      state.totalIncome =
+        Number(state.fixedIncome) + Number(state.variableIncome);
     },
     updateVariableIncomeList: (state) => {
       state.variableIncomeList = state.variableIncomeList.map((data) => {
@@ -65,6 +77,12 @@ const cashFlowSlice = createSlice({
         ).toFixed(2);
 
         const status = Number(currentPorcentage) < Number(data.idealPorcentage);
+        console.log(
+          "teste",
+          Number(data.idealPorcentage / 100) * state.variableIncome -
+            Number(data.price * data.stockAmount) /
+              ((1 - Number(data.idealPorcentage / 100)) * Number(data.price))
+        );
 
         const result1 =
           Number(data.idealPorcentage / 100) * state.variableIncome;
@@ -82,6 +100,7 @@ const cashFlowSlice = createSlice({
           shouldBuyAmount: status
             ? Math.ceil((result1 - result2) / result3)
             : 0,
+          //  ((%ideal * totalRv) - (preco * qtd)) / (1-%ideal) * preco
           status: status ? "Comprar" : "Segurar",
         };
       });

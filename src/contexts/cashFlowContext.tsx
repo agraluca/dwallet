@@ -114,7 +114,6 @@ export function CashFlowProvider({ children }: CashFlowProviderProps) {
   }, [rf, rv, tableDataRf, tableDataRv, total]);
 
   useEffect(() => {
-    console.log(rv);
     const updatedTableDataRv = tableDataRv.map((data) => {
       const currentPorcentage = (
         ((Number(data.price) * Number(data.stockAmount)) /
