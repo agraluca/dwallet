@@ -9,10 +9,6 @@ export const TableWrapper = styled.table`
     &.table__wrapper--isAdding {
       margin-bottom: ${theme.spacings.medium};
     }
-
-    .teste {
-      background: black;
-    }
   `}
 `;
 
@@ -88,5 +84,36 @@ export const TableBodyData = styled.td`
     &.table__body-data_red {
       color: ${theme.colors.red};
     }
+  `}
+`;
+
+export const EditingWrapper = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    padding-bottom: ${theme.spacings.small};
+    align-items: center;
+    justify-content: flex-end;
+    gap: ${theme.spacings.xxsmall};
+
+    & > .save-btn {
+      background: ${theme.colors.yellow};
+      color: ${theme.colors.black};
+      transition: filter 0.2s;
+
+      &:hover {
+        filter: brightness(0.8);
+      }
+    }
+  `}
+`;
+
+export const Input = styled.input`
+  ${({ theme }) => css`
+    max-width: 8rem;
+    padding: ${theme.spacings.xxsmall};
+    font-size: ${theme.font.sizes.medium};
+    font-weight: ${theme.font.weight.bold};
+
+    text-align: center;
   `}
 `;

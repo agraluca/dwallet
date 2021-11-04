@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import Wrapper from "components/Wrapper";
 import Menu from "components/Menu";
 import CardBalance from "components/CardBalance";
-import RvTable from "components/RvTable";
+import RvTable from "components/Table/RvTable";
 import { Button } from "components/Button";
 
 import * as S from "./styles";
 //import { useCashFlow } from "hooks";
-import RfTable from "components/RfTable";
+import RfTable from "components/Table/RfTable";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import { usePageStatus } from "hooks/usePageStatus";
@@ -17,12 +17,13 @@ function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
   const {
     isHidding,
+    isAdding,
+    isEditting,
     handleChangeStatusToIsHidding,
     handleChangeStatusToInitial,
-    isAdding,
     handleChangeStatusToIsAdding,
+    handleChangeStatusToIsEditting,
   } = usePageStatus();
-  // const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
 
   const dispatch = useAppDispatch();
   const {
@@ -33,7 +34,15 @@ function Wallet() {
     totalIncome,
   } = useAppSelector((state) => state.cashFlow);
 
-  //console.log("data", cashFlowState);
+  const variableIncomeTotal = variableIncomeList.reduce((acc, item) => {
+    acc += item.price * item.stockAmount;
+    return acc;
+  }, 0);
+
+  const fixedIncomeTotal = fixedIncomeList.reduce((acc, item) => {
+    acc += item.totalPrice;
+    return acc;
+  }, 0);
 
   useEffect(() => {
     const {
@@ -48,7 +57,7 @@ function Wallet() {
     dispatch(updateTotalIncome());
     dispatch(updateVariableIncomeList());
     dispatch(updateFixedIncomeList());
-  }, [dispatch, variableIncomeList.length, fixedIncomeList.length]);
+  }, [dispatch, variableIncomeList.length, fixedIncomeList.length, isEditting]);
 
   const addItemToTable = () => {
     isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();
@@ -65,16 +74,6 @@ function Wallet() {
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToggleStatus(event.target.value);
   };
-
-  const variableIncomeTotal = variableIncomeList.reduce((acc, item) => {
-    acc += item.price * item.stockAmount;
-    return acc;
-  }, 0);
-
-  const fixedIncomeTotal = fixedIncomeList.reduce((acc, item) => {
-    acc += item.totalPrice;
-    return acc;
-  }, 0);
 
   return (
     <Wrapper>
@@ -112,7 +111,12 @@ function Wallet() {
             >
               {isAdding ? "Cancelar" : "Adicionar"}
             </Button>
-            <Button variant="icon" icon="icons/edit.svg">
+            <Button
+              variant="icon"
+              icon="icons/edit.svg"
+              onClick={handleChangeStatusToIsEditting}
+              disabled={isEditting}
+            >
               Editar
             </Button>
             <Button variant="icon" icon="icons/chart-bar.svg">
@@ -150,6 +154,8 @@ function Wallet() {
               setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
               total={totalIncome}
+              isEditting={isEditting}
+              handleCancelIsEditting={handleChangeStatusToInitial}
             />
           ) : (
             <RfTable

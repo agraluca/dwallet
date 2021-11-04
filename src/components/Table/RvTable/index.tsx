@@ -1,13 +1,22 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
-import { useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 // import api from "services/axios";
-import * as S from "./styles";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
 import { alreadyExistsInList } from "utils/functions";
+
+import {
+  TableWrapper,
+  TableBody,
+  TableAddingRow,
+  TableBodyData,
+  IsEdittingMenu,
+  TableRow,
+  TableCell,
+} from "../TableElements/index";
 
 export type TableDataRvProps = {
   stock: string;
@@ -25,7 +34,9 @@ export type TableProps = {
   isAdding: boolean;
   setIsAdding: () => void;
   hide?: boolean;
+  isEditting: boolean;
   total: number;
+  handleCancelIsEditting: () => void;
 };
 
 const columnsVariableIncomeTable = [
@@ -45,6 +56,8 @@ function RvTable({
   setIsAdding,
   hide = false,
   total,
+  isEditting = false,
+  handleCancelIsEditting,
 }: TableProps) {
   const tableFormValuesInitialValues = {
     ticker: "",
@@ -58,6 +71,8 @@ function RvTable({
     tableFormValuesInitialValues
   );
 
+  const [tableRvCopy, setTableRvCopy] = useState([...tableDataRv]);
+
   const dispatch = useAppDispatch();
 
   const exists = alreadyExistsInList<TableDataRvProps>(
@@ -65,6 +80,10 @@ function RvTable({
     "stock",
     tableDataRv
   );
+
+  useEffect(() => {
+    setTableRvCopy([...tableDataRv]);
+  }, [isEditting, tableDataRv]);
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
@@ -146,21 +165,54 @@ function RvTable({
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
   };
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number,
+    field: boolean
+  ) => {
+    const slicedData = tableRvCopy.slice();
+
+    if (field && Number(event.target.value) >= 0) {
+      slicedData[index] = {
+        ...slicedData[index],
+        idealPorcentage: Number(event.target.value),
+      };
+    } else if (Number(event.target.value) >= 0) {
+      slicedData[index] = {
+        ...slicedData[index],
+        stockAmount: Number(event.target.value),
+      };
+    }
+
+    setTableRvCopy(slicedData);
+  };
+
+  const onCancel = () => {
+    handleCancelIsEditting();
+    setTableRvCopy([...tableDataRv]);
+  };
+
+  const onSave = () => {
+    const { editVariableIncomeList } = cashFlowActions;
+    dispatch(editVariableIncomeList(tableRvCopy));
+    handleCancelIsEditting();
+    setTableRvCopy([...tableDataRv]);
+  };
 
   return (
     <>
       {isAdding && (
-        <S.TableWrapper className="table__wrapper--isAdding">
-          <S.TableBody>
-            <S.TableAddingRow>
-              <S.TableBodyData>
+        <TableWrapper className="table__wrapper--isAdding">
+          <TableBody>
+            <TableAddingRow>
+              <TableBodyData>
                 <InputWithLabel
                   label="Ticker:"
                   onInputChange={(value) => handleInputChange("ticker", value)}
                   onBlur={handleTickerBlur}
                 />
-              </S.TableBodyData>
-              <S.TableBodyData>
+              </TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="Tipo:"
                   onInputChange={(value) => handleInputChange("type", value)}
@@ -168,8 +220,8 @@ function RvTable({
                   value={tableFormValues.type}
                   disabled
                 />
-              </S.TableBodyData>
-              <S.TableBodyData>
+              </TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="Preço:"
                   onInputChange={(value) => handleInputChange("price", value)}
@@ -177,17 +229,17 @@ function RvTable({
                   value={formatNumberToBrlCurrency(tableFormValues.price)}
                   disabled
                 />
-              </S.TableBodyData>
-              <S.TableBodyData>
+              </TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="% Ideal:"
                   onInputChange={(value) =>
                     handleInputChange("idealPorcentage", value)
                   }
                 />
-              </S.TableBodyData>
-              <S.TableBodyData>-</S.TableBodyData>
-              <S.TableBodyData>
+              </TableBodyData>
+              <TableBodyData>-</TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="Qtd:"
                   onInputChange={(value) =>
@@ -195,8 +247,8 @@ function RvTable({
                   }
                   onBlur={handleQuantityBlur}
                 />
-              </S.TableBodyData>
-              <S.TableBodyData>
+              </TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="Total:"
                   onInputChange={(value) => handleInputChange("total", value)}
@@ -204,8 +256,8 @@ function RvTable({
                   value={formatNumberToBrlCurrency(tableFormValues.total)}
                   disabled
                 />
-              </S.TableBodyData>
-              <S.TableBodyData className="table__body-button-container">
+              </TableBodyData>
+              <TableBodyData className="table__body-button-container">
                 <Button
                   onClick={addItemToTable}
                   className="table__body-button"
@@ -213,50 +265,96 @@ function RvTable({
                 >
                   Adicionar
                 </Button>
-              </S.TableBodyData>
-            </S.TableAddingRow>
-          </S.TableBody>
-        </S.TableWrapper>
+              </TableBodyData>
+            </TableAddingRow>
+          </TableBody>
+        </TableWrapper>
       )}
+      {isEditting && <IsEdittingMenu onCancel={onCancel} onSave={onSave} />}
+
       {tableDataRv.length > 0 && (
-        <S.TableWrapper>
+        <TableWrapper>
           <TableHeader columns={columnsVariableIncomeTable} />
 
-          <S.TableBody>
+          <TableBody>
             {tableDataRv.map((data, index) => {
               return (
-                <S.TableRow key={index}>
-                  <S.TableBodyData>{data.stock.toUpperCase()}</S.TableBodyData>
-                  <S.TableBodyData>{data.type}</S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : formatNumberToBrlCurrency(data.price)}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : `${data.idealPorcentage}%`}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : `${data.currentPorcentage}%`}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : `${data.stockAmount}`}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : `${data.shouldBuyAmount}`}
-                  </S.TableBodyData>
-                  <S.TableBodyData
+                <TableRow key={index}>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={false}
+                      value={data.stock.toUpperCase()}
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell isHidding={false} value={data.type} />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      value={formatNumberToBrlCurrency(data.price)}
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      isEditting={isEditting}
+                      isEdittingProps={{
+                        index,
+                        handleChange,
+                        field: true,
+                      }}
+                      value={
+                        isEditting
+                          ? tableRvCopy[index].idealPorcentage
+                          : data.idealPorcentage
+                      }
+                      hasPercentage
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      value={data.currentPorcentage}
+                      hasPercentage
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      value={
+                        isEditting
+                          ? tableRvCopy[index].stockAmount
+                          : data.stockAmount
+                      }
+                      isEditting={isEditting}
+                      isEdittingProps={{
+                        index,
+                        handleChange,
+                        field: false,
+                      }}
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      value={`${data.shouldBuyAmount}`}
+                    />
+                  </TableBodyData>
+                  <TableBodyData
                     className={
                       data.status === "Comprar"
                         ? "table__body-data_green"
                         : "table__body-data_red"
                     }
                   >
-                    {hide ? " - " : `${data.status}`}
-                  </S.TableBodyData>
-                </S.TableRow>
+                    <TableCell isHidding={hide} value={`${data.status}`} />
+                  </TableBodyData>
+                </TableRow>
               );
             })}
-          </S.TableBody>
-        </S.TableWrapper>
+          </TableBody>
+        </TableWrapper>
       )}
     </>
   );
