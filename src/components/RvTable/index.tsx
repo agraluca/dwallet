@@ -98,6 +98,14 @@ function RvTable({
     }));
   };
 
+  const alreadyExistsInVariableIncomeList = (stock: string) => {
+    const exists = tableDataRv.filter(
+      (item) => stock.toUpperCase() === item.stock.toUpperCase()
+    );
+
+    return exists.length > 0;
+  };
+
   const addItemToTable = () => {
     const currentPorcentage = (
       ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
@@ -126,7 +134,13 @@ function RvTable({
     };
 
     const { addNewValueToVariableIncomeList } = cashFlowActions;
+    const alreadyExists = alreadyExistsInVariableIncomeList(newValue.stock);
 
+    if (alreadyExists) {
+      alert("Já existe esse ativo em sua carteira.");
+
+      return;
+    }
     dispatch(addNewValueToVariableIncomeList(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
