@@ -1,5 +1,6 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
+import TableHeader from "components/TableHeader";
 import { TableDataRfProps } from "contexts/cashFlowContext";
 import { useCashFlow } from "hooks";
 import { useState } from "react";
@@ -13,6 +14,15 @@ export type TableProps = {
   setIsAdding: (value: boolean) => void;
   hide?: boolean;
 };
+
+const columnsFixedIncomeTable = [
+  { name: "Nome" },
+  { name: "% Ideal" },
+  { name: "% Atual" },
+  { name: "Valor Total" },
+  { name: "Valor p/ comprar" },
+  { name: "Status" },
+];
 
 function RfTable({
   tableDataRf,
@@ -117,16 +127,7 @@ function RfTable({
       <S.TableWrapper>
         {tableDataRf?.length && (
           <>
-            <S.TableHeader>
-              <S.TableHeaderRow>
-                <S.TableHeaderData>Nome</S.TableHeaderData>
-                <S.TableHeaderData>% Ideal</S.TableHeaderData>
-                <S.TableHeaderData>% Atual</S.TableHeaderData>
-                <S.TableHeaderData>Valor Total</S.TableHeaderData>
-                <S.TableHeaderData>Valor p/ comprar</S.TableHeaderData>
-                <S.TableHeaderData>Status</S.TableHeaderData>
-              </S.TableHeaderRow>
-            </S.TableHeader>
+            <TableHeader columns={columnsFixedIncomeTable} />
             <S.TableBody>
               {tableDataRf?.map((data, index) => {
                 return (
