@@ -7,7 +7,6 @@ import RvTable from "components/Table/RvTable";
 import { Button } from "components/Button";
 
 import * as S from "./styles";
-//import { useCashFlow } from "hooks";
 import RfTable from "components/Table/RfTable";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";

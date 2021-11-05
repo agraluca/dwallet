@@ -6,9 +6,11 @@ export const Container = styled.main`
   ${({ theme }) => css`
     margin: 0 auto;
     padding: 0 calc(${theme.spacings.medium} * 2);
+    padding-bottom: ${theme.spacings.large};
 
     ${media.lessThan("medium")`
       padding: 0 ${theme.spacings.xxsmall};
+      padding-bottom: ${theme.spacings.large};
     `}
   `}
 `;
@@ -64,7 +66,7 @@ export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
       ? theme.spacings.medium
       : `calc(${theme.spacings.medium} * 2)`};
 
-    ${media.lessThan("medium")`
+    ${media.lessThan("large")`
       justify-content: center;
       flex-direction: column;
       padding-top: ${theme.spacings.medium};
@@ -81,10 +83,10 @@ export const ActionButtonsWrapper = styled.div<ButtonsWrapperProps>`
   ${({ theme }) => css`
     display: flex;
     gap: ${theme.font.sizes.small};
-    ${media.lessThan("medium")`
+    ${media.lessThan("large")`
       flex-direction: column;
       justify-content: stretch;
-      width: 29rem;
+      width: 100%;
       padding-top: ${theme.spacings.medium};
       padding-bottom:  ${theme.spacings.medium};
     `}
@@ -95,6 +97,10 @@ export const ToggleContainer = styled.div<ButtonsWrapperProps>`
   ${() => css`
     display: flex;
     overflow: hidden;
+
+    ${media.lessThan("large")`
+        width: 100%;
+    `}
   `}
 `;
 export const SwitchInput = styled.input`
@@ -126,10 +132,16 @@ export const SwitchLabel = styled.label`
 
     &:first-of-type {
       border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
+      ${media.lessThan("large")`
+        width: 50%;
+      `}
     }
 
     &:last-of-type {
       border-radius: 0 ${theme.border.radius} ${theme.border.radius} 0;
+      ${media.lessThan("large")`
+        width: 50%;
+      `}
     }
   `}
 `;

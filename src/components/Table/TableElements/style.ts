@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import media from "styled-media-query";
 
 export const TableWrapper = styled.table`
   ${({ theme }) => css`
@@ -93,27 +94,50 @@ export const EditingWrapper = styled.div`
     padding-bottom: ${theme.spacings.small};
     align-items: center;
     justify-content: flex-end;
-    gap: ${theme.spacings.xxsmall};
+    gap: ${theme.spacings.xsmall};
 
-    & > .save-btn {
-      background: ${theme.colors.yellow};
-      color: ${theme.colors.black};
+    & .save-btn {
+      background: ${theme.colors.black};
+      color: ${theme.colors.blue};
       transition: filter 0.2s;
+      font-size: ${theme.font.sizes.small};
 
       &:hover {
         filter: brightness(0.8);
       }
     }
+
+    ${media.lessThan("medium")`
+      justify-content: flex-start;
+    `}
   `}
 `;
 
 export const Input = styled.input`
   ${({ theme }) => css`
-    max-width: 8rem;
-    padding: ${theme.spacings.xxsmall};
-    font-size: ${theme.font.sizes.medium};
-    font-weight: ${theme.font.weight.bold};
-
+    color: ${theme.colors.black};
+    border: 0.2rem solid ${theme.colors.lightBlue};
+    border-radius: ${theme.border.radius};
+    width: 7rem;
+    font-family: ${theme.font.family};
     text-align: center;
+    font-size: ${theme.font.sizes.medium};
+    padding: ${theme.font.sizes.xsmall} 0;
+    font-weight: ${theme.font.weight.bold};
+    outline: none;
+    margin-right: ${theme.spacings.xxsmall};
+    &:focus-within {
+      box-shadow: 0 0 0.5rem ${theme.colors.blue};
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type="number"] {
+      -moz-appearance: textfield;
+    }
   `}
 `;

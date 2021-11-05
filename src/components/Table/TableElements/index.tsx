@@ -82,6 +82,7 @@ export const TableCell = ({
     return (
       <S.Input
         type="number"
+        className="input--centered"
         value={value}
         onChange={(event) =>
           isEdittingProps?.handleChange(
