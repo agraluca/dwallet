@@ -164,6 +164,8 @@ function Wallet() {
               setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
               total={totalIncome}
+              isEditting={isEditting}
+              handleCancelIsEditting={handleChangeStatusToInitial}
             />
           )}
         </S.TableWrapper>

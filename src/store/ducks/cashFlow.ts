@@ -152,6 +152,12 @@ const cashFlowSlice = createSlice({
     ) => {
       state.variableIncomeList = [...action.payload];
     },
+    editFixedIncomeList: (
+      state,
+      action: PayloadAction<FixedIncomeListProps[]>
+    ) => {
+      state.fixedIncomeList = [...action.payload];
+    },
   },
 });
 

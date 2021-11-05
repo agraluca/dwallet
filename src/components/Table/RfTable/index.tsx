@@ -2,13 +2,22 @@ import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import TableHeader from "components/TableHeader";
 import { TableDataRfProps } from "contexts/cashFlowContext";
-import { useState } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 
-import * as S from "./styles";
 import { alreadyExistsInList } from "utils/functions";
+
+import {
+  TableWrapper,
+  TableBody,
+  TableAddingRow,
+  TableBodyData,
+  IsEdittingMenu,
+  TableRow,
+  TableCell,
+} from "../TableElements/index";
 
 export type TableProps = {
   tableDataRf: TableDataRfProps[];
@@ -16,6 +25,8 @@ export type TableProps = {
   setIsAdding: () => void;
   hide?: boolean;
   total: number;
+  isEditting: boolean;
+  handleCancelIsEditting: () => void;
 };
 
 const columnsFixedIncomeTable = [
@@ -33,6 +44,8 @@ function RfTable({
   setIsAdding,
   hide = false,
   total,
+  isEditting = false,
+  handleCancelIsEditting,
 }: TableProps) {
   const tableFormValuesInitialValues = {
     name: "",
@@ -45,11 +58,37 @@ function RfTable({
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );
+  const [tableRfCopy, setTableRfCopy] = useState([...tableDataRf]);
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    setTableRfCopy([...tableDataRf]);
+  }, [isEditting, tableDataRf]);
+
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    index: number,
+    field: boolean
+  ) => {
+    const slicedData = tableRfCopy.slice();
+
+    if (field && Number(event.target.value) >= 0) {
+      slicedData[index] = {
+        ...slicedData[index],
+        idealPorcentage: Number(event.target.value),
+      };
+    } else if (Number(event.target.value) >= 0) {
+      slicedData[index] = {
+        ...slicedData[index],
+        totalPrice: Number(event.target.value),
+      };
+    }
+    setTableRfCopy(slicedData);
   };
 
   const addItemToTable = () => {
@@ -88,30 +127,40 @@ function RfTable({
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
   };
+  const onCancel = () => {
+    handleCancelIsEditting();
+    setTableRfCopy([...tableDataRf]);
+  };
+  const onSave = () => {
+    const { editFixedIncomeList } = cashFlowActions;
+    dispatch(editFixedIncomeList(tableRfCopy));
+    handleCancelIsEditting();
+    setTableRfCopy([...tableRfCopy]);
+  };
 
   return (
     <>
       {isAdding && (
-        <S.TableWrapper className="table__wrapper--isAdding">
-          <S.TableBody>
-            <S.TableAddingRow>
-              <S.TableBodyData>
+        <TableWrapper className="table__wrapper--isAdding">
+          <TableBody>
+            <TableAddingRow>
+              <TableBodyData>
                 <InputWithLabel
                   label="Nome:"
                   onInputChange={(value) => handleInputChange("name", value)}
                 />
-              </S.TableBodyData>
+              </TableBodyData>
 
-              <S.TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="% Ideal:"
                   onInputChange={(value) =>
                     handleInputChange("idealPorcentage", value)
                   }
                 />
-              </S.TableBodyData>
+              </TableBodyData>
 
-              <S.TableBodyData>
+              <TableBodyData>
                 <InputWithLabel
                   label="Preço:"
                   onInputChange={(value) =>
@@ -119,8 +168,8 @@ function RfTable({
                   }
                   value={tableFormValues.totalPrice}
                 />
-              </S.TableBodyData>
-              <S.TableBodyData className="table__body-button-container">
+              </TableBodyData>
+              <TableBodyData className="table__body-button-container">
                 <Button
                   onClick={addItemToTable}
                   className="table__body-button"
@@ -128,47 +177,81 @@ function RfTable({
                 >
                   Adicionar
                 </Button>
-              </S.TableBodyData>
-            </S.TableAddingRow>
-          </S.TableBody>
-        </S.TableWrapper>
+              </TableBodyData>
+            </TableAddingRow>
+          </TableBody>
+        </TableWrapper>
       )}
+      {isEditting && <IsEdittingMenu onCancel={onCancel} onSave={onSave} />}
+
       {tableDataRf.length > 0 && (
-        <S.TableWrapper>
+        <TableWrapper>
           <TableHeader columns={columnsFixedIncomeTable} />
-          <S.TableBody>
+          <TableBody>
             {tableDataRf?.map((data, index) => {
               return (
-                <S.TableRow key={index}>
-                  <S.TableBodyData>{data.name.toUpperCase()}</S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : `${data.idealPorcentage}%`}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : `${data.currentPorcentage}%`}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide ? " - " : formatNumberToBrlCurrency(data.totalPrice)}
-                  </S.TableBodyData>
-                  <S.TableBodyData>
-                    {hide
-                      ? " - "
-                      : formatNumberToBrlCurrency(data.shouldBuyPrice)}
-                  </S.TableBodyData>
-                  <S.TableBodyData
+                <TableRow key={index}>
+                  <TableBodyData>{data.name.toUpperCase()}</TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      isEditting={isEditting}
+                      isEdittingProps={{
+                        index,
+                        handleChange,
+                        field: true,
+                      }}
+                      hasPercentage={!hide}
+                      value={
+                        isEditting
+                          ? tableRfCopy[index].idealPorcentage
+                          : data.idealPorcentage
+                      }
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      hasPercentage={!hide}
+                      value={data.currentPorcentage}
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      isEditting={isEditting}
+                      isEdittingProps={{
+                        index,
+                        handleChange,
+                        field: false,
+                      }}
+                      value={
+                        isEditting
+                          ? tableRfCopy[index].totalPrice
+                          : formatNumberToBrlCurrency(data.totalPrice)
+                      }
+                    />
+                  </TableBodyData>
+                  <TableBodyData>
+                    <TableCell
+                      isHidding={hide}
+                      value={formatNumberToBrlCurrency(data.shouldBuyPrice)}
+                    />
+                  </TableBodyData>
+                  <TableBodyData
                     className={
                       data.status === "Comprar"
                         ? "table__body-data_green"
                         : "table__body-data_red"
                     }
                   >
-                    {hide ? " - " : data.status}
-                  </S.TableBodyData>
-                </S.TableRow>
+                    <TableCell isHidding={hide} value={data.status} />
+                  </TableBodyData>
+                </TableRow>
               );
             })}
-          </S.TableBody>
-        </S.TableWrapper>
+          </TableBody>
+        </TableWrapper>
       )}
     </>
   );
