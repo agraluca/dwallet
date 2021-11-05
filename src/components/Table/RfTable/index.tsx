@@ -17,6 +17,8 @@ import {
   TableRow,
   TableCell,
 } from "../TableElements/index";
+import toast from "react-hot-toast";
+import Toast from "components/Toast";
 
 export type TableDataRfProps = {
   name: string;
@@ -126,7 +128,10 @@ function RfTable({
     const exists = alreadyExistsInList(newValue.name, "name", tableDataRf);
 
     if (exists) {
-      alert("Já existe esse ativo em sua carteira.");
+      toast.custom(
+        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        { position: "top-right" }
+      );
       return;
     }
     const { addNewValueToFixedIncomeList } = cashFlowActions;

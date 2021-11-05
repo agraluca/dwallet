@@ -18,6 +18,9 @@ import {
   TableCell,
 } from "../TableElements/index";
 
+import toast from "react-hot-toast";
+import Toast from "components/Toast";
+
 export type TableDataRvProps = {
   stock: string;
   type: string;
@@ -86,7 +89,18 @@ function RvTable({
   }, [isEditting, tableDataRv]);
 
   const handleInputChange = (field: string, value: string) => {
-    setTableFormValues((prev) => ({ ...prev, [field]: value }));
+    if (field !== "idealPorcentage" && field !== "quantity") {
+      console.log(field);
+      setTableFormValues((prev) => ({ ...prev, [field]: value }));
+    } else if (
+      field === "idealPorcentage" &&
+      Number(value) > 0 &&
+      Number(value) <= 100
+    ) {
+      setTableFormValues((prev) => ({ ...prev, [field]: value }));
+    } else if (field === "quantity" && Number(value) > 0) {
+      setTableFormValues((prev) => ({ ...prev, [field]: value }));
+    }
   };
 
   const handleTickerBlur = async () => {
@@ -97,7 +111,10 @@ function RvTable({
     // console.log(response.data);
 
     if (exists) {
-      alert("Já existe esse ativo em sua carteira.");
+      toast.custom(
+        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        { position: "top-right" }
+      );
 
       return;
     }
@@ -152,7 +169,10 @@ function RvTable({
     );
 
     if (alreadyExists) {
-      alert("Já existe esse ativo em sua carteira.");
+      toast.custom(
+        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        { position: "top-right" }
+      );
 
       return;
     }
@@ -228,19 +248,23 @@ function RvTable({
               </TableBodyData>
               <TableBodyData>
                 <InputWithLabel
+                  type="number"
                   label="% Ideal:"
                   onInputChange={(value) =>
                     handleInputChange("idealPorcentage", value)
                   }
+                  value={tableFormValues.idealPorcentage}
                 />
               </TableBodyData>
               <TableBodyData>-</TableBodyData>
               <TableBodyData>
                 <InputWithLabel
+                  type="number"
                   label="Qtd:"
                   onInputChange={(value) =>
                     handleInputChange("quantity", value)
                   }
+                  value={tableFormValues.quantity}
                   onBlur={handleQuantityBlur}
                 />
               </TableBodyData>

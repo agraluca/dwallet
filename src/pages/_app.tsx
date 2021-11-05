@@ -7,6 +7,7 @@ import store from "store/store";
 import GlobalStyles from "styles/global";
 import { ThemeProvider } from "styled-components";
 import theme from "styles/theme";
+import { Toaster } from "react-hot-toast";
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -34,6 +35,7 @@ function App({ Component, pageProps }: AppProps) {
             stopDelayMs={200}
             height={3}
           />
+          <Toaster />
           <Component {...pageProps} />
         </ThemeProvider>
       </Provider>

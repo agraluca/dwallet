@@ -16,7 +16,7 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   ${({ theme }) => css`
-    width: 10rem;
+    width: 12rem;
     outline: none;
     border: none;
     font-size: ${theme.font.sizes.small};
