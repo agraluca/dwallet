@@ -1,64 +1,95 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Wrapper from "components/Wrapper";
 import Menu from "components/Menu";
 import CardBalance from "components/CardBalance";
-import RvTable from "components/RvTable";
+import RvTable from "components/Table/RvTable";
 import { Button } from "components/Button";
 
 import * as S from "./styles";
-import { useCashFlow } from "hooks";
-import RfTable from "components/RfTable";
+import RfTable from "components/Table/RfTable";
+import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
+import { cashFlowActions } from "store/ducks/cashFlow";
+import { usePageStatus } from "hooks/usePageStatus";
 
 function Wallet() {
-  const [isAdding, setIsAdding] = useState(false);
   const [toggleStatus, setToggleStatus] = useState("rv");
-  const [isHidding, setIsHidding] = useState(false);
-  const { total, rf, rv, tableDataRv, tableDataRf } = useCashFlow();
+  const {
+    isHidding,
+    isAdding,
+    isEditting,
+    handleChangeStatusToIsHidding,
+    handleChangeStatusToInitial,
+    handleChangeStatusToIsAdding,
+    handleChangeStatusToIsEditting,
+  } = usePageStatus();
+
+  const dispatch = useAppDispatch();
+  const {
+    variableIncomeList,
+    fixedIncomeList,
+    fixedIncome,
+    variableIncome,
+    totalIncome,
+  } = useAppSelector((state) => state.cashFlow);
+
+  const variableIncomeTotal = variableIncomeList.reduce((acc, item) => {
+    acc += item.price * item.stockAmount;
+    return acc;
+  }, 0);
+
+  const fixedIncomeTotal = fixedIncomeList.reduce((acc, item) => {
+    acc += item.totalPrice;
+    return acc;
+  }, 0);
+
+  useEffect(() => {
+    const {
+      updateFixedIncome,
+      updateVariableIncome,
+      updateTotalIncome,
+      updateVariableIncomeList,
+      updateFixedIncomeList,
+    } = cashFlowActions;
+    dispatch(updateFixedIncome());
+    dispatch(updateVariableIncome());
+    dispatch(updateTotalIncome());
+    dispatch(updateVariableIncomeList());
+    dispatch(updateFixedIncomeList());
+  }, [dispatch, variableIncomeList.length, fixedIncomeList.length, isEditting]);
 
   const addItemToTable = () => {
-    if (isAdding) {
-      setIsAdding(false);
-    } else {
-      setIsAdding(true);
-      setIsHidding(false);
-    }
+    isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();
   };
 
   const handleToggleIsHidding = () => {
-    !isAdding && setIsHidding((state) => !state);
+    if (!isAdding) {
+      isHidding
+        ? handleChangeStatusToInitial()
+        : handleChangeStatusToIsHidding();
+    }
   };
 
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToggleStatus(event.target.value);
   };
 
-  const rvTotal = tableDataRv.reduce((acc, item) => {
-    acc += item.price * item.stockAmount;
-    return acc;
-  }, 0);
-
-  const rfTotal = tableDataRf.reduce((acc, item) => {
-    acc += item.totalPrice;
-    return acc;
-  }, 0);
-
   return (
     <Wrapper>
       <Menu />
       <S.Container>
         <S.CardWrapper>
-          <CardBalance type="total" value={total} hide={isHidding} />
+          <CardBalance type="total" value={totalIncome} hide={isHidding} />
           <CardBalance
             type="rf"
-            value={rf / total}
-            total={rfTotal}
+            value={fixedIncome / totalIncome}
+            total={fixedIncomeTotal}
             hide={isHidding}
           />
           <CardBalance
             type="rv"
-            value={rv / total}
-            total={rvTotal}
+            value={variableIncome / totalIncome}
+            total={variableIncomeTotal}
             hide={isHidding}
           />
         </S.CardWrapper>
@@ -79,7 +110,12 @@ function Wallet() {
             >
               {isAdding ? "Cancelar" : "Adicionar"}
             </Button>
-            <Button variant="icon" icon="icons/edit.svg">
+            <Button
+              variant="icon"
+              icon="icons/edit.svg"
+              onClick={handleChangeStatusToIsEditting}
+              disabled={isEditting}
+            >
               Editar
             </Button>
             <Button variant="icon" icon="icons/chart-bar.svg">
@@ -108,20 +144,27 @@ function Wallet() {
           </S.ToggleContainer>
         </S.ButtonsWrapper>
 
+        {}
         <S.TableWrapper>
           {toggleStatus === "rv" ? (
             <RvTable
-              tableDataRv={tableDataRv}
+              tableDataRv={variableIncomeList}
               isAdding={isAdding}
-              setIsAdding={setIsAdding}
+              setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
+              total={totalIncome}
+              isEditting={isEditting}
+              handleCancelIsEditting={handleChangeStatusToInitial}
             />
           ) : (
             <RfTable
-              tableDataRf={tableDataRf}
+              tableDataRf={fixedIncomeList}
               isAdding={isAdding}
-              setIsAdding={setIsAdding}
+              setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
+              total={totalIncome}
+              isEditting={isEditting}
+              handleCancelIsEditting={handleChangeStatusToInitial}
             />
           )}
         </S.TableWrapper>

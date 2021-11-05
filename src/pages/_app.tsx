@@ -1,16 +1,17 @@
 import { AppProps } from "next/app";
-import { AuthProvider, CashFlowProvider } from "contexts";
 import Head from "next/head";
 import NextNprogress from "nextjs-progressbar";
-
+import { Provider as NextAuthProvider } from "next-auth/client";
+import { Provider } from "react-redux";
+import store from "store/store";
 import GlobalStyles from "styles/global";
 import { ThemeProvider } from "styled-components";
 import theme from "styles/theme";
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider session={pageProps.session}>
-      <CashFlowProvider>
+    <NextAuthProvider session={pageProps.session}>
+      <Provider store={store}>
         <ThemeProvider theme={theme}>
           <Head>
             <title>DWallet - Seu sistema de balanceamento de carteira</title>
@@ -35,8 +36,8 @@ function App({ Component, pageProps }: AppProps) {
           />
           <Component {...pageProps} />
         </ThemeProvider>
-      </CashFlowProvider>
-    </AuthProvider>
+      </Provider>
+    </NextAuthProvider>
   );
 }
 

@@ -60,7 +60,7 @@ function CardBalance({ type, value, total = 0, hide = false }: CardProps) {
         {type === "total"
           ? formatNumberToBrlCurrency(value)
           : isPercentageValue
-          ? formatNumberToPercent(value)
+          ? formatNumberToPercent(value || 0)
           : formatNumberToBrlCurrency(total)}
       </S.Title>
     </S.Wrapper>

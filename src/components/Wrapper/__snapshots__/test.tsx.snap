@@ -17,7 +17,6 @@ exports[`<Wrapper /> should render the heading 1`] = `
   bottom: 0;
   width: 100%;
   pointer-events: none;
-  z-index: -1;
 }
 
 .c1 {
@@ -29,6 +28,7 @@ exports[`<Wrapper /> should render the heading 1`] = `
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 10;
 }
 
 <section
