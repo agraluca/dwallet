@@ -1,7 +1,6 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import TableHeader from "components/TableHeader";
-import { TableDataRfProps } from "contexts/cashFlowContext";
 import { useState, useEffect, ChangeEvent } from "react";
 import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch } from "hooks/useReduxHooks";
@@ -18,6 +17,15 @@ import {
   TableRow,
   TableCell,
 } from "../TableElements/index";
+
+export type TableDataRfProps = {
+  name: string;
+  idealPorcentage: number;
+  currentPorcentage: number;
+  totalPrice: number;
+  shouldBuyPrice: number;
+  status: string;
+};
 
 export type TableProps = {
   tableDataRf: TableDataRfProps[];
