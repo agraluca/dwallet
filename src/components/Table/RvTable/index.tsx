@@ -2,11 +2,12 @@ import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import { ChangeEvent, useState, useEffect } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
-import api from "services/axios";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
 import { alreadyExistsInList } from "utils/functions";
+
+import * as api from "services/axios";
 
 import {
   TableWrapper,
@@ -40,13 +41,6 @@ export type TableProps = {
   isEditting: boolean;
   total: number;
   handleCancelIsEditting: () => void;
-};
-
-export type FetchDataProp = {
-  companyName: string;
-  formattedPrice: string;
-  tickerName: string;
-  tickerType: string;
 };
 
 const columnsVariableIncomeTable = [
@@ -97,7 +91,6 @@ function RvTable({
 
   const handleInputChange = (field: string, value: string) => {
     if (field !== "idealPorcentage" && field !== "quantity") {
-      console.log(field);
       setTableFormValues((prev) => ({ ...prev, [field]: value }));
     } else if (
       field === "idealPorcentage" &&
@@ -111,25 +104,31 @@ function RvTable({
   };
 
   const handleTickerBlur = async () => {
-    const response = await api.get(`stock/${tableFormValues.ticker}`);
+    try {
+      if (exists) {
+        toast.custom(
+          <Toast
+            title="Já existe esse ativo em sua carteira."
+            type="warning"
+          />,
+          { position: "top-right" }
+        );
 
-    const { formattedPrice, tickerType } = response.data as FetchDataProp;
+        return;
+      }
+      const { data } = await api.getOneStock(tableFormValues.ticker);
 
-    const price = formattedPrice.slice(2).replace(",", ".");
-
-    if (exists) {
-      toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
-        { position: "top-right" }
-      );
-
-      return;
+      setTableFormValues((prev) => ({
+        ...prev,
+        type: typeCheck(tableFormValues.ticker),
+        price: data.formattedPrice,
+      }));
+    } catch (err) {
+      const { error } = err.response.data;
+      toast.custom(<Toast title={error} type="warning" />, {
+        position: "top-right",
+      });
     }
-    setTableFormValues((prev) => ({
-      ...prev,
-      type: typeCheck(tickerType),
-      price,
-    }));
   };
 
   const handleQuantityBlur = () => {
@@ -188,6 +187,7 @@ function RvTable({
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
   };
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement>,
     index: number,
