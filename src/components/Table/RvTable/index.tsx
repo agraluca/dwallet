@@ -7,8 +7,6 @@ import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
 import { alreadyExistsInList } from "utils/functions";
 
-import * as api from "services/axios";
-
 import {
   TableWrapper,
   TableBody,
@@ -21,6 +19,7 @@ import {
 
 import toast from "react-hot-toast";
 import Toast from "components/Toast";
+import { getDetailStock } from "store/fetchActions/fetchStocks";
 
 export type TableDataRvProps = {
   stock: string;
@@ -104,31 +103,24 @@ function RvTable({
   };
 
   const handleTickerBlur = async () => {
-    try {
-      if (exists) {
-        toast.custom(
-          <Toast
-            title="Já existe esse ativo em sua carteira."
-            type="warning"
-          />,
-          { position: "top-right" }
-        );
+    if (exists) {
+      toast.custom(
+        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        { position: "top-right" }
+      );
 
-        return;
-      }
-      const { data } = await api.getOneStock(tableFormValues.ticker);
-
-      setTableFormValues((prev) => ({
-        ...prev,
-        type: typeCheck(tableFormValues.ticker),
-        price: data.formattedPrice,
-      }));
-    } catch (err) {
-      const { error } = err.response.data;
-      toast.custom(<Toast title={error} type="warning" />, {
-        position: "top-right",
-      });
+      return;
     }
+
+    const data = await dispatch(getDetailStock(tableFormValues.ticker));
+
+    const { tickerType, formattedPrice } = data!;
+
+    setTableFormValues((prev) => ({
+      ...prev,
+      type: typeCheck(tickerType),
+      price: formattedPrice,
+    }));
   };
 
   const handleQuantityBlur = () => {

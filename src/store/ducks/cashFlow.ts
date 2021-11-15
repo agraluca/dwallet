@@ -27,6 +27,7 @@ interface CashFlowProps {
   //setTableDataRv: (value: TableDataRvProps[]) => void;
   fixedIncomeList: FixedIncomeListProps[];
   //setTableDataRf: (value: TableDataRfProps[]) => void;
+  loading: boolean;
 }
 
 const initialState: CashFlowProps = {
@@ -56,6 +57,7 @@ const initialState: CashFlowProps = {
     },
   ],
   fixedIncomeList: [],
+  loading: false,
 };
 
 const cashFlowSlice = createSlice({
@@ -133,7 +135,7 @@ const cashFlowSlice = createSlice({
         };
       });
     },
-    reset: () => initialState,
+
     addNewValueToVariableIncomeList: (
       state,
       action: PayloadAction<VariableIncomeListProps>
@@ -157,6 +159,10 @@ const cashFlowSlice = createSlice({
       action: PayloadAction<FixedIncomeListProps[]>
     ) => {
       state.fixedIncomeList = [...action.payload];
+    },
+    reset: () => initialState,
+    loadingStatus: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
   },
 });

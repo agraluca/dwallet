@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { cashFlowReducer } from "./ducks/cashFlow";
+import { loadingReducer } from "./ducks/loading";
 
 export const store = configureStore({
-  reducer: { cashFlow: cashFlowReducer },
+  reducer: { cashFlow: cashFlowReducer, loading: loadingReducer },
   devTools: true,
 });
 
