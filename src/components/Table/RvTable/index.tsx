@@ -2,7 +2,7 @@ import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import { ChangeEvent, useState, useEffect } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
-// import api from "services/axios";
+import api from "services/axios";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
@@ -40,6 +40,13 @@ export type TableProps = {
   isEditting: boolean;
   total: number;
   handleCancelIsEditting: () => void;
+};
+
+export type FetchDataProp = {
+  companyName: string;
+  formattedPrice: string;
+  tickerName: string;
+  tickerType: string;
 };
 
 const columnsVariableIncomeTable = [
@@ -104,11 +111,11 @@ function RvTable({
   };
 
   const handleTickerBlur = async () => {
-    // const response = await api.get(
-    //   `mainsearchquery?q=${tableFormValues.ticker}&country=`
-    // );
+    const response = await api.get(`stock/${tableFormValues.ticker}`);
 
-    // console.log(response.data);
+    const { formattedPrice, tickerType } = response.data as FetchDataProp;
+
+    const price = formattedPrice.slice(2).replace(",", ".");
 
     if (exists) {
       toast.custom(
@@ -120,8 +127,8 @@ function RvTable({
     }
     setTableFormValues((prev) => ({
       ...prev,
-      type: typeCheck(tableFormValues.ticker),
-      price: "10",
+      type: typeCheck(tickerType),
+      price,
     }));
   };
 

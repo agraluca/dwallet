@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://statusinvest.com.br/home/",
+  baseURL: "http://localhost:4000/",
 });
