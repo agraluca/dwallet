@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface VariableIncomeListProps {
+type VariableIncomeListProps = {
   stock: string;
   type: string;
   price: number;
@@ -9,26 +9,24 @@ interface VariableIncomeListProps {
   stockAmount: number;
   shouldBuyAmount: number;
   status: string;
-}
-interface FixedIncomeListProps {
+};
+type FixedIncomeListProps = {
   name: string;
   idealPorcentage: number;
   currentPorcentage: number;
   totalPrice: number;
   shouldBuyPrice: number;
   status: string;
-}
+};
 
-interface CashFlowProps {
+type CashFlowProps = {
   totalIncome: number;
   variableIncome: number;
   fixedIncome: number;
   variableIncomeList: VariableIncomeListProps[];
-  //setTableDataRv: (value: TableDataRvProps[]) => void;
   fixedIncomeList: FixedIncomeListProps[];
-  //setTableDataRf: (value: TableDataRfProps[]) => void;
   loading: boolean;
-}
+};
 
 const initialState: CashFlowProps = {
   totalIncome: 0,

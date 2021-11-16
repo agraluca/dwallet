@@ -4,6 +4,10 @@ export const typeCheck = (tickerType: string) => {
       return "Ação ON";
     case "PN":
       return "Ação PN";
+    case "UNT":
+      return "Ação UNIT";
+    case "DRN":
+      return "BDR";
     default:
       return "Fii";
   }

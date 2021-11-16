@@ -1,24 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type LoadingProps = {
-  loading: boolean;
+  loading: {
+    [name: string]: boolean;
+  };
 };
 
 const initialState: LoadingProps = {
-  loading: false,
-};
-
-type LoadingPayloadProps = {
-  name: unknown;
-  value: boolean;
+  loading: {},
 };
 
 const loadingSlice = createSlice({
   name: "loading",
   initialState,
   reducers: {
-    loadingStatus: (state, action: PayloadAction<LoadingPayloadProps>) => {
-      action.payload.name = action.payload.value;
+    startLoading: (state, action: PayloadAction<string>) => {
+      state.loading = {
+        ...state.loading,
+        [action.payload]: true,
+      };
+    },
+    finishLoading: (state, action: PayloadAction<string>) => {
+      state.loading = {
+        ...state.loading,
+        [action.payload]: false,
+      };
     },
   },
 });

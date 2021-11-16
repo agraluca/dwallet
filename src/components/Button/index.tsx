@@ -6,6 +6,7 @@ export type ButtonProps = {
   variant?: string;
   icon?: string;
   iconSize?: "small" | "medium" | "large";
+  loading?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({
@@ -13,6 +14,7 @@ export function Button({
   variant = "",
   icon,
   iconSize,
+  loading = false,
   ...rest
 }: ButtonProps) {
   switch (variant) {
@@ -23,6 +25,8 @@ export function Button({
         </S.IconButton>
       );
     default:
-      return <S.Button {...rest}>{children}</S.Button>;
+      return (
+        <S.Button {...rest}>{loading ? <S.LoadingDots /> : children}</S.Button>
+      );
   }
 }

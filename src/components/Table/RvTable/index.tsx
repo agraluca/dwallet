@@ -2,7 +2,7 @@ import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import { ChangeEvent, useState, useEffect } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
-import { useAppDispatch } from "hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
 import { alreadyExistsInList } from "utils/functions";
@@ -77,6 +77,7 @@ function RvTable({
   const [tableRvCopy, setTableRvCopy] = useState([...tableDataRv]);
 
   const dispatch = useAppDispatch();
+  const { loading } = useAppSelector(({ loading }) => loading);
 
   const exists = alreadyExistsInList<TableDataRvProps>(
     tableFormValues.ticker,
@@ -113,14 +114,15 @@ function RvTable({
     }
 
     const data = await dispatch(getDetailStock(tableFormValues.ticker));
+    if (data) {
+      const { tickerType, formattedPrice } = data;
 
-    const { tickerType, formattedPrice } = data!;
-
-    setTableFormValues((prev) => ({
-      ...prev,
-      type: typeCheck(tickerType),
-      price: formattedPrice,
-    }));
+      setTableFormValues((prev) => ({
+        ...prev,
+        type: typeCheck(tickerType),
+        price: formattedPrice,
+      }));
+    }
   };
 
   const handleQuantityBlur = () => {
@@ -281,6 +283,7 @@ function RvTable({
                   onClick={addItemToTable}
                   className="table__body-button"
                   disabled={Number(tableFormValues.total) === 0 || exists}
+                  loading={loading.getDetailStockLoading}
                 >
                   Adicionar
                 </Button>

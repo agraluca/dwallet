@@ -66,3 +66,10 @@ export const Icon = styled.img<IconProps>`
     }
   }}
 `;
+
+export const LoadingDots = styled.img.attrs(() => ({
+  src: "/img/dots.svg",
+  alt: "Carregando...",
+}))`
+  width: 4rem;
+`;
