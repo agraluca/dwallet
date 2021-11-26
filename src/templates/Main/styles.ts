@@ -44,6 +44,7 @@ export const Content = styled.div`
   align-items: center;
   flex-direction: column;
   width: 50%;
+  z-index: 50;
 
   ${media.lessThan("large")`
     justify-content: center;
@@ -105,4 +106,27 @@ export const Button = styled.button`
       width: 100%;
    `}
   `}
+`;
+
+export const FormLogin = styled.form`
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    span.errorUserOrPassword {
+      color: ${theme.colors.red};
+      svg {
+        margin-right: 0.5rem;
+      }
+    }
+  `}
+`;
+
+export const FormLoading = styled.img.attrs(() => ({
+  src: "/img/dots.svg",
+  alt: "Waiting...",
+}))`
+  width: 4rem;
 `;

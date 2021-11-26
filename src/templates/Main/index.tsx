@@ -1,16 +1,49 @@
 import * as S from "./styles";
 import Wrapper from "components/Wrapper";
-import { useAuth } from "../../hooks/useAuth";
+
 import Heading from "components/Heading";
+import { useState } from "react";
+import { signin } from "next-auth/client";
+import { useRouter } from "next/dist/client/router";
+import Input from "components/Input";
+import { Button } from "components/Button";
 
 function Main({
   title = "DWallet",
   description = "Seu sistema de balanceamento de carteira",
 }) {
-  const { logIn } = useAuth();
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
 
+  const [loading, setLoading] = useState(false);
+
+  const routes = useRouter();
+  const { push, query } = routes;
+
+  function handleInput(field: string, value: string) {
+    setFormValues((prevState) => ({ ...prevState, [field]: value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+
+    const result = await signin("credentials", {
+      ...formValues,
+      redirect: false,
+      callbackUrl: query.callbackUrl
+        ? `${process.env.NEXT_PUBLIC_URL}${query?.callbackUrl}`
+        : `${process.env.NEXT_PUBLIC_URL}/wallet`,
+    });
+    if (result?.url) {
+      return push(result?.url);
+    }
+    setLoading(false);
+  }
   return (
-    <Wrapper>
+    <Wrapper zeroIndex>
       <S.Wrapper>
         <S.Content>
           <S.TitleWrapper>
@@ -21,14 +54,25 @@ function Main({
           </S.TitleWrapper>
           <S.Description>{description}</S.Description>
 
-          <S.Button onClick={logIn}>
-            <img
-              src="/icons/google.svg"
-              alt="google logo"
-              className="login--google-logo"
+          <S.FormLogin onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              onInputChange={(value) => handleInput("email", value)}
+              placeholder="Email"
+              inputSize="normal"
+              icon="email"
             />
-            Entrar com o Google
-          </S.Button>
+            <Input
+              type="password"
+              onInputChange={(value) => handleInput("password", value)}
+              placeholder="Senha"
+              inputSize="normal"
+              icon="lock"
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? <S.FormLoading /> : <span>Entrar</span>}
+            </Button>
+          </S.FormLogin>
         </S.Content>
         <S.IlustrationWrapper>
           <S.Illustration src="/img/hero.svg" alt="Uma carteira" />
