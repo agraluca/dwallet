@@ -168,9 +168,27 @@ function RvTable({
       tableDataRv
     );
 
+    const hasOverIdealPercentage = tableDataRv.slice().reduce((acc, item) => {
+      acc += item.idealPorcentage;
+
+      return acc;
+    }, 0);
+
+    if (hasOverIdealPercentage + newValue.idealPorcentage > 100) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
     if (alreadyExists) {
       toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        <Toast title="Já existe esse ativo em sua carteira." type="error" />,
         { position: "top-right" }
       );
 
