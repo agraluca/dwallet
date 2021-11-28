@@ -24,7 +24,7 @@ export const InputWrapper = styled.div<InputWrapperProps>`
     display: flex;
     align-items: center;
     margin-bottom: ${error ? "0" : `${theme.spacings.xsmall}`};
-    background: ${theme.colors.gray};
+    background: ${theme.colors.white};
     border-radius: ${theme.border.radius};
 
     ${!!inputSize && WrapperModifier[inputSize!]()}
@@ -35,7 +35,7 @@ export const InputWrapper = styled.div<InputWrapperProps>`
       margin-left: ${theme.spacings.xsmall};
     }
     &:focus-within {
-      box-shadow: 0 0 0.5rem ${theme.colors.purple};
+      box-shadow: 0 0 0.5rem ${theme.colors.yellow};
     }
   `}
 `;
@@ -56,7 +56,7 @@ export const Input = styled.input`
     outline: none;
 
     &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 ${theme.spacings.small} ${theme.colors.gray}
+      -webkit-box-shadow: 0 0 0 ${theme.spacings.small} ${theme.colors.white}
         inset;
       border-radius: ${theme.border.radius};
       filter: none;

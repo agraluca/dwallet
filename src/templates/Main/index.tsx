@@ -3,10 +3,11 @@ import Wrapper from "components/Wrapper";
 
 import Heading from "components/Heading";
 import { useState } from "react";
-import { signin } from "next-auth/client";
+import { fetchToken } from "store/fetchActions/fetchAuth";
 import { useRouter } from "next/dist/client/router";
 import Input from "components/Input";
 import { Button } from "components/Button";
+import { useAppDispatch } from "hooks/useReduxHooks";
 
 function Main({
   title = "DWallet",
@@ -18,9 +19,10 @@ function Main({
   });
 
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   const routes = useRouter();
-  const { push, query } = routes;
+  const { push } = routes;
 
   function handleInput(field: string, value: string) {
     setFormValues((prevState) => ({ ...prevState, [field]: value }));
@@ -30,15 +32,9 @@ function Main({
     e.preventDefault();
     setLoading(true);
 
-    const result = await signin("credentials", {
-      ...formValues,
-      redirect: false,
-      callbackUrl: query.callbackUrl
-        ? `${process.env.NEXT_PUBLIC_URL}${query?.callbackUrl}`
-        : `${process.env.NEXT_PUBLIC_URL}/wallet`,
-    });
-    if (result?.url) {
-      return push(result?.url);
+    const data = await dispatch(fetchToken(formValues));
+    if (data) {
+      return push("/home");
     }
     setLoading(false);
   }

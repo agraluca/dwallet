@@ -11,18 +11,9 @@ import RfTable from "components/Table/RfTable";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import { usePageStatus } from "hooks/usePageStatus";
-import { getSession } from "next-auth/client";
 
 function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
-
-  const teste = async () => {
-    const session = await getSession();
-    console.log("teste", session);
-  };
-  useEffect(() => {
-    teste();
-  }, []);
 
   const {
     isHidding,

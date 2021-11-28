@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken } from "./localStorageService";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -6,7 +7,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = window.localStorage("token");
+    const token = getToken();
 
     if (token) {
       config.headers["Authorization"] = "Bearer " + JSON.parse(token);

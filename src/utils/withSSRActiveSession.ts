@@ -1,15 +1,15 @@
-import { getSession } from "next-auth/client";
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
   GetServerSidePropsResult,
 } from "next";
+import { getToken } from "services/localStorageService";
 
 export function withSSRActiveSession<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const session = await getSession(ctx);
+    const session = getToken();
 
     if (session) {
       return {

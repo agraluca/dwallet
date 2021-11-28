@@ -1,9 +1,9 @@
-import { getSession } from "next-auth/client";
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
   GetServerSidePropsResult,
 } from "next";
+import { getToken } from "services/localStorageService";
 
 //! Recebe uma função que pode ser executada caso a autenticação esteja OK
 //! o <P> foi pelo Generic Type, era necessário ter pelo menos um argumento no GetServerSidePropsResult
@@ -12,8 +12,8 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const session = await getSession(ctx);
-
+    const session = getToken();
+    console.log(session);
     if (!session) {
       return {
         redirect: {

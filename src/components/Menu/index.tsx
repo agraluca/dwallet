@@ -4,19 +4,33 @@ import Image from "next/image";
 import UserDropdown from "components/UserDropdown";
 
 import * as S from "./styles";
-import { useSession } from "next-auth/client";
+import jwt_decode from "jwt-decode";
 import MediaMatch from "components/MediaMatch";
 
 import { Menu as MenuIcon } from "@styled-icons/open-iconic/Menu";
 import { Close as CloseIcon } from "@styled-icons/material-outlined/Close";
 import { useState } from "react";
-import { useAuth } from "hooks";
+import { getToken } from "services/localStorageService";
 
+type TokenProps = {
+  id: string;
+  name: string;
+  email: string;
+  iat: number;
+  exp: number;
+};
 function Menu() {
-  const [session] = useSession();
-  const username = session?.user?.name?.split(" ")[0];
+  const token = getToken() ?? "";
+
+  const decodedToken: TokenProps = jwt_decode(token);
+
+  const username = token && decodedToken.name;
+
   const [isOpen, setIsOpen] = useState(false);
-  const { logOut } = useAuth();
+
+  const logOut = () => {
+    console.log("logout");
+  };
 
   return (
     <>
