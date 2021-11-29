@@ -162,7 +162,6 @@ function Wallet() {
               isAdding={isAdding}
               setIsAdding={handleChangeStatusToInitial}
               hide={isHidding}
-              total={totalIncome}
               isEditting={isEditting}
               handleCancelIsEditting={handleChangeStatusToInitial}
             />

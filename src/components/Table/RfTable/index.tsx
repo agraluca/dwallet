@@ -34,7 +34,6 @@ export type TableProps = {
   isAdding: boolean;
   setIsAdding: () => void;
   hide?: boolean;
-  total: number;
   isEditting: boolean;
   handleCancelIsEditting: () => void;
 };
@@ -53,7 +52,6 @@ function RfTable({
   isAdding,
   setIsAdding,
   hide = false,
-  total,
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
@@ -102,28 +100,13 @@ function RfTable({
   };
 
   const addItemToTable = () => {
-    const currentPorcentage = (
-      (Number(tableFormValues.totalPrice) /
-        (total + Number(tableFormValues.totalPrice))) *
-      100
-    ).toFixed(2);
-    const status =
-      Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
-
     const newValue = {
       name: tableFormValues.name,
       idealPorcentage: Number(tableFormValues.idealPorcentage),
-      currentPorcentage: Number(currentPorcentage),
+      currentPorcentage: 0,
       totalPrice: Number(tableFormValues.totalPrice),
-      shouldBuyPrice: status
-        ? Math.ceil(
-            (Number(tableFormValues.idealPorcentage) *
-              Number(tableFormValues.totalPrice)) /
-              Number(currentPorcentage) -
-              Number(tableFormValues.totalPrice)
-          )
-        : 0,
-      status: status ? "Comprar" : "Segurar",
+      shouldBuyPrice: 0,
+      status: "Segurar",
     };
     const exists = alreadyExistsInList(newValue.name, "name", tableDataRf);
 
