@@ -14,8 +14,8 @@ export function alreadyExistsInList<T>(name: string, field: string, list: T[]) {
 
 export function hasOverLimit(
   data: OverLimiteData[],
-  valueToCompare: number,
-  limit: number
+  limit: number,
+  valueToCompare?: number
 ) {
   const hasOverIdealPercentage = data.slice().reduce((acc, item) => {
     acc += item.idealPorcentage;
@@ -23,5 +23,9 @@ export function hasOverLimit(
     return acc;
   }, 0);
 
-  return hasOverIdealPercentage + valueToCompare > limit;
+  if (valueToCompare) {
+    return hasOverIdealPercentage + valueToCompare > limit;
+  }
+
+  return hasOverIdealPercentage > limit;
 }

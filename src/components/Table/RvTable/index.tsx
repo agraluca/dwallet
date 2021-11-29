@@ -151,7 +151,7 @@ function RvTable({
       tableDataRv
     );
 
-    const overLimit = hasOverLimit(tableDataRv, newValue.idealPorcentage, 100);
+    const overLimit = hasOverLimit(tableDataRv, 100, newValue.idealPorcentage);
 
     if (overLimit) {
       toast.custom(
@@ -208,6 +208,19 @@ function RvTable({
 
   const onSave = () => {
     const { editVariableIncomeList } = cashFlowActions;
+    const overLimit = hasOverLimit(tableRvCopy, 100);
+
+    if (overLimit) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+      return;
+    }
+
     dispatch(editVariableIncomeList(tableRvCopy));
     handleCancelIsEditting();
     setTableRvCopy([...tableDataRv]);
