@@ -5,7 +5,7 @@ import { formatNumberToBrlCurrency, typeCheck } from "utils";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
-import { alreadyExistsInList } from "utils/functions";
+import { alreadyExistsInList, hasOverLimit } from "utils/functions";
 
 import {
   TableWrapper,
@@ -151,13 +151,9 @@ function RvTable({
       tableDataRv
     );
 
-    const hasOverIdealPercentage = tableDataRv.slice().reduce((acc, item) => {
-      acc += item.idealPorcentage;
+    const overLimit = hasOverLimit(tableDataRv, newValue.idealPorcentage, 100);
 
-      return acc;
-    }, 0);
-
-    if (hasOverIdealPercentage + newValue.idealPorcentage > 100) {
+    if (overLimit) {
       toast.custom(
         <Toast
           title="Porcentagem ideal excede o limite de 100%"
