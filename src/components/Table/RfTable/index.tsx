@@ -109,10 +109,27 @@ function RfTable({
       status: "Segurar",
     };
     const exists = alreadyExistsInList(newValue.name, "name", tableDataRf);
+    const hasOverIdealPercentage = tableDataRf.slice().reduce((acc, item) => {
+      acc += item.idealPorcentage;
+
+      return acc;
+    }, 0);
+
+    if (hasOverIdealPercentage + newValue.idealPorcentage > 100) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
 
     if (exists) {
       toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        <Toast title="Já existe esse ativo em sua carteira." type="error" />,
         { position: "top-right" }
       );
       return;
