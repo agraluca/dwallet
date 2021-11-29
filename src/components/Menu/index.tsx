@@ -1,44 +1,20 @@
+import { useState } from "react";
+
 import Link from "next/link";
 import Image from "next/image";
 
 import UserDropdown from "components/UserDropdown";
-
-import * as S from "./styles";
-import jwt_decode from "jwt-decode";
 import MediaMatch from "components/MediaMatch";
 
 import { Menu as MenuIcon } from "@styled-icons/open-iconic/Menu";
 import { Close as CloseIcon } from "@styled-icons/material-outlined/Close";
-import { useState } from "react";
-import { getToken, removeItemFromStorage } from "services/localStorageService";
-import { useRouter } from "next/dist/client/router";
-import { removeCookies } from "services/cookiesService";
 
-// type TokenProps = {
-//   id: string;
-//   name: string;
-//   email: string;
-//   iat: number;
-//   exp: number;
-// };
+import useAuth from "hooks/useAuth";
+
+import * as S from "./styles";
+
 function Menu() {
-  const routes = useRouter();
-  const { push } = routes;
-
-  const token = getToken();
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const decodedToken: any = token && jwt_decode(token);
-
-  const username = decodedToken?.name;
-
-  const logOut = () => {
-    removeItemFromStorage("token");
-    removeItemFromStorage("refresh_token");
-    removeCookies();
-
-    push("/");
-  };
+  const { logOut, username } = useAuth();
 
   const [isOpen, setIsOpen] = useState(false);
 

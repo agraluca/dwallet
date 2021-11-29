@@ -12,11 +12,18 @@ const WrapperModifier = {
     width: 32.9rem;
     height: 4.2rem;
   `,
+  full: () => css`
+    width: 100%;
+    height: 4.8rem;
+  `,
 };
 
-export const Wrapper = styled.section`
-  display: flex;
-  flex-direction: column;
+export const Wrapper = styled.section<InputWrapperProps>`
+  ${({ inputSize }) => css`
+    display: flex;
+    flex-direction: column;
+    width: ${inputSize === "full" && "100%"};
+  `}
 `;
 
 export const InputWrapper = styled.div<InputWrapperProps>`

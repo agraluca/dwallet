@@ -1,13 +1,15 @@
-import * as S from "./styles";
-import Wrapper from "components/Wrapper";
-
-import Heading from "components/Heading";
 import { useState } from "react";
-import { fetchToken } from "store/fetchActions/fetchAuth";
-import { useRouter } from "next/dist/client/router";
+
+import Wrapper from "components/Wrapper";
+import Heading from "components/Heading";
 import Input from "components/Input";
 import { Button } from "components/Button";
-import { useAppDispatch } from "hooks/useReduxHooks";
+
+import useAuth from "hooks/useAuth";
+
+import * as S from "./styles";
+
+import { useAppSelector } from "hooks/useReduxHooks";
 
 function Main({
   title = "DWallet",
@@ -17,27 +19,18 @@ function Main({
     email: "",
     password: "",
   });
+  const { signIn } = useAuth();
 
-  const [loading, setLoading] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const routes = useRouter();
-  const { push } = routes;
-
+  const { loading } = useAppSelector(({ loading }) => loading);
   function handleInput(field: string, value: string) {
     setFormValues((prevState) => ({ ...prevState, [field]: value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-
-    const data = await dispatch(fetchToken(formValues));
-    if (data) {
-      return push("/home");
-    }
-    setLoading(false);
+    signIn(formValues);
   }
+
   return (
     <Wrapper zeroIndex>
       <S.Wrapper>
@@ -55,18 +48,26 @@ function Main({
               type="text"
               onInputChange={(value) => handleInput("email", value)}
               placeholder="Email"
-              inputSize="normal"
+              inputSize="full"
               icon="email"
             />
             <Input
               type="password"
               onInputChange={(value) => handleInput("password", value)}
               placeholder="Senha"
-              inputSize="normal"
+              inputSize="full"
               icon="lock"
             />
-            <Button type="submit" disabled={loading}>
-              {loading ? <S.FormLoading /> : <span>Entrar</span>}
+            <Button
+              className="submitButton"
+              type="submit"
+              disabled={loading.getTokenLoading}
+            >
+              {loading.getTokenLoading ? (
+                <S.FormLoading />
+              ) : (
+                <span>Entrar</span>
+              )}
             </Button>
           </S.FormLogin>
         </S.Content>

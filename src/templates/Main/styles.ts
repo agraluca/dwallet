@@ -5,6 +5,7 @@ export const Wrapper = styled.main`
   ${({ theme }) => css`
     background-color: ${theme.colors.black};
     width: 100%;
+
     height: 100%;
     padding: ${theme.spacings.medium};
     display: flex;
@@ -64,7 +65,7 @@ export const IlustrationWrapper = styled.div`
 `;
 
 export const Illustration = styled.img`
-  width: min(30rem, 100%);
+  width: min(40rem, 100%);
   align-self: flex-start;
 `;
 
@@ -75,51 +76,19 @@ export const WaveIllustration = styled.img`
   width: 100vw;
 `;
 
-export const Button = styled.button`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    width: 40rem;
-    border-radius: ${theme.border.radius};
-    padding: ${theme.spacings.xsmall};
-    font-size: ${theme.font.sizes.small};
-    font-weight: ${theme.font.weight.normal};
-    cursor: pointer;
-    transition: filter 0.2s;
-    margin-top: ${theme.spacings.small};
-    border: 0.2rem solid ${theme.colors.white};
-    color: ${theme.colors.white};
-    background-color: ${theme.colors.black};
-
-    .login--google-logo {
-      width: 2.8rem;
-      height: 2.8rem;
-    }
-
-    &:hover {
-      filter: brightness(0.8);
-    }
-
-    ${media.lessThan("small")`
-      width: 100%;
-   `}
-  `}
-`;
-
 export const FormLogin = styled.form`
   ${({ theme }) => css`
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: ${theme.spacings.xxsmall};
     flex-direction: column;
+    padding: ${theme.spacings.medium} 0;
+    max-width: 40rem;
+    width: 100%;
 
-    span.errorUserOrPassword {
-      color: ${theme.colors.red};
-      svg {
-        margin-right: 0.5rem;
-      }
+    .submitButton {
+      width: 100%;
     }
   `}
 `;

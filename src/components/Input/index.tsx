@@ -5,7 +5,7 @@ export type InputProps = {
   onInputChange?: (value: string) => void;
   icon?: "person" | "email" | "lock";
   placeholder?: string;
-  inputSize?: "normal" | "large";
+  inputSize?: "normal" | "large" | "full";
   type?: "text" | "password" | "email";
   error?: string;
   initialValue?: string;
@@ -43,7 +43,7 @@ function Input({
   }
 
   return (
-    <S.Wrapper>
+    <S.Wrapper inputSize={inputSize}>
       <S.InputWrapper inputSize={inputSize} error={error} aria-label="input">
         <img src={IconsData[icon]} alt={icon} />
         <S.Input
