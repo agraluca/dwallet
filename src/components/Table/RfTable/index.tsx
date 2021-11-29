@@ -6,7 +6,7 @@ import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 
-import { alreadyExistsInList } from "utils/functions";
+import { alreadyExistsInList, hasOverLimit } from "utils/functions";
 
 import {
   TableWrapper,
@@ -109,13 +109,9 @@ function RfTable({
       status: "Segurar",
     };
     const exists = alreadyExistsInList(newValue.name, "name", tableDataRf);
-    const hasOverIdealPercentage = tableDataRf.slice().reduce((acc, item) => {
-      acc += item.idealPorcentage;
+    const overLimit = hasOverLimit(tableDataRf, 100, newValue.idealPorcentage);
 
-      return acc;
-    }, 0);
-
-    if (hasOverIdealPercentage + newValue.idealPorcentage > 100) {
+    if (overLimit) {
       toast.custom(
         <Toast
           title="Porcentagem ideal excede o limite de 100%"
@@ -146,6 +142,21 @@ function RfTable({
   };
   const onSave = () => {
     const { editFixedIncomeList } = cashFlowActions;
+
+    const overLimit = hasOverLimit(tableRfCopy, 100);
+
+    if (overLimit) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
     dispatch(editFixedIncomeList(tableRfCopy));
     handleCancelIsEditting();
     setTableRfCopy([...tableRfCopy]);
