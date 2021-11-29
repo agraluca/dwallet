@@ -11,6 +11,7 @@ import RfTable from "components/Table/RfTable";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import { usePageStatus } from "hooks/usePageStatus";
+import { fetchUserWallet } from "store/fetchActions/fetchWallet";
 
 function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
@@ -52,6 +53,7 @@ function Wallet() {
       updateVariableIncomeList,
       updateFixedIncomeList,
     } = cashFlowActions;
+    dispatch(fetchUserWallet());
     dispatch(updateFixedIncome());
     dispatch(updateVariableIncome());
     dispatch(updateTotalIncome());
@@ -74,7 +76,7 @@ function Wallet() {
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToggleStatus(event.target.value);
   };
-
+  console.log("log", variableIncomeList);
   return (
     <Wrapper>
       <Menu />
