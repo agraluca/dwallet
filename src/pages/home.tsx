@@ -10,9 +10,3 @@ export const getServerSideProps = withSSRAuth(async () => {
     props: {},
   };
 });
-
-// export const getServerSideProps = () => {
-//   return {
-//     props: {},
-//   };
-// };

@@ -3,15 +3,19 @@ import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
 } from "next";
-import { getCookies } from "services/cookiesService";
 
 export function withSSRActiveSession<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const session = getCookies("authToken");
+    const session = ctx.req.headers.cookie;
+    const hasValue =
+      session
+        ?.split(";")
+        .find((item) => item === "authToken=")
+        ?.split("=")[1] !== "";
 
-    if (session) {
+    if (hasValue) {
       return {
         redirect: {
           destination: "/home",
