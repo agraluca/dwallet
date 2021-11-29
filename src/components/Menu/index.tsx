@@ -10,27 +10,37 @@ import MediaMatch from "components/MediaMatch";
 import { Menu as MenuIcon } from "@styled-icons/open-iconic/Menu";
 import { Close as CloseIcon } from "@styled-icons/material-outlined/Close";
 import { useState } from "react";
-import { getToken } from "services/localStorageService";
+import { getToken, removeItemFromStorage } from "services/localStorageService";
+import { useRouter } from "next/dist/client/router";
+import { removeCookies } from "services/cookiesService";
 
-type TokenProps = {
-  id: string;
-  name: string;
-  email: string;
-  iat: number;
-  exp: number;
-};
+// type TokenProps = {
+//   id: string;
+//   name: string;
+//   email: string;
+//   iat: number;
+//   exp: number;
+// };
 function Menu() {
-  const token = getToken() ?? "";
+  const routes = useRouter();
+  const { push } = routes;
 
-  const decodedToken: TokenProps = jwt_decode(token);
+  const token = getToken();
 
-  const username = token && decodedToken.name;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const decodedToken: any = token && jwt_decode(token);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const username = decodedToken?.name;
 
   const logOut = () => {
-    console.log("logout");
+    removeItemFromStorage("token");
+    removeItemFromStorage("refresh_token");
+    removeCookies();
+
+    push("/");
   };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

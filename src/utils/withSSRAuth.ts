@@ -3,7 +3,6 @@ import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
 } from "next";
-import { getToken } from "services/localStorageService";
 
 //! Recebe uma função que pode ser executada caso a autenticação esteja OK
 //! o <P> foi pelo Generic Type, era necessário ter pelo menos um argumento no GetServerSidePropsResult
@@ -12,9 +11,13 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const session = getToken();
-    console.log(session);
-    if (!session) {
+    const session = ctx.req.headers.cookie;
+    const hasValue =
+      session
+        ?.split(";")
+        .find((item) => item === "authToken=")
+        ?.split("=")[1] !== "";
+    if (!hasValue) {
       return {
         redirect: {
           destination: "/",

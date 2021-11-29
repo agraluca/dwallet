@@ -20,3 +20,9 @@ export function setRefreshToken(refreshToken) {
     localStorage.setItem("refresh_token", JSON.stringify(refreshToken));
   }
 }
+
+export function removeItemFromStorage(keyName) {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(keyName);
+  }
+}

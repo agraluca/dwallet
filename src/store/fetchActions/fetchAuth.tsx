@@ -5,6 +5,7 @@ import { setToken, setRefreshToken } from "services/localStorageService";
 
 import toast from "react-hot-toast";
 import Toast from "components/Toast";
+import { setCookies } from "services/cookiesService";
 
 type FormValuesProps = {
   email: string;
@@ -26,6 +27,7 @@ export const fetchToken = (formValues: FormValuesProps) => {
       const { token, refreshToken } = res.data as ResponseTokenProps;
       setToken(token);
       setRefreshToken(refreshToken);
+      setCookies(token, refreshToken);
 
       return res.data;
     } catch (err) {

@@ -3,13 +3,13 @@ import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
 } from "next";
-import { getToken } from "services/localStorageService";
+import { getCookies } from "services/cookiesService";
 
 export function withSSRActiveSession<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const session = getToken();
+    const session = getCookies("authToken");
 
     if (session) {
       return {
