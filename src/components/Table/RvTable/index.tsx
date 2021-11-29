@@ -38,7 +38,6 @@ export type TableProps = {
   setIsAdding: () => void;
   hide?: boolean;
   isEditting: boolean;
-  total: number;
   handleCancelIsEditting: () => void;
 };
 
@@ -58,7 +57,6 @@ function RvTable({
   isAdding,
   setIsAdding,
   hide = false,
-  total,
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
@@ -135,30 +133,15 @@ function RvTable({
   };
 
   const addItemToTable = () => {
-    const currentPorcentage = (
-      ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
-        (total + Number(tableFormValues.total))) *
-      100
-    ).toFixed(2);
-    const status =
-      Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
-
     const newValue = {
       stock: tableFormValues.ticker,
       type: tableFormValues.type,
       price: Number(tableFormValues.price),
       idealPorcentage: Number(tableFormValues.idealPorcentage),
-      currentPorcentage: Number(currentPorcentage),
+      currentPorcentage: 0,
       stockAmount: Number(tableFormValues.quantity),
-      shouldBuyAmount: status
-        ? Math.ceil(
-            (Number(tableFormValues.idealPorcentage) *
-              Number(tableFormValues.quantity)) /
-              Number(currentPorcentage) -
-              Number(tableFormValues.quantity)
-          )
-        : 0,
-      status: status ? "Comprar" : "Segurar",
+      shouldBuyAmount: 0,
+      status: "Segurar",
     };
 
     const { addNewValueToVariableIncomeList } = cashFlowActions;
