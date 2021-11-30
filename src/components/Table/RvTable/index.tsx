@@ -48,17 +48,6 @@ export type TableProps = {
   handleCancelIsEditting: () => void;
 };
 
-const columnsVariableIncomeTable = [
-  { name: "Ticker" },
-  { name: "Tipo" },
-  { name: "Preço" },
-  { name: "% Ideal" },
-  { name: "% Atual" },
-  { name: "Qtd" },
-  { name: "Qtd p/ comprar" },
-  { name: "Status" },
-];
-
 function RvTable({
   tableDataRv,
   isAdding,
@@ -68,6 +57,28 @@ function RvTable({
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
+  const columnsVariableIncomeTable = isEditting
+    ? [
+        { name: "" },
+        { name: "Ticker" },
+        { name: "Tipo" },
+        { name: "Preço" },
+        { name: "% Ideal" },
+        { name: "% Atual" },
+        { name: "Qtd" },
+        { name: "Qtd p/ comprar" },
+        { name: "Status" },
+      ]
+    : [
+        { name: "Ticker" },
+        { name: "Tipo" },
+        { name: "Preço" },
+        { name: "% Ideal" },
+        { name: "% Atual" },
+        { name: "Qtd" },
+        { name: "Qtd p/ comprar" },
+        { name: "Status" },
+      ];
   const tableFormValuesInitialValues = {
     ticker: "",
     type: "",
@@ -310,10 +321,16 @@ function RvTable({
             {tableDataRv.map((data, index) => {
               return (
                 <TableRow key={data._id}>
-                  <Times
-                    className="remove-item"
-                    onClick={() => handleDelete(data._id!)}
-                  />
+                  {isEditting && (
+                    <TableBodyData>
+                      <Times
+                        className="remove-item"
+                        onClick={() => handleDelete(data._id!)}
+                        width={20}
+                        height={20}
+                      />
+                    </TableBodyData>
+                  )}
 
                   <TableBodyData>
                     <TableCell

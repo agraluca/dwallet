@@ -66,7 +66,10 @@ export const TableBodyData = styled.td`
     font-weight: ${theme.font.weight.bold};
     padding: 0 ${theme.spacings.medium};
 
-    min-width: 13.2rem;
+    .remove-item {
+      color: ${theme.colors.red};
+      cursor: pointer;
+    }
 
     &:first-child {
       border-top-left-radius: ${theme.border.radius};

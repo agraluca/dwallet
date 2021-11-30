@@ -76,7 +76,7 @@ function Wallet() {
   const handleToggleStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     setToggleStatus(event.target.value);
   };
-  console.log("log", variableIncomeList);
+
   return (
     <Wrapper>
       <Menu />
