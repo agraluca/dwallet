@@ -15,7 +15,9 @@ export const getAllStocks = () => {
       const res = await api.get<Stock[]>(`/stock`);
       return res;
     } catch (err) {
-      toast.custom(<Toast title={err.response.data.error} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;
@@ -33,7 +35,10 @@ export const getDetailStock = (tickerName: string) => {
       const res = await api.get<Stock>(`/stock/${tickerName}`);
       return res.data;
     } catch (err) {
-      toast.custom(<Toast title={err.response.data.error} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;
