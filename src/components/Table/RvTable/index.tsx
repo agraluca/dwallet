@@ -5,7 +5,11 @@ import { formatNumberToBrlCurrency, typeCheck } from "utils";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
-import { alreadyExistsInList, hasOverLimit } from "utils/functions";
+import {
+  alreadyExistsInList,
+  hasOverLimit,
+  existZeroValueInIdealPercentage,
+} from "utils/functions";
 
 import {
   TableWrapper,
@@ -102,15 +106,6 @@ function RvTable({
   };
 
   const handleTickerBlur = async () => {
-    if (exists) {
-      toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
-        { position: "top-right" }
-      );
-
-      return;
-    }
-
     const data = await dispatch(getDetailStock(tableFormValues.ticker));
     if (data) {
       const { tickerType, formattedPrice } = data;
@@ -133,6 +128,15 @@ function RvTable({
   };
 
   const addItemToTable = () => {
+    if (Number(tableFormValues.idealPorcentage) === 0) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
     const newValue = {
       stock: tableFormValues.ticker,
       type: tableFormValues.type,
@@ -209,6 +213,17 @@ function RvTable({
   const onSave = () => {
     const { editVariableIncomeList } = cashFlowActions;
     const overLimit = hasOverLimit(tableRvCopy, 100);
+    const hasZeroValueInIdealPercentage =
+      existZeroValueInIdealPercentage(tableRvCopy);
+
+    if (hasZeroValueInIdealPercentage) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
 
     if (overLimit) {
       toast.custom(

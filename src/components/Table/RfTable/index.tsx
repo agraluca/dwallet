@@ -6,7 +6,11 @@ import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 
-import { alreadyExistsInList, hasOverLimit } from "utils/functions";
+import {
+  alreadyExistsInList,
+  hasOverLimit,
+  existZeroValueInIdealPercentage,
+} from "utils/functions";
 
 import {
   TableWrapper,
@@ -100,6 +104,15 @@ function RfTable({
   };
 
   const addItemToTable = () => {
+    if (Number(tableFormValues.idealPorcentage) === 0) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
     const newValue = {
       name: tableFormValues.name,
       idealPorcentage: Number(tableFormValues.idealPorcentage),
@@ -136,14 +149,27 @@ function RfTable({
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
   };
+
   const onCancel = () => {
     handleCancelIsEditting();
     setTableRfCopy([...tableDataRf]);
   };
+
   const onSave = () => {
     const { editFixedIncomeList } = cashFlowActions;
 
     const overLimit = hasOverLimit(tableRfCopy, 100);
+    const existIdealPercentageZero =
+      existZeroValueInIdealPercentage(tableRfCopy);
+
+    if (existIdealPercentageZero) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
 
     if (overLimit) {
       toast.custom(

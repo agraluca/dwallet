@@ -1,7 +1,7 @@
 import { TableDataRfProps } from "components/Table/RfTable";
 import { TableDataRvProps } from "components/Table/RvTable/index";
 
-type OverLimiteData = TableDataRfProps | TableDataRvProps;
+type OverLimitData = TableDataRfProps | TableDataRvProps;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function alreadyExistsInList<T>(name: string, field: string, list: T[]) {
@@ -13,7 +13,7 @@ export function alreadyExistsInList<T>(name: string, field: string, list: T[]) {
 }
 
 export function hasOverLimit(
-  data: OverLimiteData[],
+  data: OverLimitData[],
   limit: number,
   valueToCompare?: number
 ) {
@@ -28,4 +28,16 @@ export function hasOverLimit(
   }
 
   return hasOverIdealPercentage > limit;
+}
+
+export function existZeroValueInIdealPercentage(data: OverLimitData[]) {
+  const existsIdealPercentageZeroValue = data.reduce((acc, item) => {
+    if (Number(item.idealPorcentage) === 0) {
+      acc = true;
+    }
+
+    return acc;
+  }, false);
+
+  return existsIdealPercentageZeroValue;
 }
