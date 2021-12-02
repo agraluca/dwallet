@@ -16,6 +16,6 @@
     "jsx": "preserve",
     "typeRoots": ["./node_modules/@types","src/types/custom.d.ts"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types", "src/services/axios.js"],
   "exclude": ["node_modules"]
 }

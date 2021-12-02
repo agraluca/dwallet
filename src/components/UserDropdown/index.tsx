@@ -3,7 +3,7 @@ import Dropdown from "components/Dropdown";
 import { ExitToApp } from "@styled-icons/material/ExitToApp";
 import { AccountCircle } from "@styled-icons/material-outlined/AccountCircle";
 
-import { useAuth } from "hooks";
+import useAuth from "hooks/useAuth";
 
 import * as S from "./styles";
 

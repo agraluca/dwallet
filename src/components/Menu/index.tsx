@@ -1,22 +1,22 @@
+import { useState } from "react";
+
 import Link from "next/link";
 import Image from "next/image";
 
 import UserDropdown from "components/UserDropdown";
-
-import * as S from "./styles";
-import { useSession } from "next-auth/client";
 import MediaMatch from "components/MediaMatch";
 
 import { Menu as MenuIcon } from "@styled-icons/open-iconic/Menu";
 import { Close as CloseIcon } from "@styled-icons/material-outlined/Close";
-import { useState } from "react";
-import { useAuth } from "hooks";
+
+import useAuth from "hooks/useAuth";
+
+import * as S from "./styles";
 
 function Menu() {
-  const [session] = useSession();
-  const username = session?.user?.name?.split(" ")[0];
+  const { logOut, username } = useAuth();
+
   const [isOpen, setIsOpen] = useState(false);
-  const { logOut } = useAuth();
 
   return (
     <>

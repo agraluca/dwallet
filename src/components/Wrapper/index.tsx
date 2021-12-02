@@ -1,14 +1,15 @@
 import { ReactNode } from "react";
 import * as S from "./styles";
 
-interface WrapperProps {
+export type WrapperProps = {
   children: ReactNode;
-}
+  zeroIndex?: boolean;
+};
 
-function Wrapper({ children }: WrapperProps) {
+function Wrapper({ children, zeroIndex = false }: WrapperProps) {
   return (
     <S.Wrapper>
-      <S.Content>{children}</S.Content>
+      <S.Content zeroIndex={zeroIndex}>{children}</S.Content>
       <S.WaveImg src="/img/wave.svg" alt="wave" className="wave" />
     </S.Wrapper>
   );

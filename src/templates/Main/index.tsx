@@ -1,16 +1,38 @@
-import * as S from "./styles";
+import { useState } from "react";
+
 import Wrapper from "components/Wrapper";
-import { useAuth } from "../../hooks/useAuth";
 import Heading from "components/Heading";
+import Input from "components/Input";
+import { Button } from "components/Button";
+
+import useAuth from "hooks/useAuth";
+
+import * as S from "./styles";
+
+import { useAppSelector } from "hooks/useReduxHooks";
 
 function Main({
   title = "DWallet",
   description = "Seu sistema de balanceamento de carteira",
 }) {
-  const { logIn } = useAuth();
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
+  const { signIn } = useAuth();
+
+  const { loading } = useAppSelector(({ loading }) => loading);
+  function handleInput(field: string, value: string) {
+    setFormValues((prevState) => ({ ...prevState, [field]: value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    signIn(formValues);
+  }
 
   return (
-    <Wrapper>
+    <Wrapper zeroIndex>
       <S.Wrapper>
         <S.Content>
           <S.TitleWrapper>
@@ -21,14 +43,33 @@ function Main({
           </S.TitleWrapper>
           <S.Description>{description}</S.Description>
 
-          <S.Button onClick={logIn}>
-            <img
-              src="/icons/google.svg"
-              alt="google logo"
-              className="login--google-logo"
+          <S.FormLogin onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              onInputChange={(value) => handleInput("email", value)}
+              placeholder="Email"
+              inputSize="full"
+              icon="email"
             />
-            Entrar com o Google
-          </S.Button>
+            <Input
+              type="password"
+              onInputChange={(value) => handleInput("password", value)}
+              placeholder="Senha"
+              inputSize="full"
+              icon="lock"
+            />
+            <Button
+              className="submitButton"
+              type="submit"
+              disabled={loading.getTokenLoading}
+            >
+              {loading.getTokenLoading ? (
+                <S.FormLoading />
+              ) : (
+                <span>Entrar</span>
+              )}
+            </Button>
+          </S.FormLogin>
         </S.Content>
         <S.IlustrationWrapper>
           <S.Illustration src="/img/hero.svg" alt="Uma carteira" />

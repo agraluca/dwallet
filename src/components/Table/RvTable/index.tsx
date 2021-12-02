@@ -3,13 +3,13 @@ import InputWithLabel from "components/InputWithLabel";
 import { ChangeEvent, useState, useEffect } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
-import { cashFlowActions } from "store/ducks/cashFlow";
 import TableHeader from "components/TableHeader";
 import {
   alreadyExistsInList,
   hasOverLimit,
   existZeroValueInIdealPercentage,
 } from "utils/functions";
+import { Times } from "@styled-icons/fa-solid/Times";
 
 import {
   TableWrapper,
@@ -24,6 +24,11 @@ import {
 import toast from "react-hot-toast";
 import Toast from "components/Toast";
 import { getDetailStock } from "store/fetchActions/fetchStocks";
+import {
+  addVariableIncomeToUserWallet,
+  editVariableIncomeWallet,
+  removeItemFromVariableIncomeWallet,
+} from "store/fetchActions/fetchWallet";
 
 export type TableDataRvProps = {
   stock: string;
@@ -34,6 +39,7 @@ export type TableDataRvProps = {
   stockAmount: number;
   shouldBuyAmount: number;
   status: string;
+  _id?: string;
 };
 
 export type TableProps = {
@@ -45,17 +51,6 @@ export type TableProps = {
   handleCancelIsEditting: () => void;
 };
 
-const columnsVariableIncomeTable = [
-  { name: "Ticker" },
-  { name: "Tipo" },
-  { name: "Preço" },
-  { name: "% Ideal" },
-  { name: "% Atual" },
-  { name: "Qtd" },
-  { name: "Qtd p/ comprar" },
-  { name: "Status" },
-];
-
 function RvTable({
   tableDataRv,
   isAdding,
@@ -64,6 +59,28 @@ function RvTable({
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
+  const columnsVariableIncomeTable = isEditting
+    ? [
+        { name: "" },
+        { name: "Ticker" },
+        { name: "Tipo" },
+        { name: "Preço" },
+        { name: "% Ideal" },
+        { name: "% Atual" },
+        { name: "Qtd" },
+        { name: "Qtd p/ comprar" },
+        { name: "Status" },
+      ]
+    : [
+        { name: "Ticker" },
+        { name: "Tipo" },
+        { name: "Preço" },
+        { name: "% Ideal" },
+        { name: "% Atual" },
+        { name: "Qtd" },
+        { name: "Qtd p/ comprar" },
+        { name: "Status" },
+      ];
   const tableFormValuesInitialValues = {
     ticker: "",
     type: "",
@@ -148,7 +165,6 @@ function RvTable({
       status: "Segurar",
     };
 
-    const { addNewValueToVariableIncomeList } = cashFlowActions;
     const alreadyExists = alreadyExistsInList(
       newValue.stock,
       "stock",
@@ -177,7 +193,7 @@ function RvTable({
 
       return;
     }
-    dispatch(addNewValueToVariableIncomeList(newValue));
+    dispatch(addVariableIncomeToUserWallet(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
@@ -211,7 +227,6 @@ function RvTable({
   };
 
   const onSave = () => {
-    const { editVariableIncomeList } = cashFlowActions;
     const overLimit = hasOverLimit(tableRvCopy, 100);
     const hasZeroValueInIdealPercentage =
       existZeroValueInIdealPercentage(tableRvCopy);
@@ -236,9 +251,13 @@ function RvTable({
       return;
     }
 
-    dispatch(editVariableIncomeList(tableRvCopy));
+    dispatch(editVariableIncomeWallet(tableRvCopy));
     handleCancelIsEditting();
     setTableRvCopy([...tableDataRv]);
+  };
+
+  const handleDelete = (_id: string) => {
+    dispatch(removeItemFromVariableIncomeWallet(_id));
   };
 
   return (
@@ -326,7 +345,18 @@ function RvTable({
           <TableBody>
             {tableDataRv.map((data, index) => {
               return (
-                <TableRow key={index}>
+                <TableRow key={data._id}>
+                  {isEditting && (
+                    <TableBodyData>
+                      <Times
+                        className="remove-item"
+                        onClick={() => handleDelete(data._id!)}
+                        width={20}
+                        height={20}
+                      />
+                    </TableBodyData>
+                  )}
+
                   <TableBodyData>
                     <TableCell
                       isHidding={false}

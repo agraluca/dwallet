@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { WrapperProps } from ".";
 
 export const Wrapper = styled.section`
   ${({ theme }) => css`
@@ -16,8 +17,8 @@ export const WaveImg = styled.img`
   pointer-events: none;
 `;
 
-export const Content = styled.section`
-  ${({ theme }) => css`
+export const Content = styled.section<Pick<WrapperProps, "zeroIndex">>`
+  ${({ theme, zeroIndex }) => css`
     position: absolute;
     max-width: ${theme.grid.container};
     min-width: 30rem;
@@ -26,6 +27,6 @@ export const Content = styled.section`
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: ${theme.layers.base};
+    z-index: ${zeroIndex ? 0 : theme.layers.base};
   `}
 `;

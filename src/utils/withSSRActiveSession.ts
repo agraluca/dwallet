@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/client";
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -9,9 +8,14 @@ export function withSSRActiveSession<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const session = await getSession(ctx);
+    const session = ctx.req.headers.cookie;
+    const hasValue =
+      session
+        ?.split(";")
+        .find((item) => item === "authToken=")
+        ?.split("=")[1] !== "";
 
-    if (session) {
+    if (hasValue) {
       return {
         redirect: {
           destination: "/home",

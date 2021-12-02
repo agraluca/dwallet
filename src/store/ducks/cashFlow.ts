@@ -9,6 +9,7 @@ type VariableIncomeListProps = {
   stockAmount: number;
   shouldBuyAmount: number;
   status: string;
+  _id: string;
 };
 type FixedIncomeListProps = {
   name: string;
@@ -32,28 +33,7 @@ const initialState: CashFlowProps = {
   totalIncome: 0,
   variableIncome: 0,
   fixedIncome: 0,
-  variableIncomeList: [
-    {
-      stock: "WEGE3",
-      type: "Ação",
-      price: 10,
-      idealPorcentage: 10,
-      currentPorcentage: 0,
-      stockAmount: 1,
-      shouldBuyAmount: 0,
-      status: "Segurar",
-    },
-    {
-      stock: "ITUB3",
-      type: "Ação",
-      price: 15.5,
-      idealPorcentage: 8,
-      currentPorcentage: 8,
-      stockAmount: 10,
-      shouldBuyAmount: 0,
-      status: "Segurar",
-    },
-  ],
+  variableIncomeList: [],
   fixedIncomeList: [],
   loading: false,
 };
@@ -77,6 +57,9 @@ const cashFlowSlice = createSlice({
     updateTotalIncome: (state) => {
       state.totalIncome =
         Number(state.fixedIncome) + Number(state.variableIncome);
+    },
+    getAndUpdateVariableIncomeList: (state, action) => {
+      state.variableIncomeList = action.payload;
     },
     updateVariableIncomeList: (state) => {
       state.variableIncomeList = state.variableIncomeList.map((data) => {
@@ -106,6 +89,7 @@ const cashFlowSlice = createSlice({
             : 0,
           //  ((%ideal * totalRv) - (preco * qtd)) / (1-%ideal) * preco
           status: status ? "Comprar" : "Segurar",
+          _id: data._id,
         };
       });
     },
@@ -133,25 +117,18 @@ const cashFlowSlice = createSlice({
         };
       });
     },
-
-    addNewValueToVariableIncomeList: (
-      state,
-      action: PayloadAction<VariableIncomeListProps>
-    ) => {
-      state.variableIncomeList = [...state.variableIncomeList, action.payload];
-    },
     addNewValueToFixedIncomeList: (
       state,
       action: PayloadAction<FixedIncomeListProps>
     ) => {
       state.fixedIncomeList = [...state.fixedIncomeList, action.payload];
     },
-    editVariableIncomeList: (
-      state,
-      action: PayloadAction<VariableIncomeListProps[]>
-    ) => {
-      state.variableIncomeList = [...action.payload];
-    },
+    // editVariableIncomeList: (
+    //   state,
+    //   action: PayloadAction<VariableIncomeListProps[]>
+    // ) => {
+    //   state.variableIncomeList = [...action.payload];
+    // },
     editFixedIncomeList: (
       state,
       action: PayloadAction<FixedIncomeListProps[]>
@@ -159,9 +136,6 @@ const cashFlowSlice = createSlice({
       state.fixedIncomeList = [...action.payload];
     },
     reset: () => initialState,
-    loadingStatus: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
   },
 });
 
