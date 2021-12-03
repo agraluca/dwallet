@@ -4,7 +4,11 @@ import { ChangeEvent, useState, useEffect } from "react";
 import { formatNumberToBrlCurrency, typeCheck } from "utils";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import TableHeader from "components/TableHeader";
-import { alreadyExistsInList } from "utils/functions";
+import {
+  alreadyExistsInList,
+  hasOverLimit,
+  existZeroValueInIdealPercentage,
+} from "utils/functions";
 import { Times } from "@styled-icons/fa-solid/Times";
 
 import {
@@ -44,7 +48,6 @@ export type TableProps = {
   setIsAdding: () => void;
   hide?: boolean;
   isEditting: boolean;
-  total: number;
   handleCancelIsEditting: () => void;
 };
 
@@ -53,7 +56,6 @@ function RvTable({
   isAdding,
   setIsAdding,
   hide = false,
-  total,
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
@@ -121,15 +123,6 @@ function RvTable({
   };
 
   const handleTickerBlur = async () => {
-    if (exists) {
-      toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
-        { position: "top-right" }
-      );
-
-      return;
-    }
-
     const data = await dispatch(getDetailStock(tableFormValues.ticker));
     if (data) {
       const { tickerType, formattedPrice } = data;
@@ -152,30 +145,24 @@ function RvTable({
   };
 
   const addItemToTable = () => {
-    const currentPorcentage = (
-      ((Number(tableFormValues.price) * Number(tableFormValues.quantity)) /
-        (total + Number(tableFormValues.total))) *
-      100
-    ).toFixed(2);
-    const status =
-      Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
+    if (Number(tableFormValues.idealPorcentage) === 0) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
 
     const newValue = {
       stock: tableFormValues.ticker,
       type: tableFormValues.type,
       price: Number(tableFormValues.price),
       idealPorcentage: Number(tableFormValues.idealPorcentage),
-      currentPorcentage: Number(currentPorcentage),
+      currentPorcentage: 0,
       stockAmount: Number(tableFormValues.quantity),
-      shouldBuyAmount: status
-        ? Math.ceil(
-            (Number(tableFormValues.idealPorcentage) *
-              Number(tableFormValues.quantity)) /
-              Number(currentPorcentage) -
-              Number(tableFormValues.quantity)
-          )
-        : 0,
-      status: status ? "Comprar" : "Segurar",
+      shouldBuyAmount: 0,
+      status: "Segurar",
     };
 
     const alreadyExists = alreadyExistsInList(
@@ -184,9 +171,23 @@ function RvTable({
       tableDataRv
     );
 
+    const overLimit = hasOverLimit(tableDataRv, 100, newValue.idealPorcentage);
+
+    if (overLimit) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
     if (alreadyExists) {
       toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        <Toast title="Já existe esse ativo em sua carteira." type="error" />,
         { position: "top-right" }
       );
 
@@ -226,6 +227,30 @@ function RvTable({
   };
 
   const onSave = () => {
+    const overLimit = hasOverLimit(tableRvCopy, 100);
+    const hasZeroValueInIdealPercentage =
+      existZeroValueInIdealPercentage(tableRvCopy);
+
+    if (hasZeroValueInIdealPercentage) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
+    if (overLimit) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+      return;
+    }
+
     dispatch(editVariableIncomeWallet(tableRvCopy));
     handleCancelIsEditting();
     setTableRvCopy([...tableDataRv]);

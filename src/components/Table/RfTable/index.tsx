@@ -6,7 +6,11 @@ import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch } from "hooks/useReduxHooks";
 import { cashFlowActions } from "store/ducks/cashFlow";
 
-import { alreadyExistsInList } from "utils/functions";
+import {
+  alreadyExistsInList,
+  hasOverLimit,
+  existZeroValueInIdealPercentage,
+} from "utils/functions";
 
 import {
   TableWrapper,
@@ -34,7 +38,6 @@ export type TableProps = {
   isAdding: boolean;
   setIsAdding: () => void;
   hide?: boolean;
-  total: number;
   isEditting: boolean;
   handleCancelIsEditting: () => void;
 };
@@ -53,7 +56,6 @@ function RfTable({
   isAdding,
   setIsAdding,
   hide = false,
-  total,
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
@@ -102,34 +104,41 @@ function RfTable({
   };
 
   const addItemToTable = () => {
-    const currentPorcentage = (
-      (Number(tableFormValues.totalPrice) /
-        (total + Number(tableFormValues.totalPrice))) *
-      100
-    ).toFixed(2);
-    const status =
-      Number(currentPorcentage) < Number(tableFormValues.idealPorcentage);
+    if (Number(tableFormValues.idealPorcentage) === 0) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
 
     const newValue = {
       name: tableFormValues.name,
       idealPorcentage: Number(tableFormValues.idealPorcentage),
-      currentPorcentage: Number(currentPorcentage),
+      currentPorcentage: 0,
       totalPrice: Number(tableFormValues.totalPrice),
-      shouldBuyPrice: status
-        ? Math.ceil(
-            (Number(tableFormValues.idealPorcentage) *
-              Number(tableFormValues.totalPrice)) /
-              Number(currentPorcentage) -
-              Number(tableFormValues.totalPrice)
-          )
-        : 0,
-      status: status ? "Comprar" : "Segurar",
+      shouldBuyPrice: 0,
+      status: "Segurar",
     };
     const exists = alreadyExistsInList(newValue.name, "name", tableDataRf);
+    const overLimit = hasOverLimit(tableDataRf, 100, newValue.idealPorcentage);
+
+    if (overLimit) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
 
     if (exists) {
       toast.custom(
-        <Toast title="Já existe esse ativo em sua carteira." type="warning" />,
+        <Toast title="Já existe esse ativo em sua carteira." type="error" />,
         { position: "top-right" }
       );
       return;
@@ -140,12 +149,40 @@ function RfTable({
     setTableFormValues(tableFormValuesInitialValues);
     setIsAdding();
   };
+
   const onCancel = () => {
     handleCancelIsEditting();
     setTableRfCopy([...tableDataRf]);
   };
+
   const onSave = () => {
     const { editFixedIncomeList } = cashFlowActions;
+
+    const overLimit = hasOverLimit(tableRfCopy, 100);
+    const existIdealPercentageZero =
+      existZeroValueInIdealPercentage(tableRfCopy);
+
+    if (existIdealPercentageZero) {
+      toast.custom(
+        <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
+    if (overLimit) {
+      toast.custom(
+        <Toast
+          title="Porcentagem ideal excede o limite de 100%"
+          type="error"
+        />,
+        { position: "top-right" }
+      );
+
+      return;
+    }
+
     dispatch(editFixedIncomeList(tableRfCopy));
     handleCancelIsEditting();
     setTableRfCopy([...tableRfCopy]);
