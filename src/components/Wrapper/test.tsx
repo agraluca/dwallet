@@ -6,7 +6,7 @@ import Wrapper from ".";
 
 describe("<Wrapper />", () => {
   it("should render the heading", () => {
-    const { container } = renderWithTheme(
+    renderWithTheme(
       <Wrapper>
         <Heading level={1}>Wrapper</Heading>
       </Wrapper>
@@ -15,7 +15,5 @@ describe("<Wrapper />", () => {
     expect(
       screen.getByRole("heading", { name: /Wrapper/i })
     ).toBeInTheDocument();
-
-    expect(container.firstChild).toMatchSnapshot();
   });
 });
