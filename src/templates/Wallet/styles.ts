@@ -60,7 +60,6 @@ export const ButtonsWrapper = styled.section<ButtonsWrapperProps>`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    //gap: ${theme.grid.gutter};
     padding-top: calc(${theme.spacings.medium} * 2);
     padding-bottom: ${isAdding
       ? theme.spacings.medium
@@ -151,7 +150,7 @@ export const TableWrapper = styled.section`
     width: 100%;
 
     ${media.lessThan("large")`
-      overflow: auto;
+    overflow: auto;
       &::-webkit-scrollbar {
         height: 1rem;
 

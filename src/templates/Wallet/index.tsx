@@ -50,14 +50,12 @@ function Wallet() {
       updateFixedIncome,
       updateVariableIncome,
       updateTotalIncome,
-      updateVariableIncomeList,
       updateFixedIncomeList,
     } = cashFlowActions;
     dispatch(fetchUserWallet());
     dispatch(updateFixedIncome());
     dispatch(updateVariableIncome());
     dispatch(updateTotalIncome());
-    dispatch(updateVariableIncomeList());
     dispatch(updateFixedIncomeList());
   }, [dispatch, variableIncomeList.length, fixedIncomeList.length, isEditting]);
 

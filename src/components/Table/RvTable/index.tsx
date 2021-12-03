@@ -315,7 +315,10 @@ function RvTable({
 
       {tableDataRv.length > 0 && (
         <TableWrapper>
-          <TableHeader columns={columnsVariableIncomeTable} />
+          <TableHeader
+            columns={columnsVariableIncomeTable}
+            tableDataRv={tableDataRv}
+          />
 
           <TableBody>
             {tableDataRv.map((data, index) => {

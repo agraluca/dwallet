@@ -33,7 +33,6 @@ export const fetchUserWallet = () => {
     dispatch(startLoading("getWalletLoading"));
     try {
       const res = await api.get<UserWalletProps>(`/wallet/get`);
-      console.log(res.data.userWallet.wallet);
 
       dispatch(getAndUpdateVariableIncomeList(res.data.userWallet.wallet));
       dispatch(updateVariableIncomeList());

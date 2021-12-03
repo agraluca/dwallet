@@ -5,7 +5,11 @@ export const TableHeader = styled.thead`
 `;
 
 export const TableHeaderRow = styled.tr`
-  ${() => css``}
+  ${() => css`
+    .tooltip {
+      border-radius: 0;
+    }
+  `}
 `;
 
 export const TableHeaderData = styled.th`
