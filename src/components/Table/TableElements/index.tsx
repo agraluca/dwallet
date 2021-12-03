@@ -7,9 +7,10 @@ interface TableElementsProps {
   children: ReactNode;
 }
 
-interface TableElementWithClassnameProps extends TableElementsProps {
+export type TableElementWithClassnameProps = {
   className?: string;
-}
+  isHidding?: boolean;
+} & TableElementsProps;
 
 interface IsEdittingMenuProps {
   onCancel: () => void;
@@ -56,8 +57,11 @@ export const TableAddingRow = ({ children }: TableElementsProps) => (
 export const TableBodyData = ({
   children,
   className,
+  isHidding = false,
 }: TableElementWithClassnameProps) => (
-  <S.TableBodyData className={className}>{children}</S.TableBodyData>
+  <S.TableBodyData isHidding={isHidding} className={className}>
+    {children}
+  </S.TableBodyData>
 );
 
 export const IsEdittingMenu = ({ onCancel, onSave }: IsEdittingMenuProps) => {

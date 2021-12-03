@@ -59,8 +59,12 @@ export const TableAddingRow = styled.tr`
   `}
 `;
 
-export const TableBodyData = styled.td`
-  ${({ theme }) => css`
+type TableBodyDataProps = {
+  isHidding?: boolean;
+};
+
+export const TableBodyData = styled.td<TableBodyDataProps>`
+  ${({ theme, isHidding }) => css`
     color: ${theme.colors.lightBlack};
     font-size: ${theme.font.sizes.medium};
     font-weight: ${theme.font.weight.bold};
@@ -82,11 +86,11 @@ export const TableBodyData = styled.td`
     }
 
     &.table__body-data_green {
-      color: ${theme.colors.green};
+      color: ${isHidding ? theme.colors.lightBlack : theme.colors.green}};
     }
 
     &.table__body-data_red {
-      color: ${theme.colors.red};
+      color: ${isHidding ? theme.colors.lightBlack : theme.colors.red}};
     }
   `}
 `;

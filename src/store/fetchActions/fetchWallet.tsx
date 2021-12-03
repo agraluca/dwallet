@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Toast from "components/Toast";
 import { cashFlowActions } from "store/ducks/cashFlow";
 import { TableDataRvProps } from "components/Table/RvTable";
+import { AxiosResponse } from "axios";
 
 type WalletProps = {
   companyName: string;
@@ -27,18 +28,29 @@ type UserWalletProps = {
 export const fetchUserWallet = () => {
   return async (dispatch: AppDispatch) => {
     const { startLoading, finishLoading } = loadingActions;
-    const { getAndUpdateVariableIncomeList, updateVariableIncomeList } =
-      cashFlowActions;
+    const {
+      getAndUpdateVariableIncomeList,
+      updateVariableIncomeList,
+      updateFixedIncome,
+      updateVariableIncome,
+      updateTotalIncome,
+      updateFixedIncomeList,
+    } = cashFlowActions;
 
     dispatch(startLoading("getWalletLoading"));
     try {
       const res = await api.get<UserWalletProps>(`/wallet/get`);
-
       dispatch(getAndUpdateVariableIncomeList(res.data.userWallet.wallet));
       dispatch(updateVariableIncomeList());
+      dispatch(updateFixedIncome());
+      dispatch(updateVariableIncome());
+      dispatch(updateTotalIncome());
+      dispatch(updateFixedIncomeList());
       return res.data;
     } catch (err) {
-      toast.custom(<Toast title={err?.response?.data?.msg} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;
@@ -54,13 +66,15 @@ export const addVariableIncomeToUserWallet = (newValue: TableDataRvProps) => {
 
     dispatch(startLoading("postWalletLoading"));
     try {
-      const res = await api.post<unknown>(`/wallet/add`, newValue);
+      const res: AxiosResponse = await api.post(`/wallet/add`, newValue);
 
       dispatch(fetchUserWallet());
 
-      return res.data;
+      return res.data as TableDataRvProps;
     } catch (err) {
-      toast.custom(<Toast title={err?.response?.data?.msg} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;
@@ -70,19 +84,27 @@ export const addVariableIncomeToUserWallet = (newValue: TableDataRvProps) => {
   };
 };
 
+type WalletEditProps = {
+  wallet: TableDataRvProps[];
+};
+
 export const editVariableIncomeWallet = (wallet: TableDataRvProps[]) => {
   return async (dispatch: AppDispatch) => {
     const { startLoading, finishLoading } = loadingActions;
 
     dispatch(startLoading("editWalletLoading"));
     try {
-      const res = await api.put<unknown>(`/wallet/update`, { wallet });
+      const res: AxiosResponse = await api.put(`/wallet/update`, {
+        wallet,
+      });
 
       dispatch(fetchUserWallet());
 
-      return res.data;
+      return res.data as WalletEditProps;
     } catch (err) {
-      toast.custom(<Toast title={err?.response?.data?.msg} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;

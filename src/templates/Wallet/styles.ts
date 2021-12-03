@@ -168,3 +168,13 @@ export const TableWrapper = styled.section`
     `}
   `}
 `;
+
+export const SvgContainer = styled.section`
+  ${({ theme }) => css`
+    padding: ${theme.spacings.large} 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `}
+`;

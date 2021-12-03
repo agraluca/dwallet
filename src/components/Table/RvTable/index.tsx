@@ -222,6 +222,7 @@ function RvTable({
   };
 
   const onCancel = () => {
+    setTableFormValues(tableFormValuesInitialValues);
     handleCancelIsEditting();
     setTableRvCopy([...tableDataRv]);
   };
@@ -258,6 +259,7 @@ function RvTable({
 
   const handleDelete = (_id: string) => {
     dispatch(removeItemFromVariableIncomeWallet(_id));
+    handleCancelIsEditting();
   };
 
   return (
@@ -422,6 +424,7 @@ function RvTable({
                     />
                   </TableBodyData>
                   <TableBodyData
+                    isHidding={hide}
                     className={
                       data.status === "Comprar"
                         ? "table__body-data_green"

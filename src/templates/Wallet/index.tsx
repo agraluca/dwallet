@@ -9,9 +9,9 @@ import { Button } from "components/Button";
 import * as S from "./styles";
 import RfTable from "components/Table/RfTable";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
-import { cashFlowActions } from "store/ducks/cashFlow";
 import { usePageStatus } from "hooks/usePageStatus";
 import { fetchUserWallet } from "store/fetchActions/fetchWallet";
+import Spinner from "components/Spinner";
 
 function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
@@ -34,6 +34,9 @@ function Wallet() {
     variableIncome,
     totalIncome,
   } = useAppSelector((state) => state.cashFlow);
+  const { loading } = useAppSelector(({ loading }) => loading);
+  const isLoading =
+    (loading.getWalletLoading || loading.removingWalletLoading) ?? false;
 
   const variableIncomeTotal = variableIncomeList.reduce((acc, item) => {
     acc += item.price * item.stockAmount;
@@ -46,18 +49,8 @@ function Wallet() {
   }, 0);
 
   useEffect(() => {
-    const {
-      updateFixedIncome,
-      updateVariableIncome,
-      updateTotalIncome,
-      updateFixedIncomeList,
-    } = cashFlowActions;
     dispatch(fetchUserWallet());
-    dispatch(updateFixedIncome());
-    dispatch(updateVariableIncome());
-    dispatch(updateTotalIncome());
-    dispatch(updateFixedIncomeList());
-  }, [dispatch, variableIncomeList.length, fixedIncomeList.length, isEditting]);
+  }, [dispatch, variableIncomeList.length, fixedIncomeList.length]);
 
   const addItemToTable = () => {
     isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();
@@ -144,29 +137,33 @@ function Wallet() {
             <S.SwitchLabel htmlFor="radio-two">Renda Variável</S.SwitchLabel>
           </S.ToggleContainer>
         </S.ButtonsWrapper>
-
-        {}
-        <S.TableWrapper>
-          {toggleStatus === "rv" ? (
-            <RvTable
-              tableDataRv={variableIncomeList}
-              isAdding={isAdding}
-              setIsAdding={handleChangeStatusToInitial}
-              hide={isHidding}
-              isEditting={isEditting}
-              handleCancelIsEditting={handleChangeStatusToInitial}
-            />
-          ) : (
-            <RfTable
-              tableDataRf={fixedIncomeList}
-              isAdding={isAdding}
-              setIsAdding={handleChangeStatusToInitial}
-              hide={isHidding}
-              isEditting={isEditting}
-              handleCancelIsEditting={handleChangeStatusToInitial}
-            />
-          )}
-        </S.TableWrapper>
+        {isLoading ? (
+          <S.SvgContainer>
+            <Spinner />
+          </S.SvgContainer>
+        ) : (
+          <S.TableWrapper>
+            {toggleStatus === "rv" ? (
+              <RvTable
+                tableDataRv={variableIncomeList}
+                isAdding={isAdding}
+                setIsAdding={handleChangeStatusToInitial}
+                hide={isHidding}
+                isEditting={isEditting}
+                handleCancelIsEditting={handleChangeStatusToInitial}
+              />
+            ) : (
+              <RfTable
+                tableDataRf={fixedIncomeList}
+                isAdding={isAdding}
+                setIsAdding={handleChangeStatusToInitial}
+                hide={isHidding}
+                isEditting={isEditting}
+                handleCancelIsEditting={handleChangeStatusToInitial}
+              />
+            )}
+          </S.TableWrapper>
+        )}
       </S.Container>
     </Wrapper>
   );

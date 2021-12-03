@@ -1,7 +1,9 @@
 import axios from "axios";
+import { removeCookies } from "./cookiesService";
 import {
   getRefreshToken,
   getToken,
+  removeItemFromStorage,
   setRefreshToken,
   setToken,
 } from "./localStorageService";
@@ -50,7 +52,9 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
     }
-
+    removeItemFromStorage("token");
+    removeItemFromStorage("refresh_token");
+    removeCookies();
     return Promise.reject(error);
   }
 );
