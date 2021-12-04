@@ -51,6 +51,15 @@ const columnsFixedIncomeTable = [
   { name: "Status" },
 ];
 
+const tableFormValuesInitialValues = {
+  name: "",
+  idealPorcentage: 0,
+  currentPorcentage: 0,
+  totalPrice: 0,
+  shouldBuyPrice: 0,
+  status: "",
+};
+
 function RfTable({
   tableDataRf,
   isAdding,
@@ -59,14 +68,6 @@ function RfTable({
   isEditting = false,
   handleCancelIsEditting,
 }: TableProps) {
-  const tableFormValuesInitialValues = {
-    name: "",
-    idealPorcentage: 0,
-    currentPorcentage: 0,
-    totalPrice: 0,
-    shouldBuyPrice: 0,
-    status: "",
-  };
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );
@@ -77,6 +78,12 @@ function RfTable({
   useEffect(() => {
     setTableRfCopy([...tableDataRf]);
   }, [isEditting, tableDataRf]);
+
+  useEffect(() => {
+    if (!isAdding) {
+      setTableFormValues(tableFormValuesInitialValues);
+    }
+  }, [isAdding]);
 
   const handleInputChange = (field: string, value: string) => {
     setTableFormValues((prev) => ({ ...prev, [field]: value }));

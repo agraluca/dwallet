@@ -19,6 +19,7 @@ import {
   IsEdittingMenu,
   TableRow,
   TableCell,
+  DeleteModalContent,
 } from "../TableElements/index";
 
 import toast from "react-hot-toast";
@@ -29,6 +30,8 @@ import {
   editVariableIncomeWallet,
   removeItemFromVariableIncomeWallet,
 } from "store/fetchActions/fetchWallet";
+import Modal from "components/Modal";
+import { useModal } from "hooks/useModal";
 
 export type TableDataRvProps = {
   stock: string;
@@ -95,7 +98,10 @@ function RvTable({
     tableFormValuesInitialValues
   );
 
+  const { isOpen, handleOpenModal, handleCloseModal } = useModal();
+
   const [tableRvCopy, setTableRvCopy] = useState([...tableDataRv]);
+  const [deleteStock, setDeleteStock] = useState<TableDataRvProps>();
 
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector(({ loading }) => loading);
@@ -265,13 +271,35 @@ function RvTable({
     setTableRvCopy([...tableDataRv]);
   };
 
-  const handleDelete = (_id: string) => {
-    dispatch(removeItemFromVariableIncomeWallet(_id));
+  const handleDelete = () => {
+    dispatch(removeItemFromVariableIncomeWallet(deleteStock!._id!));
+
+    handleCloseModal();
+    setDeleteStock(undefined);
+
     handleCancelIsEditting();
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteStock(undefined);
+    handleCloseModal();
   };
 
   return (
     <>
+      <Modal
+        isOpen={isOpen}
+        title="Tem certeza que deletar este ativo?"
+        onClose={handleCloseModal}
+        size="md"
+      >
+        <DeleteModalContent
+          name="rv"
+          data={deleteStock!}
+          onCancel={handleCancelDelete}
+          onConfirm={handleDelete}
+        />
+      </Modal>
       {isAdding && (
         <TableWrapper className="table__wrapper--isAdding">
           <TableBody>
@@ -361,12 +389,15 @@ function RvTable({
                 <TableRow key={data._id}>
                   {isEditting && (
                     <TableBodyData>
-                      <Times
-                        className="remove-item"
-                        onClick={() => handleDelete(data._id!)}
-                        width={20}
-                        height={20}
-                      />
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          setDeleteStock(data);
+                          handleOpenModal();
+                        }}
+                      >
+                        <Times className="remove-item" width={20} height={20} />
+                      </button>
                     </TableBodyData>
                   )}
 

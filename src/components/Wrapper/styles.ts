@@ -4,9 +4,9 @@ import { WrapperProps } from ".";
 export const Wrapper = styled.section`
   ${({ theme }) => css`
     background-color: ${theme.colors.black};
-    position: relative;
     width: 100%;
     height: 100%;
+    position: relative;
   `}
 `;
 
@@ -20,7 +20,6 @@ export const WaveImg = styled.img`
 export const Content = styled.section<Pick<WrapperProps, "zeroIndex">>`
   ${({ theme, zeroIndex }) => css`
     position: absolute;
-    max-width: ${theme.grid.container};
     min-width: 30rem;
     margin: 0 auto;
     top: 0;

@@ -70,6 +70,12 @@ export const TableBodyData = styled.td<TableBodyDataProps>`
     font-weight: ${theme.font.weight.bold};
     padding: 0 ${theme.spacings.medium};
 
+
+    .delete-btn {
+      border: 0;
+      background: transparent;
+    }
+
     .remove-item {
       color: ${theme.colors.red};
       cursor: pointer;
@@ -146,5 +152,50 @@ export const Input = styled.input`
     &[type="number"] {
       -moz-appearance: textfield;
     }
+  `}
+`;
+
+export const DeleteModalContentWrapper = styled.div`
+  font-size: ${({ theme }) => theme.font.sizes.small};
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0 1.2rem;
+`;
+
+export const DeleteModalButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  padding-top: 1.5rem;
+`;
+
+export const Button = styled.button`
+  ${() => css`
+    border: 0;
+    background: transparent;
+    padding: 1.2rem 1.4rem;
+    border-radius: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  `}
+`;
+
+export const ConfirmButton = styled(Button)`
+  ${({ theme }) => css`
+    background: ${theme.colors.red};
+    color: ${theme.colors.white};
+  `}
+`;
+
+export const CancelButton = styled(Button)`
+  ${({ theme }) => css`
+    background: ${theme.colors.lightBlack};
+    color: ${theme.colors.white};
   `}
 `;
