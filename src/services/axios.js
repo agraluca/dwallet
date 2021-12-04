@@ -38,13 +38,19 @@ api.interceptors.response.use(
       if (error.response.status === 401) {
         try {
           const refreshToken = getRefreshToken();
-          const refreshResponse = await api.post("/auth/refresh", {
-            refreshToken,
-          });
-          const { token: newToken, refreshToken: newRefreshToken } =
-            refreshResponse.data;
-          setToken(newToken);
-          setRefreshToken(newRefreshToken);
+          if (refreshToken) {
+            const refreshResponse = await api.post("/auth/refresh", {
+              refreshToken,
+            });
+            const { token: newToken, refreshToken: newRefreshToken } =
+              refreshResponse.data;
+            setToken(newToken);
+            setRefreshToken(newRefreshToken);
+          } else {
+            removeItemFromStorage("token");
+            removeItemFromStorage("refresh_token");
+            removeCookies();
+          }
         } catch (err) {
           console.error(err);
         }
@@ -52,9 +58,7 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
     }
-    removeItemFromStorage("token");
-    removeItemFromStorage("refresh_token");
-    removeCookies();
+
     return Promise.reject(error);
   }
 );

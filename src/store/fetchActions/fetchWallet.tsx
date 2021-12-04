@@ -40,12 +40,19 @@ export const fetchUserWallet = () => {
     dispatch(startLoading("getWalletLoading"));
     try {
       const res = await api.get<UserWalletProps>(`/wallet/get`);
+      if (res.status === 201) {
+        toast.custom(<Toast title={res.data.msg} type="info" />, {
+          position: "top-right",
+        });
+      }
+
       dispatch(getAndUpdateVariableIncomeList(res.data.userWallet.wallet));
       dispatch(updateVariableIncomeList());
       dispatch(updateFixedIncome());
       dispatch(updateVariableIncome());
       dispatch(updateTotalIncome());
       dispatch(updateFixedIncomeList());
+
       return res.data;
     } catch (err) {
       const errorMessage =

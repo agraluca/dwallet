@@ -4,7 +4,7 @@ import { removeItemFromStorage, getToken } from "services/localStorageService";
 import { useRouter } from "next/dist/client/router";
 import { removeCookies } from "services/cookiesService";
 import jwtDecode from "jwt-decode";
-import { fetchToken } from "store/fetchActions/fetchAuth";
+import { fetchToken, registerUser } from "store/fetchActions/fetchAuth";
 import { useAppDispatch } from "./useReduxHooks";
 
 export default function useAuth() {
@@ -33,6 +33,17 @@ export default function useAuth() {
     [dispatch, push]
   );
 
+  const signUp = useCallback(
+    async (formValues) => {
+      const data = await dispatch(registerUser(formValues));
+
+      if (data) {
+        return push("/");
+      }
+    },
+    [dispatch, push]
+  );
+
   const logOut = useCallback(() => {
     removeItemFromStorage("token");
     removeItemFromStorage("refresh_token");
@@ -46,6 +57,7 @@ export default function useAuth() {
     email,
     id,
     signIn,
+    signUp,
     logOut,
   };
 }

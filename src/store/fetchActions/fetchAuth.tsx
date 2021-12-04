@@ -44,3 +44,41 @@ export const fetchToken = (formValues: FormValuesProps) => {
     }
   };
 };
+
+type FormValuesRegisterProps = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+type ResponseRegisterProps = {
+  msg: string;
+};
+
+export const registerUser = (formValues: FormValuesRegisterProps) => {
+  return async (dispatch: AppDispatch) => {
+    const { startLoading, finishLoading } = loadingActions;
+
+    dispatch(startLoading("registerUserLoading"));
+    try {
+      const res: AxiosResponse = await api.post(`/auth/register`, formValues);
+      const { msg } = res.data as ResponseRegisterProps;
+
+      toast.custom(<Toast title={msg} type="success" />, {
+        position: "top-right",
+      });
+
+      return res.data;
+    } catch (err) {
+      const errorMessage =
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
+        position: "top-right",
+      });
+      return false;
+    } finally {
+      dispatch(finishLoading("registerUserLoading"));
+    }
+  };
+};

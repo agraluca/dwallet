@@ -27,6 +27,13 @@ export const TitleWrapper = styled.div`
     .login--title {
       font-size: calc(${theme.font.sizes.large} * 2);
     }
+
+    ${media.lessThan("small")`
+      flex-direction: column;
+      .login--title {
+        font-size: ${theme.font.sizes.large};
+      }
+    `}
   `}
 `;
 
@@ -65,7 +72,7 @@ export const IlustrationWrapper = styled.div`
 `;
 
 export const Illustration = styled.img`
-  width: min(40rem, 100%);
+  width: min(45rem, 100%);
   align-self: flex-start;
 `;
 
@@ -76,7 +83,7 @@ export const WaveIllustration = styled.img`
   width: 100vw;
 `;
 
-export const FormLogin = styled.form`
+export const RegisterForm = styled.form`
   ${({ theme }) => css`
     display: flex;
     justify-content: center;
@@ -93,7 +100,7 @@ export const FormLogin = styled.form`
   `}
 `;
 
-export const RegisterLink = styled.a`
+export const LoginLink = styled.a`
   ${({ theme }) => css`
     font-size: ${theme.font.sizes.medium};
     font-weight: ${theme.font.weight.thin};

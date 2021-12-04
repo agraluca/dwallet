@@ -1,5 +1,6 @@
 import { TableDataRfProps } from "components/Table/RfTable";
 import { TableDataRvProps } from "components/Table/RvTable/index";
+import { GetServerSidePropsContext } from "next";
 
 type OverLimitData = TableDataRfProps | TableDataRvProps;
 
@@ -40,4 +41,19 @@ export function existZeroValueInIdealPercentage(data: OverLimitData[]) {
   }, false);
 
   return existsIdealPercentageZeroValue;
+}
+
+export async function verifyCookie(ctx: GetServerSidePropsContext) {
+  const session = ctx.req.headers.cookie || false;
+
+  const authTokenArray =
+    session &&
+    session
+      .split(";")
+      ?.map((item: string) => item.split("="))
+      .find((item) => item[0].trim() === "authToken");
+
+  const authToken = typeof authTokenArray === "object" && authTokenArray[1];
+  const hasValue = !!authToken;
+  return { hasValue, authToken };
 }
