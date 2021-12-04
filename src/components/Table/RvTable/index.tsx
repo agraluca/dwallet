@@ -141,6 +141,17 @@ function RvTable({
     if (data) {
       const { tickerType, formattedPrice } = data;
 
+      const alreadyExists = alreadyExistsInList(
+        data.tickerName,
+        "stock",
+        tableDataRv
+      );
+      if (alreadyExists) {
+        toast.custom(
+          <Toast title="Já existe esse ativo em sua carteira." type="error" />,
+          { position: "top-right" }
+        );
+      }
       setTableFormValues((prev) => ({
         ...prev,
         type: typeCheck(tickerType),
