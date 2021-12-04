@@ -51,6 +51,15 @@ export type TableProps = {
   handleCancelIsEditting: () => void;
 };
 
+const tableFormValuesInitialValues = {
+  ticker: "",
+  type: "",
+  price: "",
+  idealPorcentage: "",
+  quantity: "",
+  total: "",
+};
+
 function RvTable({
   tableDataRv,
   isAdding,
@@ -81,14 +90,7 @@ function RvTable({
         { name: "Qtd p/ comprar" },
         { name: "Status" },
       ];
-  const tableFormValuesInitialValues = {
-    ticker: "",
-    type: "",
-    price: "",
-    idealPorcentage: "",
-    quantity: "",
-    total: "",
-  };
+
   const [tableFormValues, setTableFormValues] = useState(
     tableFormValuesInitialValues
   );
@@ -107,6 +109,12 @@ function RvTable({
   useEffect(() => {
     setTableRvCopy([...tableDataRv]);
   }, [isEditting, tableDataRv]);
+
+  useEffect(() => {
+    if (!isAdding) {
+      setTableFormValues(tableFormValuesInitialValues);
+    }
+  }, [isAdding]);
 
   const handleInputChange = (field: string, value: string) => {
     if (field !== "idealPorcentage" && field !== "quantity") {

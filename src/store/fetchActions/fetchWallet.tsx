@@ -46,8 +46,6 @@ export const fetchUserWallet = () => {
         });
       }
 
-      console.log(response);
-
       if (response.data.userWallet) {
         dispatch(
           getAndUpdateVariableIncomeList(response.data.userWallet.wallet)
@@ -62,7 +60,6 @@ export const fetchUserWallet = () => {
 
       return response.data;
     } catch (err) {
-      console.log("erro", err);
       const errorMessage =
         err?.response?.data?.error || "Ocorreu um erro inesperado 1";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
