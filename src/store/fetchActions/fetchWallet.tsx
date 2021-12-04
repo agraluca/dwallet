@@ -39,24 +39,32 @@ export const fetchUserWallet = () => {
 
     dispatch(startLoading("getWalletLoading"));
     try {
-      const res = await api.get<UserWalletProps>(`/wallet/get`);
-      if (res.status === 201) {
-        toast.custom(<Toast title={res.data.msg} type="info" />, {
+      const response = await api.get<UserWalletProps>(`/wallet/get`);
+      if (response.status === 201) {
+        toast.custom(<Toast title={response.data.msg} type="info" />, {
           position: "top-right",
         });
       }
 
-      dispatch(getAndUpdateVariableIncomeList(res.data.userWallet.wallet));
+      console.log(response);
+
+      if (response.data.userWallet) {
+        dispatch(
+          getAndUpdateVariableIncomeList(response.data.userWallet.wallet)
+        );
+      }
+
       dispatch(updateVariableIncomeList());
       dispatch(updateFixedIncome());
       dispatch(updateVariableIncome());
       dispatch(updateTotalIncome());
       dispatch(updateFixedIncomeList());
 
-      return res.data;
+      return response.data;
     } catch (err) {
+      console.log("erro", err);
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.error || "Ocorreu um erro inesperado 1";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
