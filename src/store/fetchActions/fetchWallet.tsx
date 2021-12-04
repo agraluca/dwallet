@@ -25,6 +25,10 @@ type UserWalletProps = {
   };
 };
 
+type ResponseProps = {
+  msg: string;
+};
+
 export const fetchUserWallet = () => {
   return async (dispatch: AppDispatch) => {
     const { startLoading, finishLoading } = loadingActions;
@@ -40,17 +44,12 @@ export const fetchUserWallet = () => {
     dispatch(startLoading("getWalletLoading"));
     try {
       const res = await api.get<UserWalletProps>(`/wallet/get`);
-      if (res.status === 201) {
-        toast.custom(<Toast title={res.data.msg} type="info" />, {
-          position: "top-right",
-        });
-      }
 
       dispatch(getAndUpdateVariableIncomeList(res.data.userWallet.wallet));
-      dispatch(updateVariableIncomeList());
       dispatch(updateFixedIncome());
       dispatch(updateVariableIncome());
       dispatch(updateTotalIncome());
+      dispatch(updateVariableIncomeList());
       dispatch(updateFixedIncomeList());
 
       return res.data;
@@ -74,8 +73,11 @@ export const addVariableIncomeToUserWallet = (newValue: TableDataRvProps) => {
     dispatch(startLoading("postWalletLoading"));
     try {
       const res: AxiosResponse = await api.post(`/wallet/add`, newValue);
-
+      const { msg } = res.data as ResponseProps;
       dispatch(fetchUserWallet());
+      toast.custom(<Toast title={msg} type="success" />, {
+        position: "top-right",
+      });
 
       return res.data as TableDataRvProps;
     } catch (err) {
@@ -104,8 +106,11 @@ export const editVariableIncomeWallet = (wallet: TableDataRvProps[]) => {
       const res: AxiosResponse = await api.put(`/wallet/update`, {
         wallet,
       });
-
+      const { msg } = res.data as ResponseProps;
       dispatch(fetchUserWallet());
+      toast.custom(<Toast title={msg} type="success" />, {
+        position: "top-right",
+      });
 
       return res.data as WalletEditProps;
     } catch (err) {
@@ -128,8 +133,12 @@ export const removeItemFromVariableIncomeWallet = (id: string) => {
     dispatch(startLoading("removeWalletLoading"));
     try {
       const res = await api.delete(`/wallet/remove/${id}`);
-
+      const { msg } = res.data as ResponseProps;
       dispatch(fetchUserWallet());
+
+      toast.custom(<Toast title={msg} type="success" />, {
+        position: "top-right",
+      });
 
       return res;
     } catch (err) {

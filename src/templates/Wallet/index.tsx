@@ -50,7 +50,7 @@ function Wallet() {
 
   useEffect(() => {
     dispatch(fetchUserWallet());
-  }, [dispatch, variableIncomeList.length, fixedIncomeList.length]);
+  }, [dispatch]);
 
   const addItemToTable = () => {
     isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();
