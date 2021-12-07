@@ -33,23 +33,20 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalConfig = error.config;
-
+    console.log(error.response);
     if (originalConfig.url !== "/auth/refresh" && error.response) {
-      if (error.response.status === 401) {
+      if (error.response.status === 400) {
         try {
           const refreshToken = getRefreshToken();
           if (refreshToken) {
             const refreshResponse = await api.post("/auth/refresh", {
               refreshToken,
             });
+
             const { token: newToken, refreshToken: newRefreshToken } =
               refreshResponse.data;
             setToken(newToken);
             setRefreshToken(newRefreshToken);
-          } else {
-            removeItemFromStorage("token");
-            removeItemFromStorage("refresh_token");
-            removeCookies();
           }
         } catch (err) {
           console.error(err);
@@ -57,6 +54,15 @@ api.interceptors.response.use(
       } else {
         return Promise.reject(error);
       }
+    }
+
+    if (
+      originalConfig.url === "/auth/refresh" &&
+      error.response.status === 400
+    ) {
+      removeItemFromStorage("token");
+      removeItemFromStorage("refresh_token");
+      removeCookies();
     }
 
     return Promise.reject(error);
