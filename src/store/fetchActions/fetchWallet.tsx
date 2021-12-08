@@ -79,7 +79,7 @@ export const addVariableIncomeToUserWallet = (newValue: TableDataRvProps) => {
   return async (dispatch: AppDispatch) => {
     const { startLoading, finishLoading } = loadingActions;
 
-    dispatch(startLoading("postWalletLoading"));
+    dispatch(startLoading("addWalletLoading"));
     try {
       const res: AxiosResponse = await api.post(`/wallet/add`, newValue);
       const { msg } = res.data as ResponseProps;
@@ -97,7 +97,7 @@ export const addVariableIncomeToUserWallet = (newValue: TableDataRvProps) => {
       });
       return false;
     } finally {
-      dispatch(finishLoading("postWalletLoading"));
+      dispatch(finishLoading("addWalletLoading"));
     }
   };
 };

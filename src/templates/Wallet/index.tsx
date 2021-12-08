@@ -33,9 +33,11 @@ function Wallet() {
     variableIncome,
     totalIncome,
   } = useAppSelector((state) => state.cashFlow);
-  const { loading } = useAppSelector(({ loading }) => loading);
+  const { getWalletLoading, removeWalletLoading, editWalletLoading } =
+    useAppSelector((state) => state.loading);
+
   const isLoading =
-    (loading.getWalletLoading || loading.removingWalletLoading) ?? false;
+    (getWalletLoading || removeWalletLoading || editWalletLoading) ?? false;
 
   const variableIncomeTotal = variableIncomeList.reduce((acc, item) => {
     acc += item.price * item.stockAmount;

@@ -22,7 +22,8 @@ function Main({
   });
   const { signIn } = useAuth();
 
-  const { loading } = useAppSelector(({ loading }) => loading);
+  const { getTokenLoading } = useAppSelector((state) => state.loading);
+
   function handleInput(field: string, value: string) {
     setFormValues((prevState) => ({ ...prevState, [field]: value }));
   }
@@ -62,13 +63,9 @@ function Main({
             <Button
               className="submitButton"
               type="submit"
-              disabled={loading.getTokenLoading}
+              disabled={getTokenLoading}
             >
-              {loading.getTokenLoading ? (
-                <S.FormLoading />
-              ) : (
-                <span>Entrar</span>
-              )}
+              {getTokenLoading ? <S.FormLoading /> : <span>Entrar</span>}
             </Button>
           </S.FormLogin>
           <Link href="/register">

@@ -21,7 +21,7 @@ function RegisterUser() {
   });
   const { signUp } = useAuth();
 
-  const { loading } = useAppSelector(({ loading }) => loading);
+  const loading = useAppSelector((state) => state.loading);
   function handleInput(field: string, value: string) {
     setFormValues((prevState) => ({ ...prevState, [field]: value }));
   }
@@ -74,9 +74,9 @@ function RegisterUser() {
             <Button
               className="submitButton"
               type="submit"
-              disabled={loading.registerUserLoading}
+              disabled={loading.registerUser}
             >
-              {loading.registerUserLoading ? (
+              {loading.registerUser ? (
                 <S.FormLoading />
               ) : (
                 <span>Crie sua conta</span>
