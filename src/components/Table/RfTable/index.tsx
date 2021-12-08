@@ -154,12 +154,7 @@ function RfTable({
     dispatch(addNewValueToFixedIncomeList(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
-    toast.custom(
-      <Toast title="Ativo adicionado com sucesso!" type="success" />,
-      {
-        position: "top-right",
-      }
-    );
+
     setIsAdding();
   };
 
@@ -199,12 +194,6 @@ function RfTable({
     dispatch(editFixedIncomeList(tableRfCopy));
     handleCancelIsEditting();
     setTableRfCopy([...tableRfCopy]);
-    toast.custom(
-      <Toast title="Edição concluida com sucesso!" type="success" />,
-      {
-        position: "top-right",
-      }
-    );
   };
 
   return (

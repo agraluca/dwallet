@@ -221,12 +221,7 @@ function RvTable({
     dispatch(addVariableIncomeToUserWallet(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
-    toast.custom(
-      <Toast title="Ativo adicionado com sucesso!" type="success" />,
-      {
-        position: "top-right",
-      }
-    );
+
     setIsAdding();
   };
 
@@ -286,12 +281,6 @@ function RvTable({
     dispatch(editVariableIncomeWallet(tableRvCopy));
     handleCancelIsEditting();
     setTableRvCopy([...tableDataRv]);
-    toast.custom(
-      <Toast title="Edição concluida com sucesso!" type="success" />,
-      {
-        position: "top-right",
-      }
-    );
   };
 
   const handleDelete = () => {
