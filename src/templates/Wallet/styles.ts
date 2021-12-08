@@ -2,6 +2,13 @@ import { Wrapper as CardBalance } from "components/CardBalance/styles";
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 
+export const WalletWrapper = styled.div`
+  ${({ theme }) => css`
+    max-width: ${theme.grid.container};
+    margin: 0 auto;
+  `}
+`;
+
 export const Container = styled.main`
   ${({ theme }) => css`
     margin: 0 auto;

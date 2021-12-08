@@ -19,7 +19,6 @@ const WrapperModifiers = {
 
 export const Wrapper = styled.div<WrapperProps>`
   ${({ theme, isOpen }) => css`
-    position: relative;
     width: max-content;
     z-index: ${theme.layers.modal};
     ${Content} {
