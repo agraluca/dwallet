@@ -3,7 +3,7 @@ import { Times } from "@styled-icons/fa-solid/Times";
 
 import * as S from "./styles";
 
-interface ModalProps {
+export interface ModalProps {
   size?: "sm" | "md" | "lg";
   title?: string;
   noBorders?: boolean;
