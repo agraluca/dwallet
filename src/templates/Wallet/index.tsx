@@ -11,9 +11,16 @@ import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { usePageStatus } from "hooks/usePageStatus";
 import { fetchUserWallet } from "store/fetchActions/fetchWallet";
 import Spinner from "components/Spinner";
+import Chart from "components/Graph";
 
 function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
+  const [showGraph, setShowGraph] = useState(false);
+  const [chartData, setChartData] = useState({});
+
+  const handleShowGraph = () => {
+    setShowGraph(!showGraph);
+  };
 
   const {
     isHidding,
@@ -51,7 +58,41 @@ function Wallet() {
 
   useEffect(() => {
     dispatch(fetchUserWallet());
-  }, [dispatch]);
+    toggleStatus === "rv"
+      ? setChartData({
+          labels: variableIncomeList.map((item) => {
+            return item.stock.toUpperCase();
+          }),
+          datasets: [
+            {
+              label: "Preço",
+              data: variableIncomeList.map((item) => {
+                return item.price * item.stockAmount;
+              }),
+              backgroundColor: variableIncomeList.map(() => {
+                return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+              }),
+            },
+          ],
+        })
+      : setChartData({
+          labels: fixedIncomeList.map((item) => {
+            return item.name;
+          }),
+          datasets: [
+            {
+              label: "Preço",
+              data: fixedIncomeList.map((item) => {
+                return item.totalPrice;
+              }),
+              backgroundColor: variableIncomeList.map(() => {
+                return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+              }),
+            },
+          ],
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, toggleStatus]);
 
   const addItemToTable = () => {
     isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();
@@ -114,7 +155,11 @@ function Wallet() {
               >
                 Editar
               </Button>
-              <Button variant="icon" icon="icons/chart-bar.svg">
+              <Button
+                variant="icon"
+                icon="icons/chart-bar.svg"
+                onClick={handleShowGraph}
+              >
                 Ver gráfico
               </Button>
             </S.ActionButtonsWrapper>
@@ -143,6 +188,8 @@ function Wallet() {
             <S.SvgContainer>
               <Spinner />
             </S.SvgContainer>
+          ) : showGraph ? (
+            <Chart chartData={chartData} />
           ) : (
             <S.TableWrapper>
               {toggleStatus === "rv" ? (
