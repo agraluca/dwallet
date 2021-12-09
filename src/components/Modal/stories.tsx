@@ -7,4 +7,4 @@ export default {
   component: Modal,
 } as Meta;
 
-export const Basic: Story = () => <Modal />;
+export const Basic: Story = (args) => <Modal {...args} />;
