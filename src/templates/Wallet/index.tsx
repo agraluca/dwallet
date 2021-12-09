@@ -157,10 +157,10 @@ function Wallet() {
               </Button>
               <Button
                 variant="icon"
-                icon="icons/chart-bar.svg"
+                icon={showGraph ? "icons/table.svg" : "icons/chart-bar.svg"}
                 onClick={handleShowGraph}
               >
-                Ver gráfico
+                {showGraph ? "Ver tabela" : "Ver gráfico"}
               </Button>
             </S.ActionButtonsWrapper>
             <S.ToggleContainer>
@@ -188,7 +188,7 @@ function Wallet() {
             <S.SvgContainer>
               <Spinner />
             </S.SvgContainer>
-          ) : showGraph ? (
+          ) : !isHidding && showGraph ? (
             <Chart chartData={chartData} />
           ) : (
             <S.TableWrapper>
