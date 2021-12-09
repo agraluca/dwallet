@@ -29,9 +29,6 @@ const loadingSlice = createSlice({
   initialState,
   reducers: {
     startLoading: (state, action: PayloadAction<LoadingActionProps>) => {
-      console.log("state", state[action.payload]);
-      console.log("payload", action.payload);
-
       return (state = {
         ...state,
         [action.payload]: true,

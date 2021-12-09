@@ -125,28 +125,35 @@ export const DeleteModalContent = ({
     name === "rv" ? (
       <>
         <S.DeleteModalContentWrapper>
-          <span>
-            <b>Nome:</b> {(data as TableDataRvProps).stock}
-          </span>
-          <span>
-            <b>Tipo:</b> {(data as TableDataRvProps).type}
-          </span>
-          <span>
-            <b>Preço:</b> {(data as TableDataRvProps).price}
-          </span>
-          <span>
-            <b>% Ideal:</b> {(data as TableDataRvProps).idealPorcentage} %
-          </span>
-          <span>
-            <b>% Atual:</b> {(data as TableDataRvProps).currentPorcentage} %
-          </span>
-          <span>
-            <b>Quantidade:</b> {(data as TableDataRvProps).stockAmount}
-          </span>
+          {Object.keys(data as TableDataRvProps).map((key) => {
+            return (
+              <span key={key}>
+                {key === "_id" ? null : (
+                  <>
+                    <b>{key}: </b>
+                    {(data as TableDataRvProps)[key as keyof TableDataRvProps]}
+                  </>
+                )}
+              </span>
+            );
+          })}
         </S.DeleteModalContentWrapper>
       </>
     ) : (
-      <div>rf</div>
+      <div>
+        {Object.keys(data as TableDataRfProps).map((key) => {
+          return (
+            <span key={key}>
+              {key === "_id" ? null : (
+                <>
+                  <b>{key}: </b>
+                  {(data as TableDataRfProps)[key as keyof TableDataRfProps]}
+                </>
+              )}
+            </span>
+          );
+        })}
+      </div>
     );
 
   return (

@@ -18,11 +18,22 @@ type WalletProps = {
   _id: string;
 };
 
+type FixedIncomeWalletProps = {
+  currentPorcentage: number;
+  idealPorcentage: number;
+  name: string;
+  shouldBuyPrice: number;
+  status: string;
+  totalPrice: number;
+  _id: string;
+};
+
 type UserWalletProps = {
   msg: string;
   userWallet: {
     id: string;
     wallet: WalletProps[];
+    walletFixedIncome: FixedIncomeWalletProps[];
   };
 };
 
@@ -44,6 +55,7 @@ export const fetchUserWallet = () => {
       updateVariableIncome,
       updateTotalIncome,
       updateFixedIncomeList,
+      getAndUpdateFixedIncomeList,
     } = cashFlowActions;
 
     dispatch(startLoading("getWalletLoading"));
@@ -58,6 +70,12 @@ export const fetchUserWallet = () => {
       if (response.data.userWallet) {
         dispatch(
           getAndUpdateVariableIncomeList(response.data.userWallet.wallet)
+        );
+
+        dispatch(
+          getAndUpdateFixedIncomeList(
+            response.data.userWallet.walletFixedIncome
+          )
         );
         dispatch(updateFixedIncome());
         dispatch(updateVariableIncome());
@@ -87,7 +105,7 @@ export const addFixedIncomeToUserWallet = (newValue: TableDataRfProps) => {
     dispatch(startLoading("addWalletLoading"));
     try {
       const res: AxiosResponse = await api.post(
-        `/walletFixedIncome/add"`,
+        `/walletFixedIncome/add`,
         newValue
       );
       const { msg } = res.data as ResponseProps;
@@ -110,14 +128,16 @@ export const addFixedIncomeToUserWallet = (newValue: TableDataRfProps) => {
   };
 };
 
-export const editFixedIncomeWallet = (wallet: TableDataRfProps[]) => {
+export const editFixedIncomeWallet = (
+  walletFixedIncome: TableDataRfProps[]
+) => {
   return async (dispatch: AppDispatch) => {
     const { startLoading, finishLoading } = loadingActions;
 
     dispatch(startLoading("editWalletLoading"));
     try {
       const res: AxiosResponse = await api.put(`/walletFixedIncome/update`, {
-        wallet,
+        walletFixedIncome,
       });
       const { msg } = res.data as ResponseProps;
       dispatch(fetchUserWallet());
@@ -126,10 +146,13 @@ export const editFixedIncomeWallet = (wallet: TableDataRfProps[]) => {
       });
 
       return res.data as WalletEditProps;
-    } catch (err) {
-      const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
-      toast.custom(<Toast title={errorMessage} type="warning" />, {
+    } catch (error) {
+      let message = "Ocorreu um erro inesperado";
+      if (error.response) {
+        message = error.response.data.msg[0].msg;
+      }
+
+      toast.custom(<Toast title={message} type="warning" />, {
         position: "top-right",
       });
       return false;

@@ -74,6 +74,8 @@ export const TableBodyData = styled.td<TableBodyDataProps>`
     .delete-btn {
       border: 0;
       background: transparent;
+      padding: ${theme.font.sizes.small} 0;
+
     }
 
     .remove-item {
@@ -156,11 +158,11 @@ export const Input = styled.input`
 `;
 
 export const DeleteModalContentWrapper = styled.div`
-  font-size: ${({ theme }) => theme.font.sizes.small};
+  font-size: ${({ theme }) => theme.font.sizes.medium};
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0 1.2rem;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
 `;
 
 export const DeleteModalButtonGroup = styled.div`
