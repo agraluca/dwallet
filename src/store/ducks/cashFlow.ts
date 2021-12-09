@@ -18,6 +18,7 @@ type FixedIncomeListProps = {
   totalPrice: number;
   shouldBuyPrice: number;
   status: string;
+  _id?: string;
 };
 
 type CashFlowProps = {
@@ -60,6 +61,9 @@ const cashFlowSlice = createSlice({
     },
     getAndUpdateVariableIncomeList: (state, action) => {
       state.variableIncomeList = action.payload;
+    },
+    getAndUpdateFixedIncomeList: (state, action) => {
+      state.fixedIncomeList = action.payload;
     },
     updateVariableIncomeList: (state) => {
       state.variableIncomeList = state.variableIncomeList.map((data) => {
@@ -114,6 +118,7 @@ const cashFlowSlice = createSlice({
           totalPrice: Number(data.totalPrice),
           shouldBuyPrice: status ? Math.ceil(result1 / result2) : 0,
           status: status ? "Comprar" : "Segurar",
+          _id: data._id,
         };
       });
     },

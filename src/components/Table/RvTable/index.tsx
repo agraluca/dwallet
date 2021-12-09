@@ -104,7 +104,7 @@ function RvTable({
   const [deleteStock, setDeleteStock] = useState<TableDataRvProps>();
 
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(({ loading }) => loading);
+  const { getDetailStockLoading } = useAppSelector((state) => state.loading);
 
   const exists = alreadyExistsInList<TableDataRvProps>(
     tableFormValues.ticker,
@@ -288,9 +288,6 @@ function RvTable({
 
     handleCloseModal();
     setDeleteStock(undefined);
-    toast.custom(<Toast title="Ativo deletado com sucesso!" type="success" />, {
-      position: "top-right",
-    });
     handleCancelIsEditting();
   };
 
@@ -379,7 +376,7 @@ function RvTable({
                   onClick={addItemToTable}
                   className="table__body-button"
                   disabled={Number(tableFormValues.total) === 0 || exists}
-                  loading={loading.getDetailStockLoading}
+                  loading={getDetailStockLoading}
                 >
                   Adicionar
                 </Button>

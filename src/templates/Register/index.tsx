@@ -21,7 +21,7 @@ function RegisterUser() {
   });
   const { signUp } = useAuth();
 
-  const { loading } = useAppSelector(({ loading }) => loading);
+  const loading = useAppSelector((state) => state.loading);
   function handleInput(field: string, value: string) {
     setFormValues((prevState) => ({ ...prevState, [field]: value }));
   }

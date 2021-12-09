@@ -4,7 +4,7 @@ import TableHeader from "components/TableHeader";
 import { useState, useEffect, ChangeEvent } from "react";
 import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch } from "hooks/useReduxHooks";
-import { cashFlowActions } from "store/ducks/cashFlow";
+import { Times } from "@styled-icons/fa-solid/Times";
 
 import {
   alreadyExistsInList,
@@ -20,9 +20,17 @@ import {
   IsEdittingMenu,
   TableRow,
   TableCell,
+  DeleteModalContent,
 } from "../TableElements/index";
 import toast from "react-hot-toast";
 import Toast from "components/Toast";
+import {
+  addFixedIncomeToUserWallet,
+  editFixedIncomeWallet,
+  removeItemFromFixedIncomeWallet,
+} from "store/fetchActions/fetchWallet";
+import Modal from "components/Modal";
+import { useModal } from "hooks/useModal";
 
 export type TableDataRfProps = {
   name: string;
@@ -31,6 +39,7 @@ export type TableDataRfProps = {
   totalPrice: number;
   shouldBuyPrice: number;
   status: string;
+  _id?: string;
 };
 
 export type TableProps = {
@@ -41,15 +50,6 @@ export type TableProps = {
   isEditting: boolean;
   handleCancelIsEditting: () => void;
 };
-
-const columnsFixedIncomeTable = [
-  { name: "Nome" },
-  { name: "% Ideal" },
-  { name: "% Atual" },
-  { name: "Valor Total" },
-  { name: "Valor p/ comprar" },
-  { name: "Status" },
-];
 
 const tableFormValuesInitialValues = {
   name: "",
@@ -72,8 +72,28 @@ function RfTable({
     tableFormValuesInitialValues
   );
   const [tableRfCopy, setTableRfCopy] = useState([...tableDataRf]);
-
+  const { isOpen, handleOpenModal, handleCloseModal } = useModal();
+  const [deleteStock, setDeleteStock] = useState<TableDataRfProps>();
   const dispatch = useAppDispatch();
+
+  const columnsFixedIncomeTable = isEditting
+    ? [
+        { name: "" },
+        { name: "Nome" },
+        { name: "% Ideal" },
+        { name: "% Atual" },
+        { name: "Valor Total" },
+        { name: "Valor p/ comprar" },
+        { name: "Status" },
+      ]
+    : [
+        { name: "Nome" },
+        { name: "% Ideal" },
+        { name: "% Atual" },
+        { name: "Valor Total" },
+        { name: "Valor p/ comprar" },
+        { name: "Status" },
+      ];
 
   useEffect(() => {
     setTableRfCopy([...tableDataRf]);
@@ -150,8 +170,8 @@ function RfTable({
       );
       return;
     }
-    const { addNewValueToFixedIncomeList } = cashFlowActions;
-    dispatch(addNewValueToFixedIncomeList(newValue));
+
+    dispatch(addFixedIncomeToUserWallet(newValue));
 
     setTableFormValues(tableFormValuesInitialValues);
 
@@ -164,8 +184,6 @@ function RfTable({
   };
 
   const onSave = () => {
-    const { editFixedIncomeList } = cashFlowActions;
-
     const overLimit = hasOverLimit(tableRfCopy, 100);
     const existIdealPercentageZero =
       existZeroValueInIdealPercentage(tableRfCopy);
@@ -191,13 +209,40 @@ function RfTable({
       return;
     }
 
-    dispatch(editFixedIncomeList(tableRfCopy));
+    dispatch(editFixedIncomeWallet(tableRfCopy));
     handleCancelIsEditting();
     setTableRfCopy([...tableRfCopy]);
   };
 
+  const handleCancelDelete = () => {
+    setDeleteStock(undefined);
+    handleCloseModal();
+  };
+
+  const handleDelete = () => {
+    dispatch(removeItemFromFixedIncomeWallet(deleteStock!._id!));
+
+    handleCloseModal();
+    setDeleteStock(undefined);
+    handleCancelIsEditting();
+  };
+
   return (
     <>
+      <Modal
+        isOpen={isOpen}
+        title="Tem certeza que deletar esta renda?"
+        onClose={handleCloseModal}
+        size="md"
+      >
+        <DeleteModalContent
+          name="rv"
+          data={deleteStock!}
+          onCancel={handleCancelDelete}
+          onConfirm={handleDelete}
+        />
+      </Modal>
+
       {isAdding && (
         <TableWrapper className="table__wrapper--isAdding">
           <TableBody>
@@ -249,6 +294,20 @@ function RfTable({
             {tableDataRf?.map((data, index) => {
               return (
                 <TableRow key={index}>
+                  {isEditting && (
+                    <TableBodyData>
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          setDeleteStock(data);
+                          handleOpenModal();
+                        }}
+                      >
+                        <Times className="remove-item" width={20} height={20} />
+                      </button>
+                    </TableBodyData>
+                  )}
+
                   <TableBodyData>{data.name.toUpperCase()}</TableBodyData>
                   <TableBodyData>
                     <TableCell

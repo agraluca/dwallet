@@ -19,6 +19,17 @@ type ResponseTokenProps = {
   refreshToken: string;
 };
 
+type FormValuesRegisterProps = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+type ResponseRegisterProps = {
+  msg: string;
+};
+
 export const fetchToken = (formValues: FormValuesProps) => {
   return async (dispatch: AppDispatch) => {
     const { startLoading, finishLoading } = loadingActions;
@@ -43,17 +54,6 @@ export const fetchToken = (formValues: FormValuesProps) => {
       dispatch(finishLoading("getTokenLoading"));
     }
   };
-};
-
-type FormValuesRegisterProps = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-type ResponseRegisterProps = {
-  msg: string;
 };
 
 export const registerUser = (formValues: FormValuesRegisterProps) => {
