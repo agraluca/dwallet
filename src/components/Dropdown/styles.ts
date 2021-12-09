@@ -53,8 +53,8 @@ export const Content = styled.div<WrapperProps>`
     margin-top: ${theme.spacings.medium};
     font-size: ${theme.font.sizes.medium};
     position: absolute;
-    right: 0;
-    top: 5rem;
+    right: 3rem;
+    top: 9.5rem;
     visibility: ${isOpen ? "visible" : "hidden"};
     &:hover::before {
       border-bottom: 1.2rem solid ${theme.colors.yellow};

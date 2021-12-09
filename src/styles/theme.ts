@@ -31,6 +31,7 @@ export default {
     green: "#33CC95",
     red: "#E52E4D",
     white: "#FAFAFA",
+    gray: "#8D8D8D",
   },
   spacings: {
     xxsmall: "0.8rem",

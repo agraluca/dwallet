@@ -23,9 +23,9 @@ const titleSizes = {
 
 export const Wrapper = styled.div<ModalSizeProps>`
   ${({ size, theme, noBorders }) => css`
-    position: absolute;
+    position: fixed;
     inset: 0;
-    z-index: 998;
+    z-index: ${theme.layers.modal};
 
     display: flex;
     align-items: center;
@@ -46,23 +46,60 @@ export const Wrapper = styled.div<ModalSizeProps>`
   `}
 `;
 
-export const ModalWrapper = styled.div`
-  ${({ theme }) => css`
+export const ModalWrapper = styled.div<IconTypeColorProps>`
+  ${({ theme, colorType }) => css`
     height: auto;
     background: ${theme.colors.white};
     border-radius: ${theme.spacings.xxsmall};
+    box-shadow: rgba(255, 255, 255, 0.2) 0 0.7rem 3rem 0;
+    position: relative;
 
-    //padding: ${theme.spacings.small};
+    &::before {
+      content: "";
+      width: 4rem;
+      height: 100%;
+      background-color: ${colorType};
+      border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
   `}
 `;
 
 export const ModalHeader = styled.header<ModalHeaderProps>`
   ${({ theme, hasTitle }) => css`
     padding: ${hasTitle ? theme.spacings.xsmall : theme.spacings.xxsmall};
-
     display: flex;
     justify-content: ${hasTitle ? "space-between" : "flex-end"};
     align-items: center;
+    position: relative;
+  `}
+`;
+
+type IconTypeColorProps = {
+  colorType?: string;
+};
+
+export const IconTypeWrapper = styled.div<IconTypeColorProps>`
+  ${({ theme, colorType }) => css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+      color: ${colorType};
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -3rem;
+      margin: 0 auto;
+      width: 10rem;
+      height: 10rem;
+      padding: ${theme.spacings.xxsmall};
+      border-radius: 100%;
+      background-color: ${theme.colors.white};
+    }
   `}
 `;
 
@@ -72,16 +109,22 @@ export const Title = styled.h3`
 `;
 
 export const CloseButton = styled.button`
-  background: ${({ theme }) => theme.colors.white};
-  border-radius: 50%;
-  border: 0;
-  cursor: pointer;
-  padding: 1rem;
-  transition: filter 0.2s;
+  ${({ theme }) => css`
+    background: ${theme.colors.white};
+    border-radius: 50%;
+    border: 0;
+    cursor: pointer;
+    padding: 1rem;
+    transition: filter 0.2s;
 
-  &:hover {
-    filter: brightness(0.8);
-  }
+    &:hover {
+      filter: brightness(0.8);
+    }
+
+    & svg {
+      color: ${theme.colors.gray};
+    }
+  `}
 `;
 
 export const ModalContent = styled.div`

@@ -121,51 +121,39 @@ export const DeleteModalContent = ({
   onConfirm,
   onCancel,
 }: DeleteModalContentProps) => {
+  const incomeName =
+    name === "rv"
+      ? (data as TableDataRvProps).stock.toUpperCase()
+      : (data as TableDataRfProps).name.toUpperCase();
   const content =
     name === "rv" ? (
       <>
         <S.DeleteModalContentWrapper>
-          {Object.keys(data as TableDataRvProps).map((key) => {
-            return (
-              <span key={key}>
-                {key === "_id" ? null : (
-                  <>
-                    <b>{key}: </b>
-                    {(data as TableDataRvProps)[key as keyof TableDataRvProps]}
-                  </>
-                )}
-              </span>
-            );
-          })}
+          <S.ModalTitle>Você esta prestes a deletar esse ativo</S.ModalTitle>
+          <S.ModalSubTitle>
+            Essa ação irá deletar o ativo{" "}
+            <S.StrongIncome>{incomeName}</S.StrongIncome> da sua carteira
+          </S.ModalSubTitle>
+          <S.AreUSure>Você tem certeza?</S.AreUSure>
         </S.DeleteModalContentWrapper>
       </>
     ) : (
-      <div>
-        {Object.keys(data as TableDataRfProps).map((key) => {
-          return (
-            <span key={key}>
-              {key === "_id" ? null : (
-                <>
-                  <b>{key}: </b>
-                  {(data as TableDataRfProps)[key as keyof TableDataRfProps]}
-                </>
-              )}
-            </span>
-          );
-        })}
-      </div>
+      <S.DeleteModalContentWrapper>
+        <S.ModalTitle>Você esta prestes a deletar esse ativo</S.ModalTitle>
+        <S.ModalSubTitle>
+          Essa ação irá deletar o ativo{" "}
+          <S.StrongIncome>{incomeName}</S.StrongIncome> da sua carteira
+        </S.ModalSubTitle>
+        <S.AreUSure>Você tem certeza?</S.AreUSure>
+      </S.DeleteModalContentWrapper>
     );
 
   return (
     <>
       {content}
       <S.DeleteModalButtonGroup>
-        <S.ConfirmButton onClick={onConfirm}>
-          SIM, QUERO DELETAR
-        </S.ConfirmButton>
-        <S.CancelButton onClick={onCancel}>
-          NÃO, QUERO MANTER ESTE ATIVO
-        </S.CancelButton>
+        <S.CancelButton onClick={onCancel}>Cancelar</S.CancelButton>
+        <S.ConfirmButton onClick={onConfirm}>Deletar</S.ConfirmButton>
       </S.DeleteModalButtonGroup>
     </>
   );

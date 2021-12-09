@@ -158,33 +158,61 @@ export const Input = styled.input`
 `;
 
 export const DeleteModalContentWrapper = styled.div`
-  font-size: ${({ theme }) => theme.font.sizes.medium};
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem 1.2rem;
+  ${({ theme }) => css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: ${theme.spacings.xxsmall};
+    padding: ${theme.spacings.xsmall} ${theme.spacings.xxsmall};
+  `}
+`;
+
+export const ModalTitle = styled.h3`
+  ${({ theme }) => css`
+    font-size: ${theme.font.sizes.large};
+    color: ${theme.colors.lightBlack};
+    margin-bottom: ${theme.spacings.small};
+  `}
+`;
+
+export const ModalSubTitle = styled.p`
+  ${({ theme }) => css`
+    font-size: ${theme.font.sizes.medium};
+    color: ${theme.colors.gray};
+  `}
+`;
+
+export const AreUSure = styled.p`
+  ${({ theme }) => css`
+    font-size: ${theme.font.sizes.medium};
+    color: ${theme.colors.gray};
+  `}
+`;
+
+export const StrongIncome = styled.strong`
+  ${({ theme }) => css`
+    color: ${theme.colors.black};
+  `}
 `;
 
 export const DeleteModalButtonGroup = styled.div`
   display: flex;
   gap: 1rem;
   padding-top: 1.5rem;
+  justify-content: flex-end;
 `;
 
 export const Button = styled.button`
-  ${() => css`
-    border: 0;
+  ${({ theme }) => css`
     background: transparent;
-    padding: 1.2rem 1.4rem;
+    padding: ${theme.spacings.xsmall} ${theme.spacings.small};
     border-radius: 0.8rem;
     font-size: 1.4rem;
     font-weight: bold;
     cursor: pointer;
-    transition: filter 0.2s;
-
-    &:hover {
-      filter: brightness(0.8);
-    }
+    transition: all 0.2s ease;
+    border: 0.1rem solid transparent;
   `}
 `;
 
@@ -192,12 +220,23 @@ export const ConfirmButton = styled(Button)`
   ${({ theme }) => css`
     background: ${theme.colors.red};
     color: ${theme.colors.white};
+
+    &:hover {
+      background: transparent;
+      border: 0.1rem solid ${theme.colors.red};
+      color: ${theme.colors.red};
+    }
   `}
 `;
 
 export const CancelButton = styled(Button)`
   ${({ theme }) => css`
-    background: ${theme.colors.lightBlack};
-    color: ${theme.colors.white};
+    background: transparent;
+    color: ${theme.colors.lightBlack};
+    &:hover {
+      background: transparent;
+      border: 0.1rem solid ${theme.colors.lightBlack};
+      color: ${theme.colors.lightBlack};
+    }
   `}
 `;

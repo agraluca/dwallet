@@ -300,9 +300,11 @@ function RvTable({
     <>
       <Modal
         isOpen={isOpen}
-        title="Tem certeza que deletar este ativo?"
         onClose={handleCloseModal}
         size="md"
+        icon={true}
+        type="delete"
+        leftBorder
       >
         <DeleteModalContent
           name="rv"

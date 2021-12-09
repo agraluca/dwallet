@@ -231,12 +231,13 @@ function RfTable({
     <>
       <Modal
         isOpen={isOpen}
-        title="Tem certeza que deletar esta renda?"
         onClose={handleCloseModal}
         size="md"
+        icon
+        type="delete"
       >
         <DeleteModalContent
-          name="rv"
+          name="rf"
           data={deleteStock!}
           onCancel={handleCancelDelete}
           onConfirm={handleDelete}
@@ -356,6 +357,7 @@ function RfTable({
                     />
                   </TableBodyData>
                   <TableBodyData
+                    isHidding={hide}
                     className={
                       data.status === "Comprar"
                         ? "table__body-data_green"

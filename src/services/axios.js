@@ -33,7 +33,7 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalConfig = error.config;
-    console.log(error.response);
+
     if (originalConfig.url !== "/auth/refresh" && error.response) {
       if (error.response.status === 400) {
         try {

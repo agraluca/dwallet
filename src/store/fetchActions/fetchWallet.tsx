@@ -87,7 +87,8 @@ export const fetchUserWallet = () => {
       return response.data;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado 1";
+        err?.response?.data?.error || "Ocorreu um erro inesperado";
+      console.error(err);
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
