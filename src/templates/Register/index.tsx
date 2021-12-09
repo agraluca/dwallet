@@ -74,9 +74,9 @@ function RegisterUser() {
             <Button
               className="submitButton"
               type="submit"
-              disabled={loading.registerUser}
+              disabled={loading.registerUserLoading}
             >
-              {loading.registerUser ? (
+              {loading.registerUserLoading ? (
                 <S.FormLoading />
               ) : (
                 <span>Crie sua conta</span>
