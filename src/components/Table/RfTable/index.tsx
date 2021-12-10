@@ -232,6 +232,7 @@ function RfTable({
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
+        leftBorder
         size="md"
         icon
         type="delete"

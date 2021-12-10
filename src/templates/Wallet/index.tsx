@@ -11,12 +11,12 @@ import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import { usePageStatus } from "hooks/usePageStatus";
 import { fetchUserWallet } from "store/fetchActions/fetchWallet";
 import Spinner from "components/Spinner";
-import Chart from "components/Graph";
+import Chart from "components/Chart";
 
 function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
-  const [showGraph, setShowGraph] = useState(false);
   const [chartData, setChartData] = useState({});
+  const [showGraph, setShowGraph] = useState(false);
 
   const handleShowGraph = () => {
     setShowGraph(!showGraph);
@@ -56,43 +56,69 @@ function Wallet() {
     return acc;
   }, 0);
 
+  const generatePastelColors = () => {
+    if (toggleStatus === "rv") {
+      return variableIncomeList.map(() => {
+        return "hsla(" + ~~(360 * Math.random()) + "," + "70%," + "80%,1)";
+      });
+    } else {
+      return fixedIncomeList.map(() => {
+        return "hsla(" + ~~(360 * Math.random()) + "," + "70%," + "80%,1)";
+      });
+    }
+  };
+
+  const setLabels = () => {
+    if (toggleStatus === "rv") {
+      return variableIncomeList.map((item) => {
+        return item.stock.toUpperCase();
+      });
+    } else {
+      return fixedIncomeList.map((item) => {
+        return item.name;
+      });
+    }
+  };
+
+  const setChartValue = () => {
+    if (toggleStatus === "rv") {
+      return variableIncomeList.map((item) => {
+        return item.price * item.stockAmount;
+      });
+    } else {
+      return fixedIncomeList.map((item) => {
+        return item.totalPrice;
+      });
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchUserWallet());
+
     toggleStatus === "rv"
       ? setChartData({
-          labels: variableIncomeList.map((item) => {
-            return item.stock.toUpperCase();
-          }),
+          labels: setLabels(),
           datasets: [
             {
               label: "Preço",
-              data: variableIncomeList.map((item) => {
-                return item.price * item.stockAmount;
-              }),
-              backgroundColor: variableIncomeList.map(() => {
-                return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-              }),
+              data: setChartValue(),
+              backgroundColor: generatePastelColors(),
             },
           ],
         })
       : setChartData({
-          labels: fixedIncomeList.map((item) => {
-            return item.name;
-          }),
+          labels: setLabels(),
           datasets: [
             {
               label: "Preço",
-              data: fixedIncomeList.map((item) => {
-                return item.totalPrice;
-              }),
-              backgroundColor: variableIncomeList.map(() => {
-                return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-              }),
+              data: setChartValue(),
+              backgroundColor: generatePastelColors(),
             },
           ],
         });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, toggleStatus]);
+  }, [dispatch, toggleStatus, showGraph]);
 
   const addItemToTable = () => {
     isAdding ? handleChangeStatusToInitial() : handleChangeStatusToIsAdding();

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type VariableIncomeListProps = {
+export type VariableIncomeListProps = {
   stock: string;
   type: string;
   price: number;
@@ -11,7 +11,7 @@ type VariableIncomeListProps = {
   status: string;
   _id: string;
 };
-type FixedIncomeListProps = {
+export type FixedIncomeListProps = {
   name: string;
   idealPorcentage: number;
   currentPorcentage: number;
