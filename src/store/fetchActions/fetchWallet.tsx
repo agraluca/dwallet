@@ -61,11 +61,6 @@ export const fetchUserWallet = () => {
     dispatch(startLoading("getWalletLoading"));
     try {
       const response = await api.get<UserWalletProps>(`/wallet/get`);
-      if (response.status === 201) {
-        toast.custom(<Toast title={response.data.msg} type="info" />, {
-          position: "top-right",
-        });
-      }
 
       if (response.data.userWallet) {
         dispatch(

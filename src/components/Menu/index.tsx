@@ -26,9 +26,9 @@ function Menu() {
             <Link href="/home" passHref>
               <S.MenuLink>Sua carteira</S.MenuLink>
             </Link>
-            <Link href="/search" passHref>
+            {/* <Link href="/search" passHref>
               <S.MenuLink>Pesquisar</S.MenuLink>
-            </Link>
+            </Link> */}
           </S.NavWrapper>
         </MediaMatch>
 
