@@ -1,7 +1,7 @@
 import { Button } from "components/Button";
 import InputWithLabel from "components/InputWithLabel";
 import { ChangeEvent, useState, useEffect } from "react";
-import { formatNumberToBrlCurrency, typeCheck } from "utils";
+import { formatNumberToBrlCurrency } from "utils";
 import { useAppDispatch, useAppSelector } from "hooks/useReduxHooks";
 import TableHeader from "components/TableHeader";
 import {
@@ -154,7 +154,7 @@ function RvTable({
       }
       setTableFormValues((prev) => ({
         ...prev,
-        type: typeCheck(tickerType),
+        type: tickerType,
         price: formattedPrice,
       }));
     }
@@ -421,7 +421,11 @@ function RvTable({
                     />
                   </TableBodyData>
                   <TableBodyData>
-                    <TableCell isHidding={false} value={data.type} />
+                    <TableCell
+                      isHidding={false}
+                      value={data.type}
+                      field="type"
+                    />
                   </TableBodyData>
                   <TableBodyData>
                     <TableCell

@@ -31,8 +31,17 @@ export default function TableHeader({
           >
             {item.name === "% Ideal" ? (
               <>
-                <p data-tip={`Total: ${totalIdealPercentage}%`}>{item.name} </p>
-                <ReactTooltip className="tooltip" type="light" />
+                <p
+                  data-for="header__total-ideal-percentage"
+                  data-tip={`Total: ${totalIdealPercentage}%`}
+                >
+                  {item.name}{" "}
+                </p>
+                <ReactTooltip
+                  id="header__total-ideal-percentage"
+                  className="tooltip"
+                  type="light"
+                />
               </>
             ) : (
               item.name

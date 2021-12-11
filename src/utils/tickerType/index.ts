@@ -1,14 +1,14 @@
 export const typeCheck = (tickerType: string) => {
   switch (tickerType) {
     case "ON":
-      return "Ação ON";
+      return "Ação Ordinária";
     case "PN":
-      return "Ação PN";
+      return "Ação Preferêncial";
     case "UNT":
       return "Ação UNIT";
     case "DRN":
       return "BDR";
     default:
-      return "Fii";
+      return "Fundo Imobiliário";
   }
 };

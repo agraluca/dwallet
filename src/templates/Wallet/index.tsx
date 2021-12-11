@@ -170,6 +170,7 @@ function Wallet() {
                 variant={isAdding ? "" : "icon"}
                 onClick={addItemToTable}
                 {...(isAdding ? {} : { icon: "icons/plus.svg" })}
+                disabled={showGraph}
               >
                 {isAdding ? "Cancelar" : "Adicionar"}
               </Button>
@@ -177,7 +178,7 @@ function Wallet() {
                 variant="icon"
                 icon="icons/edit.svg"
                 onClick={handleChangeStatusToIsEditting}
-                disabled={isEditting}
+                disabled={isEditting || showGraph}
               >
                 Editar
               </Button>
@@ -185,6 +186,7 @@ function Wallet() {
                 variant="icon"
                 icon={showGraph ? "icons/table.svg" : "icons/chart-bar.svg"}
                 onClick={handleShowGraph}
+                disabled={isEditting || isAdding}
               >
                 {showGraph ? "Ver tabela" : "Ver gráfico"}
               </Button>

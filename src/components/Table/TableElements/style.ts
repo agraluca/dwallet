@@ -100,6 +100,10 @@ export const TableBodyData = styled.td<TableBodyDataProps>`
     &.table__body-data_red {
       color: ${isHidding ? theme.colors.lightBlack : theme.colors.red}};
     }
+
+    .tooltip-dark {
+      border-radius: 0;
+    }
   `}
 `;
 

@@ -3,6 +3,8 @@ import { Button } from "components/Button";
 import * as S from "./style";
 import { TableDataRfProps } from "../RfTable";
 import { TableDataRvProps } from "../RvTable";
+import ReactTooltip from "react-tooltip";
+import { typeCheck } from "utils";
 
 interface TableElementsProps {
   children: ReactNode;
@@ -34,6 +36,7 @@ interface TableCellProps {
   isEditting?: boolean;
   hasPercentage?: boolean;
   isEdittingProps?: TableCellIsEdittingProps;
+  field?: string;
 }
 
 interface DeleteModalContentProps {
@@ -89,6 +92,7 @@ export const TableCell = ({
   isEditting = false,
   hasPercentage = false,
   isEdittingProps,
+  field,
 }: TableCellProps) => {
   if (isEditting) {
     return (
@@ -109,7 +113,26 @@ export const TableCell = ({
 
   return (
     <>
-      {isHidding ? " - " : value}
+      {isHidding ? (
+        " - "
+      ) : field === "type" ? (
+        <>
+          <p
+            data-for="table-cell__type"
+            data-tip={`${typeCheck(value as string)}`}
+          >
+            {" "}
+            {value}{" "}
+          </p>
+          <ReactTooltip
+            id="table-cell__type"
+            className="tooltip-dark"
+            type="dark"
+          />
+        </>
+      ) : (
+        value
+      )}
       {hasPercentage && "%"}
     </>
   );
