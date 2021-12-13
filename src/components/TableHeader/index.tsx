@@ -1,4 +1,3 @@
-import { TableDataRvProps } from "components/Table/RvTable";
 import ReactTooltip from "react-tooltip";
 import * as S from "./styles";
 
@@ -9,18 +8,13 @@ type TableHeaderColumnProps = {
 
 type TableHeaderProps = {
   columns: TableHeaderColumnProps[];
-  tableDataRv?: TableDataRvProps[];
+  totalIdealPercentage: number;
 };
 
 export default function TableHeader({
   columns,
-  tableDataRv,
+  totalIdealPercentage,
 }: TableHeaderProps) {
-  const totalIdealPercentage = tableDataRv?.reduce((acc, cur) => {
-    acc += cur.idealPorcentage;
-    return acc;
-  }, 0);
-
   return (
     <S.TableHeader>
       <S.TableHeaderRow>

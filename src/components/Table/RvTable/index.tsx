@@ -291,6 +291,11 @@ function RvTable({
     handleCancelIsEditting();
   };
 
+  const totalIdealPercentage = tableDataRv?.reduce((acc, cur) => {
+    acc += cur.idealPorcentage;
+    return acc;
+  }, 0);
+
   const handleCancelDelete = () => {
     setDeleteStock(undefined);
     handleCloseModal();
@@ -393,7 +398,7 @@ function RvTable({
         <TableWrapper>
           <TableHeader
             columns={columnsVariableIncomeTable}
-            tableDataRv={tableDataRv}
+            totalIdealPercentage={totalIdealPercentage}
           />
 
           <TableBody>

@@ -227,6 +227,11 @@ function RfTable({
     handleCancelIsEditting();
   };
 
+  const totalIdealPercentage = tableDataRf?.reduce((acc, cur) => {
+    acc += cur.idealPorcentage;
+    return acc;
+  }, 0);
+
   return (
     <>
       <Modal
@@ -291,7 +296,10 @@ function RfTable({
 
       {tableDataRf.length > 0 && (
         <TableWrapper>
-          <TableHeader columns={columnsFixedIncomeTable} />
+          <TableHeader
+            columns={columnsFixedIncomeTable}
+            totalIdealPercentage={totalIdealPercentage}
+          />
           <TableBody>
             {tableDataRf?.map((data, index) => {
               return (
