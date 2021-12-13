@@ -26,6 +26,7 @@ function App({ Component, pageProps }: AppProps) {
             href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;700&display=swap"
             rel="stylesheet"
           />
+          <meta name="theme-color" content="#F5CB5C" />
         </Head>
         <GlobalStyles />
         <NextNprogress
