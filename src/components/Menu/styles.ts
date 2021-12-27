@@ -69,7 +69,7 @@ export const MenuFull = styled.nav<MenuFullProps>`
     pointer-events: ${isOpen ? "all" : "none"};
     background: ${theme.colors.black};
 
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;

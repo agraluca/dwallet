@@ -1,4 +1,5 @@
 import styled, { css, DefaultTheme } from "styled-components";
+import media from "styled-media-query";
 
 interface ModalSizeProps {
   size: "sm" | "lg" | "md";
@@ -26,14 +27,18 @@ export const Wrapper = styled.div<ModalSizeProps>`
     position: fixed;
     inset: 0;
     z-index: ${theme.layers.modal};
-
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
 
     ${ModalWrapper} {
       width: ${sizes[size]};
+      ${media.lessThan("medium")`
+        width: 100%;
+        margin: ${theme.spacings.xsmall};
+      `}
     }
 
     ${Title} {
@@ -41,7 +46,7 @@ export const Wrapper = styled.div<ModalSizeProps>`
     }
 
     ${ModalHeader} {
-      border-bottom: ${noBorders ? 0 : "1px solid rgba(0, 0, 0, 0.2)"};
+      border-bottom: ${noBorders ? 0 : "0.1rem solid rgba(0, 0, 0, 0.2)"};
     }
   `}
 `;
@@ -54,16 +59,18 @@ export const ModalWrapper = styled.div<IconTypeColorProps>`
     box-shadow: rgba(255, 255, 255, 0.2) 0 0.7rem 3rem 0;
     position: relative;
 
-    &::before {
-      content: "";
-      width: 4rem;
-      height: 100%;
-      background-color: ${colorType};
-      border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
-      position: absolute;
-      top: 0;
-      bottom: 0;
-    }
+    ${media.greaterThan("medium")`
+      &::before {
+        content: "";
+        width: 4rem;
+        height: 100%;
+        background-color: ${colorType};
+        border-radius: ${theme.border.radius} 0 0 ${theme.border.radius};
+        position: absolute;
+        top: 0;
+        bottom: 0;
+      }
+    `}
   `}
 `;
 

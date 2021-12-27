@@ -177,6 +177,10 @@ export const ModalTitle = styled.h3`
     font-size: ${theme.font.sizes.large};
     color: ${theme.colors.lightBlack};
     margin-bottom: ${theme.spacings.small};
+    text-align: center;
+    /* ${media.lessThan("medium")`
+      font-size: ${theme.font.sizes.medium};
+    `} */
   `}
 `;
 
@@ -184,6 +188,7 @@ export const ModalSubTitle = styled.p`
   ${({ theme }) => css`
     font-size: ${theme.font.sizes.medium};
     color: ${theme.colors.gray};
+    text-align: center;
   `}
 `;
 
@@ -191,6 +196,7 @@ export const AreUSure = styled.p`
   ${({ theme }) => css`
     font-size: ${theme.font.sizes.medium};
     color: ${theme.colors.gray};
+    text-align: center;
   `}
 `;
 
