@@ -32,6 +32,7 @@ import {
 } from "store/fetchActions/fetchWallet";
 import Modal from "components/Modal";
 import { useModal } from "hooks/useModal";
+import Input from "components/Input";
 
 export type TableDataRvProps = {
   stock: string;
@@ -48,6 +49,7 @@ export type TableDataRvProps = {
 export type TableProps = {
   tableDataRv: TableDataRvProps[];
   isAdding: boolean;
+  showFilter: boolean;
   setIsAdding: () => void;
   hide?: boolean;
   isEditting: boolean;
@@ -66,6 +68,7 @@ const tableFormValuesInitialValues = {
 function RvTable({
   tableDataRv,
   isAdding,
+  showFilter,
   setIsAdding,
   hide = false,
   isEditting = false,
@@ -98,9 +101,15 @@ function RvTable({
     tableFormValuesInitialValues
   );
 
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
   const [tableRvCopy, setTableRvCopy] = useState([...tableDataRv]);
+
+  const tableDataFiltered = tableDataRv.filter((item) =>
+    item.stock.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const [deleteStock, setDeleteStock] = useState<TableDataRvProps>();
 
   const dispatch = useAppDispatch();
@@ -171,12 +180,10 @@ function RvTable({
 
   const addItemToTable = () => {
     if (Number(tableFormValues.idealPorcentage) === 0) {
-      toast.custom(
+      return toast.custom(
         <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
         { position: "top-right" }
       );
-
-      return;
     }
 
     const newValue = {
@@ -259,23 +266,20 @@ function RvTable({
       existZeroValueInIdealPercentage(tableRvCopy);
 
     if (hasZeroValueInIdealPercentage) {
-      toast.custom(
+      return toast.custom(
         <Toast title="Porcentagem ideal não pode ser 0%" type="error" />,
         { position: "top-right" }
       );
-
-      return;
     }
 
     if (overLimit) {
-      toast.custom(
+      return toast.custom(
         <Toast
           title="Porcentagem ideal excede o limite de 100%"
           type="error"
         />,
         { position: "top-right" }
       );
-      return;
     }
 
     dispatch(editVariableIncomeWallet(tableRvCopy));
@@ -300,6 +304,14 @@ function RvTable({
     setDeleteStock(undefined);
     handleCloseModal();
   };
+
+  const handleSeachTerm = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    !showFilter && setSearchTerm("");
+  }, [showFilter]);
 
   return (
     <>
@@ -392,6 +404,15 @@ function RvTable({
           </TableBody>
         </TableWrapper>
       )}
+      {showFilter && (
+        <Input
+          placeholder="Pesquise pelo ticker..."
+          onChange={handleSeachTerm}
+          value={searchTerm}
+          inputSize="search"
+          icon="search"
+        />
+      )}
       {isEditting && <IsEdittingMenu onCancel={onCancel} onSave={onSave} />}
 
       {tableDataRv.length > 0 && (
@@ -402,7 +423,7 @@ function RvTable({
           />
 
           <TableBody>
-            {tableDataRv.map((data, index) => {
+            {tableDataFiltered.map((data, index) => {
               return (
                 <TableRow key={data._id}>
                   {isEditting && (

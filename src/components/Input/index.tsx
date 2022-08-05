@@ -3,9 +3,9 @@ import * as S from "./styles";
 
 export type InputProps = {
   onInputChange?: (value: string) => void;
-  icon?: "person" | "email" | "lock";
+  icon?: "person" | "email" | "lock" | "search";
   placeholder?: string;
-  inputSize?: "normal" | "large" | "full";
+  inputSize?: "normal" | "large" | "full" | "search";
   type?: "text" | "password" | "email";
   error?: string;
   initialValue?: string;
@@ -15,6 +15,7 @@ export type IconsProps = {
   person: string;
   email: string;
   lock: string;
+  search: string;
 };
 
 function Input({
@@ -33,6 +34,7 @@ function Input({
     person: "img/person_outline.svg",
     email: "img/At.svg",
     lock: "img/lock_outline.svg",
+    search: "img/search.svg",
   };
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {

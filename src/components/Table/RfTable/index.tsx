@@ -31,6 +31,7 @@ import {
 } from "store/fetchActions/fetchWallet";
 import Modal from "components/Modal";
 import { useModal } from "hooks/useModal";
+import Input from "components/Input";
 
 export type TableDataRfProps = {
   name: string;
@@ -45,6 +46,7 @@ export type TableDataRfProps = {
 export type TableProps = {
   tableDataRf: TableDataRfProps[];
   isAdding: boolean;
+  showFilter: boolean;
   setIsAdding: () => void;
   hide?: boolean;
   isEditting: boolean;
@@ -63,6 +65,7 @@ const tableFormValuesInitialValues = {
 function RfTable({
   tableDataRf,
   isAdding,
+  showFilter,
   setIsAdding,
   hide = false,
   isEditting = false,
@@ -75,6 +78,12 @@ function RfTable({
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
   const [deleteStock, setDeleteStock] = useState<TableDataRfProps>();
   const dispatch = useAppDispatch();
+
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const tableDataFiltered = tableDataRf.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const columnsFixedIncomeTable = isEditting
     ? [
@@ -232,6 +241,14 @@ function RfTable({
     return acc;
   }, 0);
 
+  const handleSeachTerm = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    !showFilter && setSearchTerm("");
+  }, [showFilter]);
+
   return (
     <>
       <Modal
@@ -292,6 +309,15 @@ function RfTable({
           </TableBody>
         </TableWrapper>
       )}
+      {showFilter && (
+        <Input
+          placeholder="Pesquise pelo nome..."
+          onChange={handleSeachTerm}
+          value={searchTerm}
+          inputSize="search"
+          icon="search"
+        />
+      )}
       {isEditting && <IsEdittingMenu onCancel={onCancel} onSave={onSave} />}
 
       {tableDataRf.length > 0 && (
@@ -301,7 +327,7 @@ function RfTable({
             totalIdealPercentage={totalIdealPercentage}
           />
           <TableBody>
-            {tableDataRf?.map((data, index) => {
+            {tableDataFiltered?.map((data, index) => {
               return (
                 <TableRow key={index}>
                   {isEditting && (

@@ -45,7 +45,7 @@ export const fetchToken = (formValues: FormValuesProps) => {
       return res.data;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
@@ -71,8 +71,9 @@ export const registerUser = (formValues: FormValuesRegisterProps) => {
 
       return res.data;
     } catch (err) {
+      console.log(err.response);
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });

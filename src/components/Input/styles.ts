@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, DefaultTheme } from "styled-components";
 import { InputProps } from ".";
 
 type InputWrapperProps = Pick<InputProps, "inputSize" | "error">;
@@ -15,6 +15,11 @@ const WrapperModifier = {
   full: () => css`
     width: 100%;
     height: 4.8rem;
+  `,
+  search: (theme: DefaultTheme) => css`
+    width: 27.8rem;
+    height: 6.4rem;
+    margin-bottom: ${theme.spacings.medium};
   `,
 };
 
@@ -34,7 +39,7 @@ export const InputWrapper = styled.div<InputWrapperProps>`
     background: ${theme.colors.white};
     border-radius: ${theme.border.radius};
 
-    ${!!inputSize && WrapperModifier[inputSize!]()}
+    ${!!inputSize && WrapperModifier[inputSize!](theme)}
 
     img {
       width: 2.4rem;

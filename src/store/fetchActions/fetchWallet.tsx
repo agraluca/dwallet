@@ -82,7 +82,7 @@ export const fetchUserWallet = () => {
       return response.data;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       console.error(err);
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
@@ -113,7 +113,7 @@ export const addFixedIncomeToUserWallet = (newValue: TableDataRfProps) => {
       return res.data as TableDataRvProps;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
@@ -142,13 +142,10 @@ export const editFixedIncomeWallet = (
       });
 
       return res.data as WalletEditProps;
-    } catch (error) {
-      let message = "Ocorreu um erro inesperado";
-      if (error.response) {
-        message = error.response.data.msg[0].msg;
-      }
-
-      toast.custom(<Toast title={message} type="warning" />, {
+    } catch (err) {
+      const errorMessage =
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;
@@ -174,7 +171,9 @@ export const removeItemFromFixedIncomeWallet = (id: string) => {
 
       return res;
     } catch (err) {
-      toast.custom(<Toast title={err?.response?.data?.msg} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;
@@ -200,7 +199,7 @@ export const addVariableIncomeToUserWallet = (newValue: TableDataRvProps) => {
       return res.data as TableDataRvProps;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
@@ -229,7 +228,7 @@ export const editVariableIncomeWallet = (wallet: TableDataRvProps[]) => {
       return res.data as WalletEditProps;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
@@ -256,7 +255,9 @@ export const removeItemFromVariableIncomeWallet = (id: string) => {
 
       return res;
     } catch (err) {
-      toast.custom(<Toast title={err?.response?.data?.msg} type="warning" />, {
+      const errorMessage =
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
+      toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
       return false;

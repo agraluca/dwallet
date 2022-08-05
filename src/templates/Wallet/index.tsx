@@ -17,6 +17,7 @@ function Wallet() {
   const [toggleStatus, setToggleStatus] = useState("rv");
   const [chartData, setChartData] = useState({});
   const [showGraph, setShowGraph] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
   const handleShowGraph = () => {
     setShowGraph(!showGraph);
@@ -31,7 +32,6 @@ function Wallet() {
     handleChangeStatusToIsAdding,
     handleChangeStatusToIsEditting,
   } = usePageStatus();
-
   const dispatch = useAppDispatch();
   const {
     variableIncomeList,
@@ -61,11 +61,10 @@ function Wallet() {
       return variableIncomeList.map(() => {
         return "hsla(" + ~~(360 * Math.random()) + "," + "70%," + "80%,1)";
       });
-    } else {
-      return fixedIncomeList.map(() => {
-        return "hsla(" + ~~(360 * Math.random()) + "," + "70%," + "80%,1)";
-      });
     }
+    return fixedIncomeList.map(() => {
+      return "hsla(" + ~~(360 * Math.random()) + "," + "70%," + "80%,1)";
+    });
   };
 
   const setLabels = () => {
@@ -73,11 +72,10 @@ function Wallet() {
       return variableIncomeList.map((item) => {
         return item.stock.toUpperCase();
       });
-    } else {
-      return fixedIncomeList.map((item) => {
-        return item.name;
-      });
     }
+    return fixedIncomeList.map((item) => {
+      return item.name;
+    });
   };
 
   const setChartValue = () => {
@@ -136,6 +134,16 @@ function Wallet() {
     setToggleStatus(event.target.value);
   };
 
+  const handleShowFilter = () => {
+    setShowFilter((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (isEditting || isAdding || showGraph) {
+      setShowFilter(false);
+    }
+  }, [isAdding, isEditting, showGraph]);
+
   return (
     <Wrapper>
       <S.WalletWrapper>
@@ -190,6 +198,12 @@ function Wallet() {
               >
                 {showGraph ? "Ver tabela" : "Ver gráfico"}
               </Button>
+              <Button
+                onClick={handleShowFilter}
+                disabled={isEditting || isAdding || showGraph}
+              >
+                {showFilter ? "Esconder filtro" : "Mostrar filtro"}
+              </Button>
             </S.ActionButtonsWrapper>
             <S.ToggleContainer>
               <S.SwitchInput
@@ -224,6 +238,7 @@ function Wallet() {
                 <RvTable
                   tableDataRv={variableIncomeList}
                   isAdding={isAdding}
+                  showFilter={showFilter}
                   setIsAdding={handleChangeStatusToInitial}
                   hide={isHidding}
                   isEditting={isEditting}
@@ -233,6 +248,7 @@ function Wallet() {
                 <RfTable
                   tableDataRf={fixedIncomeList}
                   isAdding={isAdding}
+                  showFilter={showFilter}
                   setIsAdding={handleChangeStatusToInitial}
                   hide={isHidding}
                   isEditting={isEditting}

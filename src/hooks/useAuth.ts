@@ -7,6 +7,12 @@ import jwtDecode from "jwt-decode";
 import { fetchToken, registerUser } from "store/fetchActions/fetchAuth";
 import { useAppDispatch } from "./useReduxHooks";
 
+type DecodedTokenProps = {
+  name: string;
+  email: string;
+  id: string;
+};
+
 export default function useAuth() {
   const { push } = useRouter();
   const dispatch = useAppDispatch();
@@ -16,10 +22,11 @@ export default function useAuth() {
 
   useEffect(() => {
     const token = getToken();
-    const decodedToken = token && jwtDecode(token);
-    setUsername(decodedToken?.name);
-    setEmail(decodedToken?.email);
-    setId(decodedToken?.id);
+    if (!token) return;
+    const decodedToken: DecodedTokenProps = jwtDecode(token);
+    setUsername(decodedToken.name);
+    setEmail(decodedToken.email);
+    setId(decodedToken.id);
   }, []);
 
   const signIn = useCallback(

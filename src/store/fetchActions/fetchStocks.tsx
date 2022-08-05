@@ -16,7 +16,7 @@ export const getAllStocks = () => {
       return res;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
       });
@@ -36,7 +36,7 @@ export const getDetailStock = (tickerName: string) => {
       return res.data;
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.error || "Ocorreu um erro inesperado";
+        err?.response?.data?.msg || "Ocorreu um erro inesperado";
 
       toast.custom(<Toast title={errorMessage} type="warning" />, {
         position: "top-right",
