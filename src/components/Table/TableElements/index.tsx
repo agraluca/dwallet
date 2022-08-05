@@ -145,7 +145,9 @@ export const DeleteModalContent = ({
   onCancel,
 }: DeleteModalContentProps) => {
   const incomeName =
-    name === "rv" ? data.stock.toUpperCase() : data.name.toUpperCase();
+    name === "rv"
+      ? (data as TableDataRvProps).stock.toUpperCase()
+      : (data as TableDataRfProps).name.toUpperCase();
   const content =
     name === "rv" ? (
       <>
